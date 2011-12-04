@@ -27,6 +27,9 @@
 #define TextCodecUTF8_h
 
 #include "TextCodec.h"
+#if OS(MONA)
+#include <unicode/utf8.h>
+#endif
 
 namespace WebCore {
 

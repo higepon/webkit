@@ -695,7 +695,7 @@
 
 #if !OS(WINDOWS) && !OS(SOLARIS) && !OS(QNX) \
     && !OS(SYMBIAN) && !OS(HAIKU) && !OS(RVCT) \
-    && !OS(ANDROID) && !PLATFORM(BREWMP)
+  && !OS(ANDROID) && !PLATFORM(BREWMP) && !OS(MONA)
 #define HAVE_TM_GMTOFF 1
 #define HAVE_TM_ZONE 1
 #define HAVE_TIMEGM 1
@@ -784,13 +784,15 @@
 
 #define HAVE_ERRNO_H 1
 /* As long as Haiku doesn't have a complete support of locale this will be disabled. */
-#if !OS(HAIKU)
+#if !OS(HAIKU) && !OS(MONA)
 #define HAVE_LANGINFO_H 1
 #endif
 #define HAVE_MMAP 1
 #define HAVE_SBRK 1
 #define HAVE_STRINGS_H 1
+#if !OS(MONA)
 #define HAVE_SYS_PARAM_H 1
+#endif
 #define HAVE_SYS_TIME_H 1
 
 #endif

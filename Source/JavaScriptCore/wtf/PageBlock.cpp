@@ -30,6 +30,10 @@
 #include <unistd.h>
 #endif
 
+#if OS(MONA)
+#include <sys/types.h>
+#endif
+
 #if OS(WINDOWS)
 #include <malloc.h>
 #include <windows.h>
@@ -78,6 +82,13 @@ inline size_t systemPageSize()
     UserHal::PageSizeInBytes(page_size);
     return page_size;
 #endif
+}
+
+#elif OS(MONA)
+
+inline size_t systemPageSize()
+{
+  return (size_t)(MAP_PAGE_SIZE);
 }
 
 #endif

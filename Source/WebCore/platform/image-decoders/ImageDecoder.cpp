@@ -27,11 +27,13 @@
 #include <cmath>
 
 #include "BMPImageDecoder.h"
+#if !OS(MONA)
 #include "GIFImageDecoder.h"
 #include "ICOImageDecoder.h"
 #include "JPEGImageDecoder.h"
 #include "PNGImageDecoder.h"
 #include "WEBPImageDecoder.h"
+#endif
 #include "SharedBuffer.h"
 
 using namespace std;
@@ -102,6 +104,7 @@ ImageDecoder* ImageDecoder::create(const SharedBuffer& data, ImageSource::AlphaO
     if (length < lengthOfLongestSignature)
         return 0;
 
+#if !OS(MONA)
     if (matchesGIFSignature(contents))
         return new GIFImageDecoder(alphaOption, gammaAndColorProfileOption);
 
@@ -115,13 +118,14 @@ ImageDecoder* ImageDecoder::create(const SharedBuffer& data, ImageSource::AlphaO
     if (matchesWebPSignature(contents))
         return new WEBPImageDecoder(alphaOption, gammaAndColorProfileOption);
 #endif
-
+#endif
     if (matchesBMPSignature(contents))
         return new BMPImageDecoder(alphaOption, gammaAndColorProfileOption);
 
+#if !OS(MONA)
     if (matchesICOSignature(contents) || matchesCURSignature(contents))
         return new ICOImageDecoder(alphaOption, gammaAndColorProfileOption);
-
+#endif
     return 0;
 }
 

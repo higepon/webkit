@@ -92,6 +92,7 @@ static void printLog(const Vector<char>& buffer)
 WTF_ATTRIBUTE_PRINTF(1, 0)
 static void vprintf_stderr_common(const char* format, va_list args)
 {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 #if PLATFORM(MAC)
     if (strstr(format, "%@")) {
         CFStringRef cfFormat = CFStringCreateWithCString(NULL, format, kCFStringEncodingUTF8);
@@ -156,16 +157,22 @@ static void vprintf_stderr_common(const char* format, va_list args)
 #if OS(SYMBIAN)
     vfprintf(stdout, format, args);
 #else
+    _logprintf("%s %s:%d %s\n", __func__, __FILE__, __LINE__, format);
     vfprintf(stderr, format, args);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 #endif
 }
 
 WTF_ATTRIBUTE_PRINTF(1, 2)
 static void printf_stderr_common(const char* format, ...)
 {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     va_list args;
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     va_start(args, format);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     vprintf_stderr_common(format, args);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     va_end(args);
 }
 
@@ -183,11 +190,20 @@ static void printCallSite(const char* file, int line, const char* function)
 
 void WTFReportAssertionFailure(const char* file, int line, const char* function, const char* assertion)
 {
-    if (assertion)
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  if (assertion) {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
         printf_stderr_common("ASSERTION FAILED: %s\n", assertion);
-    else
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  }
+  else {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
         printf_stderr_common("SHOULD NEVER BE REACHED\n");
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  }
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     printCallSite(file, line, function);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 void WTFReportAssertionFailureWithMessage(const char* file, int line, const char* function, const char* assertion, const char* format, ...)

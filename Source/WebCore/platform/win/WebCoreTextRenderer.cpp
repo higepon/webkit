@@ -49,6 +49,7 @@ static bool isOneLeftToRightRun(const TextRun& run)
 
 static void doDrawTextAtPoint(GraphicsContext& context, const String& text, const IntPoint& point, const Font& font, const Color& color, int underlinedIndex)
 {
+	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     FontCachePurgePreventer fontCachePurgePreventer;
 
     TextRun run(text.characters(), text.length());

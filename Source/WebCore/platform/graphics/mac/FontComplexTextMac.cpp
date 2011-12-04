@@ -82,6 +82,7 @@ float Font::getGlyphsAndAdvancesForComplexText(const TextRun& run, int from, int
 
 void Font::drawComplexText(GraphicsContext* context, const TextRun& run, const FloatPoint& point, int from, int to) const
 {
+	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // This glyph buffer holds our glyphs + advances + font data for each glyph.
     GlyphBuffer glyphBuffer;
 

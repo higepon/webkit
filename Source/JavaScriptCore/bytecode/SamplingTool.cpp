@@ -101,6 +101,13 @@ static void sleepForMicroseconds(unsigned us)
     Sleep(ms);
 }
 
+#elif OS(MONA)
+
+static void sleepForMicroseconds(unsigned us)
+{
+    sleep(1);
+}
+
 #else 
 
 static void sleepForMicroseconds(unsigned us)

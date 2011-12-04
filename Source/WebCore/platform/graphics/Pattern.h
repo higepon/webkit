@@ -60,6 +60,8 @@ typedef wxBrush* PlatformPatternPtr;
 typedef pattern* PlatformPatternPtr;
 #elif OS(WINCE)
 typedef void* PlatformPatternPtr;
+#elif OS(MONA)
+typedef void* PlatformPatternPtr;
 #endif
 
 namespace WebCore {

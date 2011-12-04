@@ -1,0 +1,236 @@
+include $(MONADIR)/share/configs/Makefile.inc
+include $(MONADIR)/share/configs/dirnames.inc
+
+LIB_STATIC   = libjscore.a
+TARGET       = $(LIB_STATIC)
+include mona.inc
+DEP_TARGET   = gen-derived
+ADDCXXFLAGS+= -DBUILDING_JavaScriptCore \
+              -DBUILDING_WTF 
+
+ADDINCLUDE   = -I$(JSC_DIR) \
+               -I$(SOURCE_DIR) \
+               -I$(SOURCE_DIR)/ThirdParty  \
+               -I$(JSC_DIR)  \
+               -I$(JSC_DIR)/assembler \
+               -I$(JSC_DIR)/bytecode  \
+               -I$(JSC_DIR)/bytecompiler  \
+               -I$(JSC_DIR)/heap  \
+               -I$(JSC_DIR)/dfg  \
+               -I$(JSC_DIR)/debugger  \
+               -I$(JSC_DIR)/interpreter  \
+               -I$(JSC_DIR)/jit  \
+               -I$(JSC_DIR)/parser  \
+               -I$(JSC_DIR)/profiler  \
+               -I$(JSC_DIR)/runtime  \
+               -I$(JSC_DIR)/wtf   \
+               -I$(JSC_DIR)/wtf/unicode  \
+               -I$(JSC_DIR)/yarr  \
+               -I$(JSC_DIR)/API  \
+               -I$(JSC_DIR)/ForwardingHeaders  \
+               -I$(JSC_DIR)/DerivedSources/JavaScriptCore \
+               -I$(WEBCORE_DIR)/platform \
+               -I$(SOURCE_DIR)   \
+               -I $(MONADIR)/core/icu/icu/source/common  \
+               -I $(MONADIR)/core/icu/icu/source/i18n/  \
+               -I /Users/taro/mingw/include
+
+# todo
+
+
+SOURCES       = $(JSC_DIR)/yarr/YarrInterpreter.cpp \
+                $(JSC_DIR)/yarr/YarrPattern.cpp \
+                $(JSC_DIR)/yarr/YarrSyntaxChecker.cpp \
+                $(JSC_DIR)/wtf/Assertions.cpp \
+                $(JSC_DIR)/wtf/ByteArray.cpp \
+                $(JSC_DIR)/wtf/CryptographicallyRandomNumber.cpp \
+                $(JSC_DIR)/wtf/CurrentTime.cpp \
+                $(JSC_DIR)/wtf/DateMath.cpp \
+                $(JSC_DIR)/wtf/dtoa.cpp \
+                $(JSC_DIR)/wtf/DecimalNumber.cpp \
+                $(JSC_DIR)/wtf/FastMalloc.cpp \
+                $(JSC_DIR)/wtf/gobject/GOwnPtr.cpp \
+                $(JSC_DIR)/wtf/gobject/GOwnPtr.cpp \
+                $(JSC_DIR)/wtf/HashTable.cpp \
+                $(JSC_DIR)/wtf/MD5.cpp \
+                $(JSC_DIR)/wtf/NullPtr.cpp \
+                $(JSC_DIR)/wtf/OSRandomSource.cpp \
+                $(JSC_DIR)/wtf/PageAllocationAligned.cpp \
+                $(JSC_DIR)/wtf/PageBlock.cpp \
+                $(JSC_DIR)/wtf/ParallelJobsGeneric.cpp \
+                $(JSC_DIR)/wtf/RandomNumber.cpp \
+                $(JSC_DIR)/wtf/RefCountedLeakCounter.cpp \
+                $(JSC_DIR)/wtf/SHA1.cpp \
+                $(JSC_DIR)/wtf/StackBounds.cpp \
+                $(JSC_DIR)/wtf/TCSystemAlloc.cpp \
+                $(JSC_DIR)/wtf/ThreadingNone.cpp \
+                $(JSC_DIR)/wtf/Threading.cpp \
+                $(JSC_DIR)/wtf/TypeTraits.cpp \
+                $(JSC_DIR)/wtf/WTFThreadData.cpp \
+                $(JSC_DIR)/wtf/text/AtomicString.cpp \
+                $(JSC_DIR)/wtf/text/CString.cpp \
+                $(JSC_DIR)/wtf/text/StringBuilder.cpp \
+                $(JSC_DIR)/wtf/text/StringImpl.cpp \
+                $(JSC_DIR)/wtf/text/StringStatics.cpp \
+                $(JSC_DIR)/wtf/text/WTFString.cpp \
+                $(JSC_DIR)/wtf/unicode/CollatorDefault.cpp \
+                $(JSC_DIR)/wtf/unicode/icu/CollatorICU.cpp \
+                $(JSC_DIR)/wtf/unicode/UTF8.cpp \
+                $(JSC_DIR)/API/JSBase.cpp \
+                $(JSC_DIR)/API/JSCallbackConstructor.cpp \
+                $(JSC_DIR)/API/JSCallbackFunction.cpp \
+                $(JSC_DIR)/API/JSCallbackObject.cpp \
+                $(JSC_DIR)/API/JSClassRef.cpp \
+                $(JSC_DIR)/API/JSContextRef.cpp \
+                $(JSC_DIR)/API/JSObjectRef.cpp \
+                $(JSC_DIR)/API/JSStringRef.cpp \
+                $(JSC_DIR)/API/JSValueRef.cpp \
+                $(JSC_DIR)/API/OpaqueJSString.cpp \
+                $(JSC_DIR)/assembler/ARMAssembler.cpp \
+                $(JSC_DIR)/assembler/ARMv7Assembler.cpp \
+                $(JSC_DIR)/assembler/MacroAssemblerARM.cpp \
+                $(JSC_DIR)/assembler/MacroAssemblerSH4.cpp \
+                $(JSC_DIR)/bytecode/CodeBlock.cpp \
+                $(JSC_DIR)/bytecode/JumpTable.cpp \
+                $(JSC_DIR)/bytecode/Opcode.cpp \
+                $(JSC_DIR)/bytecode/SamplingTool.cpp \
+                $(JSC_DIR)/bytecode/StructureStubInfo.cpp \
+                $(JSC_DIR)/bytecompiler/BytecodeGenerator.cpp \
+                $(JSC_DIR)/bytecompiler/NodesCodegen.cpp \
+                $(JSC_DIR)/heap/ConservativeRoots.cpp \
+                $(JSC_DIR)/heap/HandleHeap.cpp \
+                $(JSC_DIR)/heap/HandleStack.cpp \
+                $(JSC_DIR)/heap/Heap.cpp \
+                $(JSC_DIR)/heap/MachineStackMarker.cpp \
+                $(JSC_DIR)/heap/MarkStack.cpp \
+                $(JSC_DIR)/heap/MarkedBlock.cpp \
+                $(JSC_DIR)/heap/NewSpace.cpp \
+                $(JSC_DIR)/heap/OldSpace.cpp \
+                $(JSC_DIR)/debugger/DebuggerActivation.cpp \
+                $(JSC_DIR)/debugger/DebuggerCallFrame.cpp \
+                $(JSC_DIR)/debugger/Debugger.cpp \
+                $(JSC_DIR)/dfg/DFGByteCodeParser.cpp \
+                $(JSC_DIR)/dfg/DFGGraph.cpp \
+                $(JSC_DIR)/dfg/DFGJITCodeGenerator.cpp \
+                $(JSC_DIR)/dfg/DFGJITCompiler.cpp \
+                $(JSC_DIR)/dfg/DFGNonSpeculativeJIT.cpp \
+                $(JSC_DIR)/dfg/DFGOperations.cpp \
+                $(JSC_DIR)/dfg/DFGSpeculativeJIT.cpp \
+                $(JSC_DIR)/interpreter/CallFrame.cpp \
+                $(JSC_DIR)/interpreter/Interpreter.cpp \
+                $(JSC_DIR)/interpreter/RegisterFile.cpp \
+                $(JSC_DIR)/jit/ExecutableAllocatorFixedVMPool.cpp \
+                $(JSC_DIR)/jit/ExecutableAllocator.cpp \
+                $(JSC_DIR)/jit/JITArithmetic.cpp \
+                $(JSC_DIR)/jit/JITArithmetic32_64.cpp \
+                $(JSC_DIR)/jit/JITCall.cpp \
+                $(JSC_DIR)/jit/JITCall32_64.cpp \
+                $(JSC_DIR)/jit/JIT.cpp \
+                $(JSC_DIR)/jit/JITOpcodes.cpp \
+                $(JSC_DIR)/jit/JITOpcodes32_64.cpp \
+                $(JSC_DIR)/jit/JITPropertyAccess.cpp \
+                $(JSC_DIR)/jit/JITPropertyAccess32_64.cpp \
+                $(JSC_DIR)/jit/JITStubs.cpp \
+                $(JSC_DIR)/jit/ThunkGenerators.cpp \
+                $(JSC_DIR)/parser/JSParser.cpp \
+                $(JSC_DIR)/parser/Lexer.cpp \
+                $(JSC_DIR)/parser/Nodes.cpp \
+                $(JSC_DIR)/parser/ParserArena.cpp \
+                $(JSC_DIR)/parser/Parser.cpp \
+                $(JSC_DIR)/parser/SourceProviderCache.cpp \
+                $(JSC_DIR)/profiler/Profile.cpp \
+                $(JSC_DIR)/profiler/ProfileGenerator.cpp \
+                $(JSC_DIR)/profiler/ProfileNode.cpp \
+                $(JSC_DIR)/profiler/Profiler.cpp \
+                $(JSC_DIR)/runtime/ArgList.cpp \
+                $(JSC_DIR)/runtime/Arguments.cpp \
+                $(JSC_DIR)/runtime/ArrayConstructor.cpp \
+                $(JSC_DIR)/runtime/ArrayPrototype.cpp \
+                $(JSC_DIR)/runtime/BooleanConstructor.cpp \
+                $(JSC_DIR)/runtime/BooleanObject.cpp \
+                $(JSC_DIR)/runtime/BooleanPrototype.cpp \
+                $(JSC_DIR)/runtime/CallData.cpp \
+                $(JSC_DIR)/runtime/CommonIdentifiers.cpp \
+                $(JSC_DIR)/runtime/Completion.cpp \
+                $(JSC_DIR)/runtime/ConstructData.cpp \
+                $(JSC_DIR)/runtime/DateConstructor.cpp \
+                $(JSC_DIR)/runtime/DateConversion.cpp \
+                $(JSC_DIR)/runtime/DateInstance.cpp \
+                $(JSC_DIR)/runtime/DatePrototype.cpp \
+                $(JSC_DIR)/runtime/ErrorConstructor.cpp \
+                $(JSC_DIR)/runtime/Error.cpp \
+                $(JSC_DIR)/runtime/ErrorInstance.cpp \
+                $(JSC_DIR)/runtime/ErrorPrototype.cpp \
+                $(JSC_DIR)/runtime/ExceptionHelpers.cpp \
+                $(JSC_DIR)/runtime/Executable.cpp \
+                $(JSC_DIR)/runtime/FunctionConstructor.cpp \
+                $(JSC_DIR)/runtime/FunctionPrototype.cpp \
+                $(JSC_DIR)/runtime/GCActivityCallback.cpp \
+                $(JSC_DIR)/runtime/GetterSetter.cpp \
+                $(JSC_DIR)/runtime/Identifier.cpp \
+                $(JSC_DIR)/runtime/InitializeThreading.cpp \
+                $(JSC_DIR)/runtime/InternalFunction.cpp \
+                $(JSC_DIR)/runtime/JSActivation.cpp \
+                $(JSC_DIR)/runtime/JSAPIValueWrapper.cpp \
+                $(JSC_DIR)/runtime/JSArray.cpp \
+                $(JSC_DIR)/runtime/JSByteArray.cpp \
+                $(JSC_DIR)/runtime/JSCell.cpp \
+                $(JSC_DIR)/runtime/JSFunction.cpp \
+                $(JSC_DIR)/runtime/JSGlobalData.cpp \
+                $(JSC_DIR)/runtime/JSGlobalObject.cpp \
+                $(JSC_DIR)/runtime/JSGlobalObjectFunctions.cpp \
+                $(JSC_DIR)/runtime/JSLock.cpp \
+                $(JSC_DIR)/runtime/JSNotAnObject.cpp \
+                $(JSC_DIR)/runtime/JSObject.cpp \
+                $(JSC_DIR)/runtime/JSObjectWithGlobalObject.cpp \
+                $(JSC_DIR)/runtime/JSONObject.cpp \
+                $(JSC_DIR)/runtime/JSPropertyNameIterator.cpp \
+                $(JSC_DIR)/runtime/JSStaticScopeObject.cpp \
+                $(JSC_DIR)/runtime/JSString.cpp \
+                $(JSC_DIR)/runtime/JSValue.cpp \
+                $(JSC_DIR)/runtime/JSVariableObject.cpp \
+                $(JSC_DIR)/runtime/JSWrapperObject.cpp \
+                $(JSC_DIR)/runtime/LiteralParser.cpp \
+                $(JSC_DIR)/runtime/Lookup.cpp \
+                $(JSC_DIR)/runtime/MathObject.cpp \
+                $(JSC_DIR)/runtime/NativeErrorConstructor.cpp \
+                $(JSC_DIR)/runtime/NativeErrorPrototype.cpp \
+                $(JSC_DIR)/runtime/NumberConstructor.cpp \
+                $(JSC_DIR)/runtime/NumberObject.cpp \
+                $(JSC_DIR)/runtime/NumberPrototype.cpp \
+                $(JSC_DIR)/runtime/ObjectConstructor.cpp \
+                $(JSC_DIR)/runtime/ObjectPrototype.cpp \
+                $(JSC_DIR)/runtime/Operations.cpp \
+                $(JSC_DIR)/runtime/PropertyDescriptor.cpp \
+                $(JSC_DIR)/runtime/PropertyNameArray.cpp \
+                $(JSC_DIR)/runtime/PropertySlot.cpp \
+                $(JSC_DIR)/runtime/RegExpConstructor.cpp \
+                $(JSC_DIR)/runtime/RegExp.cpp \
+                $(JSC_DIR)/runtime/RegExpObject.cpp \
+                $(JSC_DIR)/runtime/RegExpPrototype.cpp \
+                $(JSC_DIR)/runtime/RegExpCache.cpp \
+                $(JSC_DIR)/runtime/RopeImpl.cpp \
+                $(JSC_DIR)/runtime/ScopeChain.cpp \
+                $(JSC_DIR)/runtime/SmallStrings.cpp \
+                $(JSC_DIR)/runtime/StrictEvalActivation.cpp \
+                $(JSC_DIR)/runtime/StringConstructor.cpp \
+                $(JSC_DIR)/runtime/StringObject.cpp \
+                $(JSC_DIR)/runtime/StringPrototype.cpp \
+                $(JSC_DIR)/runtime/StringRecursionChecker.cpp \
+                $(JSC_DIR)/runtime/StructureChain.cpp \
+                $(JSC_DIR)/runtime/Structure.cpp \
+                $(JSC_DIR)/runtime/TimeoutChecker.cpp \
+                $(JSC_DIR)/runtime/UString.cpp \
+                $(JSC_DIR)/yarr/YarrJIT.cpp \
+                $(JSC_DIR)/wtf/OSAllocatorMona.cpp\
+                $(JSC_DIR)/wtf/mona/MainThreadMona.cpp\
+                $(JSC_DIR)/wtf/MainThread.cpp \
+
+include $(MONADIR)/share/configs/monapi-static-lib.inc
+
+gen-derived:
+	@if [ ! -e "$(JSC_DIR)/DerivedSources/JavaScriptCore/ArrayConstructor.lut.h" ]; then \
+	(cd $(JSC_DIR) && ./make-generated-sources.sh) \
+	fi    
+
+-include dependencies

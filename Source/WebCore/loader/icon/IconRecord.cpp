@@ -35,7 +35,6 @@
 #include "SQLiteStatement.h"
 #include "SQLiteTransaction.h"
 #include <wtf/text/CString.h>
-
 #include <limits.h>
 
 namespace WebCore {

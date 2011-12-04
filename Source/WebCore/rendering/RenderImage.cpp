@@ -238,6 +238,7 @@ void RenderImage::notifyFinished(CachedResource* newImage)
 
 void RenderImage::paintReplaced(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
 {
+	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     LayoutUnit cWidth = contentWidth();
     LayoutUnit cHeight = contentHeight();
     LayoutUnit leftBorder = borderLeft();

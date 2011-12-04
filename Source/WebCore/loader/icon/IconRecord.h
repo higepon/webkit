@@ -42,6 +42,10 @@
 #include <sys/types.h> // For time_t structure.
 #endif
 
+#if OS(MONA)
+#include <time.h>
+#endif
+
 namespace WebCore { 
 
 class IconDataSnapshot;

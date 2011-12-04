@@ -83,6 +83,12 @@ class BView;
 typedef BView* PlatformWidget;
 #endif
 
+#if PLATFORM(MONA)
+class MonaView;
+typedef MonaView* PlatformWidget;
+#endif
+
+
 #if PLATFORM(BREWMP)
 typedef void* PlatformWidget;
 #endif

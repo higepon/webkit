@@ -153,6 +153,15 @@ void StackBounds::initialize()
     m_bound = estimateStackBound(m_origin);
 }
 
+#elif OS(MONA)
+
+void StackBounds::initialize()
+{
+  // TODO: MONA thread
+    m_origin = (void*)0xF0000000;
+    m_bound = (void*)(reinterpret_cast<uint32_t>(m_origin) - 4 * 1024 * 1024);;
+}
+
 #elif OS(UNIX)
 
 void StackBounds::initialize()

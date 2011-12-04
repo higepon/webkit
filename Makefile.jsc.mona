@@ -1,0 +1,39 @@
+include mona.inc
+TARGET     = JSC
+SOURCES    = $(JSC_DIR)/jsc.cpp
+
+INSTDIR    = $(BINDIR)/APPS/
+INSTFILES  = $(TARGET).map
+SHAREDIR   = $(MONADIR)/share
+ADDLINK    =  -lamonagui-imp --enable-auto-import libjscore.a -licuin -l icuuc -lmonalibc-imp
+ADDINCLUDE = -I$(JSC_DIR) \
+             -I$(SOURCE_DIR) \
+             -I$(SOURCE_DIR)/ThirdParty  \
+             -I$(JSC_DIR)  \
+             -I$(JSC_DIR)/assembler \
+             -I$(JSC_DIR)/bytecode  \
+             -I$(JSC_DIR)/bytecompiler  \
+             -I$(JSC_DIR)/heap  \
+             -I$(JSC_DIR)/dfg  \
+             -I$(JSC_DIR)/debugger  \
+             -I$(JSC_DIR)/interpreter  \
+             -I$(JSC_DIR)/jit  \
+             -I$(JSC_DIR)/parser  \
+             -I$(JSC_DIR)/profiler  \
+             -I$(JSC_DIR)/runtime  \
+             -I$(JSC_DIR)/wtf   \
+             -I$(JSC_DIR)/wtf/unicode  \
+             -I$(JSC_DIR)/yarr  \
+             -I$(JSC_DIR)/API  \
+             -I$(JSC_DIR)/ForwardingHeaders  \
+             -I$(JSC_DIR)/DerivedSources/JavaScriptCore \
+             -I$(SOURCE_DIR)   \
+             -I $(MONADIR)/core/icu/icu/source/common  \
+             -I $(MONADIR)/core/icu/icu/source/i18n/  \
+             -I /Users/taro/mingw/include
+
+include $(SHAREDIR)/configs/monapi-exe.inc
+
+CXXFLAGS+=$(ADDCXXFLAGS)
+
+-include dependencies

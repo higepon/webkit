@@ -391,6 +391,7 @@ FloatSize InlineTextBox::applyShadowToGraphicsContext(GraphicsContext* context, 
 static void paintTextWithShadows(GraphicsContext* context, const Font& font, const TextRun& textRun, const AtomicString& emphasisMark, int emphasisMarkOffset, int startOffset, int endOffset, int truncationPoint, const FloatPoint& textOrigin,
                                  const FloatRect& boxRect, const ShadowData* shadow, bool stroked, bool horizontal)
 {
+	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     Color fillColor = context->fillColor();
     ColorSpace fillColorSpace = context->fillColorSpace();
     bool opaque = fillColor.alpha() == 255;
@@ -468,6 +469,7 @@ static inline AffineTransform rotation(const FloatRect& boxRect, RotationDirecti
 
 void InlineTextBox::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffset, LayoutUnit /*lineTop*/, LayoutUnit /*lineBottom*/)
 {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     if (isLineBreak() || !paintInfo.shouldPaintWithinRoot(renderer()) || renderer()->style()->visibility() != VISIBLE ||
         m_truncation == cFullTruncation || paintInfo.phase == PaintPhaseOutline || !m_len)
         return;

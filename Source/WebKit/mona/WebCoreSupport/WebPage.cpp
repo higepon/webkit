@@ -1,0 +1,79 @@
+/*
+ * Copyright (c) 2011  Higepon(Taro Minowa) <higepon@users.sourceforge.jp>r
+ *
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY APPLE COMPUTER, INC. ``AS IS'' AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE COMPUTER, INC. OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "config.h"
+#include "WebPage.h"
+#include "NotImplemented.h"
+#include "WebFrame.h"
+#include "WebFramePrivate.h"
+#include "ChromeClientMona.h"
+#include "ContextMenuClientMona.h"
+#include "EditorClientMona.h"
+#include "DragClientMona.h"
+#include "InspectorClientMona.h"
+#include "Page.h"
+#include "Settings.h"
+#include "WebView.h"
+
+using namespace WebCore;
+
+WebPage::WebPage(WebView* web_view) :
+    page_(0),
+    main_frame_(0),
+    web_view_(web_view) {
+
+  // todo: life cycle of clients
+  Page::PageClients* clients = new Page::PageClients;
+  ASSERT(clients);
+  clients->chromeClient = new ChromeClientMona();
+  clients->contextMenuClient = new ContextMenuClientMona();
+  clients->editorClient = new EditorClientMona();
+  clients->dragClient = new DragClientMona();
+  clients->inspectorClient = new InspectorClientMona();
+
+  page_ = new WebCore::Page(*clients);
+  page_->settings()->setLoadsImagesAutomatically(true);
+
+  // todo: Is this necessary?
+  // fSettings = new BWebSettings(fPage->settings());
+}
+
+void WebPage::Init() {
+  WebFramePrivate* data = new WebFramePrivate;
+  data->name = "Hello";
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  data->page = page_;
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  main_frame_ = new WebFrame(this, 0, data, web_view_);
+// _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  _logprintf("END of WebFrame %s %s:%d\n", __func__, __FILE__, __LINE__);
+}
+
+void WebPage::LoadURL(const char* urlString) {
+  ASSERT(main_frame_);
+  main_frame_->LoadURL(urlString);
+}

@@ -254,7 +254,7 @@ inline int clampToInteger(unsigned x)
     return static_cast<int>(x);
 }
 
-#if !COMPILER(MSVC) && !(COMPILER(RVCT) && PLATFORM(BREWMP)) && !OS(SOLARIS) && !OS(SYMBIAN)
+#if !COMPILER(MSVC) && !(COMPILER(RVCT) && PLATFORM(BREWMP)) && !OS(SOLARIS) && !OS(SYMBIAN) && !OS(MONA)
 using std::isfinite;
 using std::isinf;
 using std::isnan;

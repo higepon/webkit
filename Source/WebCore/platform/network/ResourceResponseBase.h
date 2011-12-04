@@ -37,7 +37,11 @@
 
 #if OS(SOLARIS)
 #include <sys/time.h> // For time_t structure.
+#elif OS(MONA)
+#include <time.h>
 #endif
+
+
 
 namespace WebCore {
 

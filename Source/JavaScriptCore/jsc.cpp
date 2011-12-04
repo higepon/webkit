@@ -367,6 +367,12 @@ int main(int argc, char** argv)
     // error mode here to work around Cygwin's behavior. See <http://webkit.org/b/55222>.
     ::SetErrorMode(0);
 #endif
+#if OS(MONA)
+  intptr_t ret = monapi_enable_stacktrace("/APPS/JSC.MAP");
+  if (ret != M_OK) {
+    monapi_fatal("syscall_stack_trace_enable failed%d\n", ret);
+  }
+#endif
 
 #if defined(_DEBUG)
     _CrtSetReportFile(_CRT_WARN, _CRTDBG_FILE_STDERR);

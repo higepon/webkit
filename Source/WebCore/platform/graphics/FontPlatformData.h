@@ -29,6 +29,8 @@
 #include "qt/FontPlatformData.h"
 #elif PLATFORM(WIN) && OS(WINCE)
 #include "wince/FontPlatformData.h"
+#elif OS(MONA)
+#include "mona/FontPlatformData.h"
 #elif PLATFORM(WX)
 #include "wx/FontPlatformData.h"
 #elif (PLATFORM(EFL) || PLATFORM(GTK)) && USE(FREETYPE)

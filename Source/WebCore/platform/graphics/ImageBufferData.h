@@ -37,4 +37,6 @@
 #include "ImageBufferDataWince.h"
 #elif PLATFORM(WX)
 #include "ImageBufferDataWx.h"
+#elif PLATFORM(MONA)
+#include "ImageBufferDataMona.h"
 #endif

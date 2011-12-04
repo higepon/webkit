@@ -1845,7 +1845,7 @@ void FrameLoader::commitProvisionalLoad()
 
 void FrameLoader::transitionToCommitted(PassRefPtr<CachedPage> cachedPage)
 {
-    ASSERT(m_client->hasWebView());
+  //    ASSERT(m_client->hasWebView());
     ASSERT(m_state == FrameStateProvisional);
 
     if (m_state != FrameStateProvisional)

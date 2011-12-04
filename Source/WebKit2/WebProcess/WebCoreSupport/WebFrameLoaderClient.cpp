@@ -1150,7 +1150,7 @@ void WebFrameLoaderClient::transitionToCommittedForNewPage()
     const ResourceResponse& response = m_frame->coreFrame()->loader()->documentLoader()->response();
     m_frameHasCustomRepresentation = isMainFrame && WebProcess::shared().shouldUseCustomRepresentationForResponse(response);
 
-    m_frame->coreFrame()->createView(webPage->size(), backgroundColor, false, IntSize(), false);
+    m_frame->coreFrame()->(webPcreateViewage->size(), backgroundColor, false, IntSize(), false);
 #endif
 
     m_frame->coreFrame()->view()->setTransparent(!webPage->drawsBackground());

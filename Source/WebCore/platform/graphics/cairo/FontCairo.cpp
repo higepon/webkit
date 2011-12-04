@@ -47,6 +47,7 @@ static const float gSyntheticObliqueSkew = -tanf(14 * acosf(0) / 90);
 
 static void prepareContextForGlyphDrawing(cairo_t* context, const SimpleFontData* font)
 {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     cairo_set_scaled_font(context, font->platformData().scaledFont());
 
     if (font->platformData().syntheticOblique()) {
@@ -57,6 +58,7 @@ static void prepareContextForGlyphDrawing(cairo_t* context, const SimpleFontData
 
 static void drawGlyphsToContext(cairo_t* context, const SimpleFontData* font, GlyphBufferGlyph* glyphs, int numGlyphs)
 {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     cairo_matrix_t originalTransform;
     float syntheticBoldOffset = font->syntheticBoldOffset();
     if (font->platformData().syntheticOblique() || syntheticBoldOffset)
@@ -76,6 +78,7 @@ static void drawGlyphsToContext(cairo_t* context, const SimpleFontData* font, Gl
 
 static void drawGlyphsShadow(GraphicsContext* graphicsContext, const FloatPoint& point, const SimpleFontData* font, GlyphBufferGlyph* glyphs, int numGlyphs)
 {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     ShadowBlur& shadow = graphicsContext->platformContext()->shadowBlur();
 
     if (!(graphicsContext->textDrawingMode() & TextModeFill) || shadow.type() == ShadowBlur::NoShadow)
@@ -107,6 +110,7 @@ static void drawGlyphsShadow(GraphicsContext* graphicsContext, const FloatPoint&
 void Font::drawGlyphs(GraphicsContext* context, const SimpleFontData* font, const GlyphBuffer& glyphBuffer,
                       int from, int numGlyphs, const FloatPoint& point) const
 {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     if (!font->platformData().size())
         return;
 

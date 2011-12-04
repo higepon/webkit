@@ -65,6 +65,8 @@ typedef WebCore::DataObjectGtk* DragDataRef;
 #elif PLATFORM(HAIKU)
 class BMessage;
 typedef class BMessage* DragDataRef;
+#elif PLATFORM(MONA)
+typedef void* DragDataRef;
 #elif PLATFORM(EFL) || PLATFORM(BREWMP)
 typedef void* DragDataRef;
 #endif

@@ -78,6 +78,8 @@ namespace WebCore {
     typedef cairo_surface_t* DragImageRef;
 #elif PLATFORM(HAIKU)
     typedef BBitmap* DragImageRef;
+#elif PLATFORM(MONA)
+    typedef void* DragImageRef;
 #elif PLATFORM(BREWMP)
     typedef IImage* DragImageRef;
 #elif PLATFORM(EFL)

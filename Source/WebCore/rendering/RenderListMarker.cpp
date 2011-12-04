@@ -1103,6 +1103,7 @@ IntRect RenderListMarker::localSelectionRect()
 
 void RenderListMarker::paint(PaintInfo& paintInfo, const LayoutPoint& paintOffset)
 {
+	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     if (paintInfo.phase != PaintPhaseForeground)
         return;
     
