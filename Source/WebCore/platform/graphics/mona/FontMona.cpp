@@ -70,7 +70,13 @@ bool Font::canExpandAroundIdeographsInComplexText()
 void Font::drawGlyphs(GraphicsContext* graphicsContext, const SimpleFontData* font,
                       const GlyphBuffer& glyphBuffer, int from, int numGlyphs, const FloatPoint& point) const
 {
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+	_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+	for (int i = 0; i < numGlyphs; i++) {
+		FloatPoint p = point;
+		p.setX(point.x() + i * 10);
+		graphicsContext->fillRect(FloatRect(p, FloatSize(8, 8)));
+	}
+
     // Color color = graphicsContext->fillColor();
     // BView* view = graphicsContext->platformContext();
     // BFont* m_font = font->platformData().font();

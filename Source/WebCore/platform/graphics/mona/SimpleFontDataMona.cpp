@@ -50,9 +50,12 @@ void SimpleFontData::platformInit()
 
     // font_height height;
     // font->GetHeight(&height);
-    // m_fontMetrics.setAscent(height.ascent);
-    // m_fontMetrics.setDescent(height.descent);
-    // m_fontMetrics.setXHeight(height.ascent * 0.56f); // Hack taken from the win port.
+    m_fontMetrics.setAscent(10);
+    m_fontMetrics.setDescent(10);
+    m_fontMetrics.setXHeight(10 * 0.56f); // Hack taken from the win port.
+    m_fontMetrics.setLineGap(2);
+    m_fontMetrics.setLineSpacing(lroundf(10) + lroundf(10) + lroundf(2));
+     //m_fontMetrics.setXHeight(height.ascent * 0.56f); // Hack taken from the win port.
     // m_fontMetrics.setLineGap(height.leading);
     // m_fontMetrics.setLineSpacing(lroundf(height.ascent) + lroundf(height.descent) + lroundf(height.leading));
 }
