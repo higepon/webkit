@@ -33,6 +33,8 @@
 #include "FontSelector.h"
 #include "GraphicsContext.h"
 #include "NotImplemented.h"
+#define assert(x) /* */
+#include <monagui.h>
 
 
 // FIXME: Temp routine to convert unicode character to UTF8.
@@ -55,6 +57,8 @@ int charUnicodeToUTF8HACK(unsigned short glyph, char* out)
     return i;
 }
 
+monagui::FontMetrics* g_fontMetrics = NULL;
+
 namespace WebCore {
 
 bool Font::canReturnFallbackFontsForComplexText()
@@ -70,12 +74,48 @@ bool Font::canExpandAroundIdeographsInComplexText()
 void Font::drawGlyphs(GraphicsContext* graphicsContext, const SimpleFontData* font,
                       const GlyphBuffer& glyphBuffer, int from, int numGlyphs, const FloatPoint& point) const
 {
-	_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-	for (int i = 0; i < numGlyphs; i++) {
-		FloatPoint p = point;
-		p.setX(point.x() + i * 10);
-		graphicsContext->fillRect(FloatRect(p, FloatSize(8, 8)));
-	}
+    GlyphBufferGlyph* glyphs = const_cast<GlyphBufferGlyph*>(glyphBuffer.glyphs(from));
+    if (g_fontMetrics) {
+      g_fontMetrics->setFontStyle(monagui::Font::FIXED);
+    }
+    int w = 0;
+    int h = 0;
+
+    for (int i = 0; i < numGlyphs; i++) {
+          int pos = 0;
+          int bit = 1;
+          char fp[256];
+          //          memset(fp, 0, 256);
+          int offset = 0;
+          int width = 0;
+          int height = 0;
+
+        if (g_fontMetrics) {
+          _logprintf("PONHIGE %c\n", glyphs[i].index);
+          if (g_fontMetrics->decodeCharacter(glyphs[i].index, &offset, &width, &height, fp)) {
+            _logprintf("offset=%d width=%d height=%d\n", offset, width, height);
+            int x = point.x();
+            int y = point.y();
+            for (int j = 0; j < height; j++) {
+              for (int k = 0; k < width; k++) {
+                int x0 = x + w + k + (offset - width) / 2;
+                if ((fp[pos] & bit) != 0) {
+                  _logprintf("(%d, %d)\n", j, k);
+                  _logprintf("(%d, %d)\n", x0, y + h + j);
+                  graphicsContext->drawLine(IntPoint(x0, y + h + j), IntPoint(x0 + 1, y + h + j));
+                }
+                bit <<= 1;
+                if (bit == 256) {
+                  pos++;
+                  bit = 1;
+                }
+              }
+            }
+          }
+          w += offset;
+        }
+    }
+    //        graphicsContext->fillRect(FloatRect(p, FloatSize(8, 8)));
 
     // Color color = graphicsContext->fillColor();
     // BView* view = graphicsContext->platformContext();
@@ -127,4 +167,3 @@ int Font::offsetForPositionForComplexText(const TextRun&, float, bool) const
 }
 
 } // namespace WebCore
-

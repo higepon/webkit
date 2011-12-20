@@ -78,6 +78,7 @@ extern void (*SharedTimerFiredFunction)();
 //   WebCore::WebView web_view_;
 // };
 
+extern monagui::FontMetrics* g_fontMetrics;
 
 using namespace WebCore;
 
@@ -88,6 +89,7 @@ WebView::WebView() : web_page_(new WebPage(this)), image_buffer_(0), Frame("brow
   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   setBackground(monagui::Color::blue);
   setBounds(40, 40, 400, 400);
+  g_fontMetrics = getFontMetrics();
 }
 
 void WebView::paint(Graphics *g) {
