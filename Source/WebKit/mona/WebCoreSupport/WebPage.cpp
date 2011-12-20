@@ -57,6 +57,7 @@ WebPage::WebPage(WebView* web_view) :
 
   page_ = new WebCore::Page(*clients);
   page_->settings()->setLoadsImagesAutomatically(true);
+  page_->settings()->setJavaScriptEnabled(true);
 
   // todo: Is this necessary?
   // fSettings = new BWebSettings(fPage->settings());
