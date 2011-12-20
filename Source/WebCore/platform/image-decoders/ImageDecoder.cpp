@@ -27,11 +27,11 @@
 #include <cmath>
 
 #include "BMPImageDecoder.h"
+#include "PNGImageDecoder.h"
 #if !OS(MONA)
 #include "GIFImageDecoder.h"
 #include "ICOImageDecoder.h"
 #include "JPEGImageDecoder.h"
-#include "PNGImageDecoder.h"
 #include "WEBPImageDecoder.h"
 #endif
 #include "SharedBuffer.h"
@@ -107,10 +107,12 @@ ImageDecoder* ImageDecoder::create(const SharedBuffer& data, ImageSource::AlphaO
 #if !OS(MONA)
     if (matchesGIFSignature(contents))
         return new GIFImageDecoder(alphaOption, gammaAndColorProfileOption);
-
-    if (matchesPNGSignature(contents))
+#endif
+    if (matchesPNGSignature(contents)) {
+    	_logprintf("PPPPPPPPPPPPPPPPNNNG\n");
         return new PNGImageDecoder(alphaOption, gammaAndColorProfileOption);
-
+    }
+#if !OS(MONA)
     if (matchesJPEGSignature(contents))
         return new JPEGImageDecoder(alphaOption, gammaAndColorProfileOption);
 

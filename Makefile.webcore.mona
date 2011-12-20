@@ -1856,6 +1856,7 @@ $(WEBCORE_DIR)/loader/icon/IconLoader.cpp\
 $(WEBCORE_DIR)/loader/icon/IconRecord.cpp\
 $(WEBCORE_DIR)/loader/icon/PageURLRecord.cpp\
 $(WEBCORE_DIR)/platform/image-decoders/bmp/BMPImageDecoder.cpp \
+$(WEBCORE_DIR)/platform/image-decoders/png/PNGImageDecoder.cpp \
 $(WEBCORE_DIR)/platform/image-decoders/bmp/BMPImageReader.cpp\
 $(WEBCORE_DIR)/platform/image-decoders/ImageDecoder.cpp\
 $(WEBCORE_DIR)/platform/image-decoders/cairo/ImageDecoderCairo.cpp\
