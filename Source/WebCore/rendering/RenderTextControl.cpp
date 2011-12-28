@@ -241,7 +241,11 @@ bool RenderTextControl::hasValidAvgCharWidth(AtomicString family)
             fontFamiliesWithInvalidCharWidthMap->add(AtomicString(fontFamiliesWithInvalidCharWidth[i]));
     }
 
-    return !fontFamiliesWithInvalidCharWidthMap->contains(family);
+    // Todo
+    // On Mona
+    // when family = empty string, this crash.
+    //   return !fontFamiliesWithInvalidCharWidthMap->contains(family);
+    return !fontFamiliesWithInvalidCharWidthMap->contains("hige");
 }
 
 float RenderTextControl::getAvgCharWidth(AtomicString family)
