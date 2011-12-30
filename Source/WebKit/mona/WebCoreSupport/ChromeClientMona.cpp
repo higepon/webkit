@@ -277,33 +277,6 @@ void ChromeClientMona::invalidateContentsAndWindow(const IntRect& rect, bool imm
     _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     ASSERT(webpage_);
     webpage_->paint(rect, immediate);
-
-//	cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-//	                                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
-//	  if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
-//	    _logprintf("CAIRO failure : %s %s:%d\n", __func__, __FILE__, __LINE__);
-//	    return;  // create will notice we didn't set m_initialized and fail.
-//	  }
-//
-//	  GraphicsContext context(cairo_create(surface));
-//
-//	  unsigned char* p = cairo_image_surface_get_data(surface);
-//	  for (int i = 0; i < 10; i++) {
-//	    _logprintf("before %x ", p[i]);
-//	  }
-//
-//	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//	  ASSERT(webView()->webPage()->page()->mainFrame());
-//	  webView()->webPage()->page()->mainFrame()->view()->forceLayout(true); // correct place?
-//	  webView()->webPage()->page()->mainFrame()->view()->paint(&context, IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT));
-//	 p = cairo_image_surface_get_data(surface);
-//	  for (int i = 0; i < 10; i++) {
-//	    _logprintf("after %x ", p[i]);
-//	  }
-//	  ASSERT(webView());
-//	  webView()->SetImageBuffer(p);
-   // webView()->repaint();
-    //    notImplemented();
 }
 
 void ChromeClientMona::invalidateContentsForSlowScroll(const IntRect&, bool)
@@ -406,6 +379,7 @@ void ChromeClientMona::runOpenPanel(Frame*, PassRefPtr<FileChooser>)
 
 void ChromeClientMona::loadIconForFiles(const WTF::Vector<WTF::String>& filenames, FileIconLoader* loader)
 {
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     loader->notifyFinished(Icon::createIconForFiles(filenames));
 }
 
