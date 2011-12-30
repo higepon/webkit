@@ -79,16 +79,18 @@ WebPage::~WebPage() {
   cairo_surface_destroy(surface_);
 }
 
-// todo: Handle rect and immediate.
 void WebPage::paint(const IntRect& rect, bool immediate) {
+  _logprintf("(%d %d %d %d) immediate=%s %s %s:%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate ? "true" : "false", __func__, __FILE__, __LINE__);
   ASSERT(web_view_);
   ASSERT(main_frame_);
   ASSERT(main_frame_->Frame());
   GraphicsContext context(cairo_);
   main_frame_->Frame()->view()->forceLayout(true); // correct place? 
-  main_frame_->Frame()->view()->paint(&context, IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT));
+  main_frame_->Frame()->view()->paint(&context, rect);
   web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
-  web_view_->repaint();
+  if (immediate) {
+    web_view_->repaint();
+  }
 }
 
 void WebPage::Init() {
