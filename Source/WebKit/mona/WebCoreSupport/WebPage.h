@@ -32,12 +32,14 @@ namespace WebCore {
 class Page;
 class WebFrame;
 class WebView;
+class IntRect;
 
 class WebPage {
  public:
   WebPage(WebView* web_view);
   void Init();
   void LoadURL(const char* urlString);
+  void paint(const IntRect& rect, bool immediate);
 
   Page* page() {
     return page_;

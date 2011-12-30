@@ -29,6 +29,8 @@
 #include "WebPage.h"
 #include "NotImplemented.h"
 #include "WebFrame.h"
+#include "Frame.h"
+#include "FrameView.h"
 #include "WebFramePrivate.h"
 #include "ChromeClientMona.h"
 #include "ContextMenuClientMona.h"
@@ -49,7 +51,7 @@ WebPage::WebPage(WebView* web_view) :
   // todo: life cycle of clients
   Page::PageClients* clients = new Page::PageClients;
   ASSERT(clients);
-  clients->chromeClient = new ChromeClientMona(web_view_);
+  clients->chromeClient = new ChromeClientMona(this);
   clients->contextMenuClient = new ContextMenuClientMona();
   EditorClientMona* editorClient = new EditorClientMona();
   clients->editorClient = editorClient;
@@ -63,6 +65,27 @@ WebPage::WebPage(WebView* web_view) :
 
     // todo: Is this necessary?
   // fSettings = new BWebSettings(fPage->settings());
+}
+
+// todo: Handle rect and immediate.
+void WebPage::paint(const IntRect& rect, bool immediate) {
+  ASSERT(web_view_);
+  ASSERT(main_frame_);
+  ASSERT(main_frame_->Frame());
+
+  // todo destruct surface
+  cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
+  if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
+    _logprintf("CAIRO failure : %s %s:%d\n", __func__, __FILE__, __LINE__);
+    return;  // create will notice we didn't set m_initialized and fail.
+  }
+
+  GraphicsContext context(cairo_create(surface));
+  main_frame_->Frame()->view()->forceLayout(true); // correct place? 
+  main_frame_->Frame()->view()->paint(&context, IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT));
+  web_view_->SetImageBuffer(cairo_image_surface_get_data(surface));
+  web_view_->repaint();
 }
 
 void WebPage::Init() {
