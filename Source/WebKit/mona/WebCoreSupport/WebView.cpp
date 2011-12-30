@@ -27,9 +27,14 @@
 
 #include <assert.h>
 #include "config.h"
+#include "FocusController.h"
+#include "Page.h"
 #include "WebPage.h"
 #include "NotImplemented.h"
+#include "PlatformKeyboardEvent.h"
+#include "Frame.h"
 #include "WebView.h"
+
 extern void (*SharedTimerFiredFunction)();
 
 // class MonaLauncher : public monagui::Frame {
@@ -88,16 +93,16 @@ WebView::WebView() : web_page_(new WebPage(this)), image_buffer_(0), Frame("brow
   web_page_->Init();
   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   setBackground(monagui::Color::blue);
-  setBounds(40, 40, 400, 400);
+  setBounds(40, 40, WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
   g_fontMetrics = getFontMetrics();
 }
 
 void WebView::paint(Graphics *g) {
   if (image_buffer_) {
     _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-    for (int i = 0; i < 400; i++) {
-      for (int j = 0; j < 400; j++) {
-        g->drawPixel(i, j, ((uint32_t*)(image_buffer_))[i + j * 400]);
+    for (int i = 0; i < WEBVIEW_WIDTH; i++) {
+      for (int j = 0; j < WEBVIEW_HEIGHT; j++) {
+        g->drawPixel(i, j, ((uint32_t*)(image_buffer_))[i + j * WEBVIEW_WIDTH]);
       }
     }
   }
@@ -110,18 +115,25 @@ void WebView::SetImageBuffer(unsigned char* p) {
 }
 
 void WebView::processEvent(monagui::Event* event) {
-    if (event->getType() == Event::TIMER) {
+    if (event->getType() == monagui::Event::TIMER) {
       if (SharedTimerFiredFunction) {
         kill_timer(event->arg1);
         _logprintf("before timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
         SharedTimerFiredFunction();
         _logprintf("after timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
       }
+    } else if (event->getType() == monagui::Event::KEY_PRESSED) {
+        int keycode = ((KeyEvent *)event)->getKeycode();
+        int modifiers = ((KeyEvent *)event)->getModifiers();
+        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
+        _logprintf("KEY %s %s:%d\n", __func__, __FILE__, __LINE__);
+        PlatformKeyboardEvent keyEvent((monagui::KeyEvent *)event);
+        frame->eventHandler()->keyEvent(keyEvent);
     }
+
 }
 
 void WebView::LoadURL(const char* urlString, bool aquireFocus /* = true */) {
   web_page_->LoadURL(urlString);
   run();
 }
-

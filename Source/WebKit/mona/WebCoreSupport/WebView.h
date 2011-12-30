@@ -35,6 +35,9 @@ namespace WebCore {
 
 class WebPage;
 
+#define WEBVIEW_WIDTH 400
+#define WEBVIEW_HEIGHT 400
+
 class WebView : public monagui::Frame {
  public:
   WebView();
@@ -42,6 +45,9 @@ class WebView : public monagui::Frame {
   void paint(monagui::Graphics *g);
   void processEvent(monagui::Event* event);
   void SetImageBuffer(unsigned char* p);
+  WebPage* webPage() {
+	  return web_page_;
+  }
 //     class UserData {
 //     public:
 //         virtual                 ~UserData();

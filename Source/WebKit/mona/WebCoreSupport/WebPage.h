@@ -39,6 +39,10 @@ class WebPage {
   void Init();
   void LoadURL(const char* urlString);
 
+  Page* page() {
+    return page_;
+  }
+
  private:
   Page* page_;;
   WebFrame* main_frame_;

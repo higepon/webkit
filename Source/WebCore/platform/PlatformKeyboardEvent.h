@@ -73,6 +73,12 @@ typedef unsigned long int uint32;
 #define AEEEvent uint16
 #endif
 
+#if OS(MONA)
+namespace monagui {
+class KeyEvent;
+}
+#endif
+
 namespace WebCore {
 
     class PlatformKeyboardEvent {
@@ -210,6 +216,10 @@ namespace WebCore {
         PlatformKeyboardEvent(const Evas_Event_Key_Up*);
 #endif
 
+#if OS(MONA)
+       PlatformKeyboardEvent(monagui::KeyEvent*);
+#endif
+
     protected:
         Type m_type;
         String m_text;
@@ -235,6 +245,9 @@ namespace WebCore {
 #endif
 #if PLATFORM(QT)
         QKeyEvent* m_qtEvent;
+#endif
+#if OS(MONA)
+        monagui::KeyEvent* m_monaKeyEvent;
 #endif
     };
     

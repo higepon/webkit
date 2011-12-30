@@ -40,6 +40,9 @@
 #include "NotImplemented.h"
 #include "PlatformString.h"
 #include "SecurityOrigin.h"
+#include "WebPage.h"
+#include "Page.h"
+#include "WebView.h"
 //#include "PopupMenuHaiku.h"
 //#include "SearchPopupMenuHaiku.h"
 
@@ -49,7 +52,7 @@
 
 namespace WebCore {
 
-ChromeClientMona::ChromeClientMona()
+ChromeClientMona::ChromeClientMona(WebView* webview) : m_webview()
 {
 }
 
@@ -185,22 +188,22 @@ void ChromeClientMona::setResizable(bool)
     notImplemented();
 }
 
-void ChromeClientMona::addMessageToConsole(const String& message, unsigned int lineNumber,
-                                            const String& sourceID)
+void ChromeClientMona::addMessageToConsole(const WTF::String& message, unsigned int lineNumber,
+                                            const WTF::String& sourceID)
 {
     notImplemented();
   //    printf("MESSAGE %s:%i %s\n", BString(sourceID).String(), lineNumber, BString(message).String());
 }
 
-void ChromeClientMona::addMessageToConsole(MessageSource, MessageLevel, const String& message,
-                                            unsigned int lineNumber, const String& sourceID)
+void ChromeClientMona::addMessageToConsole(MessageSource, MessageLevel, const WTF::String& message,
+                                            unsigned int lineNumber, const WTF::String& sourceID)
 {
     notImplemented();
   //    printf("MESSAGE %s:%i %s\n", BString(sourceID).String(), lineNumber, BString(message).String());
 }
 
-void ChromeClientMona::addMessageToConsole(MessageSource, MessageType, MessageLevel, const String& message,
-                                            unsigned int lineNumber, const String& sourceID)
+void ChromeClientMona::addMessageToConsole(MessageSource, MessageType, MessageLevel, const WTF::String& message,
+                                            unsigned int lineNumber, const WTF::String& sourceID)
 {
     notImplemented();
   //    printf("MESSAGE %s:%i %s\n", BString(sourceID).String(), lineNumber, BString(message).String());
@@ -212,7 +215,7 @@ bool ChromeClientMona::canRunBeforeUnloadConfirmPanel()
     return false;
 }
 
-bool ChromeClientMona::runBeforeUnloadConfirmPanel(const String& message, Frame* frame)
+bool ChromeClientMona::runBeforeUnloadConfirmPanel(const WTF::String& message, Frame* frame)
 {
     notImplemented();
     return false;
@@ -223,27 +226,27 @@ void ChromeClientMona::closeWindowSoon()
     notImplemented();
 }
 
-void ChromeClientMona::runJavaScriptAlert(Frame*, const String& msg)
+void ChromeClientMona::runJavaScriptAlert(Frame*, const WTF::String& msg)
 {
     notImplemented();
     // BAlert* alert = new BAlert("JavaScript", BString(msg).String(), "OK");
     // alert->Go();
 }
 
-bool ChromeClientMona::runJavaScriptConfirm(Frame*, const String& msg)
+bool ChromeClientMona::runJavaScriptConfirm(Frame*, const WTF::String& msg)
 {
     notImplemented();
     //    BAlert* alert = new BAlert("JavaScript", BString(msg).String(), "Yes", "No");
     //    return !alert->Go();
 }
 
-bool ChromeClientMona::runJavaScriptPrompt(Frame*, const String& message, const String& defaultValue, String& result)
+bool ChromeClientMona::runJavaScriptPrompt(Frame*, const WTF::String& message, const WTF::String& defaultValue, WTF::String& result)
 {
     notImplemented();
     return false;
 }
 
-void ChromeClientMona::setStatusbarText(const String&)
+void ChromeClientMona::setStatusbarText(const WTF::String&)
 {
     notImplemented();
 }
@@ -271,6 +274,31 @@ void ChromeClientMona::invalidateWindow(const IntRect&, bool)
 
 void ChromeClientMona::invalidateContentsAndWindow(const IntRect&, bool)
 {
+//	cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+//	                                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
+//	  if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
+//	    _logprintf("CAIRO failure : %s %s:%d\n", __func__, __FILE__, __LINE__);
+//	    return;  // create will notice we didn't set m_initialized and fail.
+//	  }
+//
+//	  GraphicsContext context(cairo_create(surface));
+//
+//	  unsigned char* p = cairo_image_surface_get_data(surface);
+//	  for (int i = 0; i < 10; i++) {
+//	    _logprintf("before %x ", p[i]);
+//	  }
+//
+//	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//	  ASSERT(webView()->webPage()->page()->mainFrame());
+//	  webView()->webPage()->page()->mainFrame()->view()->forceLayout(true); // correct place?
+//	  webView()->webPage()->page()->mainFrame()->view()->paint(&context, IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT));
+//	 p = cairo_image_surface_get_data(surface);
+//	  for (int i = 0; i < 10; i++) {
+//	    _logprintf("after %x ", p[i]);
+//	  }
+//	  ASSERT(webView());
+//	  webView()->SetImageBuffer(p);
+   // webView()->repaint();
     notImplemented();
 }
 
@@ -330,12 +358,12 @@ void ChromeClientMona::mouseDidMoveOverElement(const HitTestResult& hit, unsigne
     notImplemented();
 }
 
-void ChromeClientMona::setToolTip(const String& tip)
+void ChromeClientMona::setToolTip(const WTF::String& tip)
 {
     notImplemented();
 }
 
-void ChromeClientMona::setToolTip(const String& tip, TextDirection)
+void ChromeClientMona::setToolTip(const WTF::String& tip, TextDirection)
 {
     notImplemented();
 }
@@ -372,7 +400,7 @@ void ChromeClientMona::runOpenPanel(Frame*, PassRefPtr<FileChooser>)
     notImplemented();
 }
 
-void ChromeClientMona::loadIconForFiles(const Vector<String>& filenames, FileIconLoader* loader)
+void ChromeClientMona::loadIconForFiles(const WTF::Vector<WTF::String>& filenames, FileIconLoader* loader)
 {
     loader->notifyFinished(Icon::createIconForFiles(filenames));
 }

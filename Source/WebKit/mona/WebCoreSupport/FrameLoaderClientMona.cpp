@@ -676,7 +676,7 @@ void FrameLoaderClientMona::dispatchDidReceiveContentLength(DocumentLoader* load
 void FrameLoaderClientMona::dispatchDidFinishLoading(DocumentLoader*, unsigned long)
 {
   cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                                        400, 400);
+                                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
   if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
     _logprintf("CAIRO failure : %s %s:%d\n", __func__, __FILE__, __LINE__);
     return;  // create will notice we didn't set m_initialized and fail.
@@ -691,7 +691,7 @@ void FrameLoaderClientMona::dispatchDidFinishLoading(DocumentLoader*, unsigned l
 
   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   frame_->view()->forceLayout(true); // correct place? 
-  frame_->view()->paint(&context, IntRect(0, 0, 400, 400));
+  frame_->view()->paint(&context, IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT));
  p = cairo_image_surface_get_data(surface);
   for (int i = 0; i < 10; i++) {
     _logprintf("after %x ", p[i]);
@@ -927,7 +927,7 @@ void FrameLoaderClientMona::transitionToCommittedForNewPage()
 {
   ASSERT(web_frame_);
   Frame* frame = web_frame_->Frame();
-  IntSize size = IntSize(400, 400);
+  IntSize size = IntSize(WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
   bool transparent = web_frame_->IsTransparent();
   Color backgroundColor = transparent ? WebCore::Color::transparent : WebCore::Color::gray;
 

@@ -54,6 +54,7 @@ EditorClientMona::EditorClientMona()
 
 void EditorClientMona::setPage(Page* page)
 {
+	_logprintf("SET_PAGE!!! %s %s:%d\n", __func__, __FILE__, __LINE__);
     m_page = page;
 }
 
@@ -243,18 +244,27 @@ void EditorClientMona::redo()
 
 void EditorClientMona::handleKeyboardEvent(KeyboardEvent* event)
 {
-    // Frame* frame = m_page->focusController()->focusedOrMainFrame();
-    // if (!frame || !frame->document()->focusedNode())
-    //     return;
-
-    // const PlatformKeyboardEvent* kevent = event->keyEvent();
-    // if (!kevent || kevent->type() == PlatformKeyboardEvent::KeyUp)
-    //     return;
-
-    // Node* start = frame->selection()->start().containerNode();
-    // if (!start)
-    //     return;
-
+	_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+	_logprintf("%s %s:%d %d\n", __func__, __FILE__, __LINE__, m_page);
+	_logprintf("%s %s:%d %d\n", __func__, __FILE__, __LINE__, m_page->focusController());
+	_logprintf("%s %s:%d %d\n", __func__, __FILE__, __LINE__, m_page->focusController()->focusedOrMainFrame());
+    Frame* frame = m_page->focusController()->focusedOrMainFrame();
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    if (!frame || !frame->document()->focusedNode())
+        return;
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    const PlatformKeyboardEvent* kevent = event->keyEvent();
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    if (!kevent || kevent->type() == PlatformKeyboardEvent::KeyUp)
+        return;
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    Node* start = frame->selection()->start().containerNode();
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    if (!start)
+        return;
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    frame->editor()->insertText("abc", event);
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // if (start->isContentEditable()) {
     //     switch (kevent->windowsVirtualKeyCode()) {
     //     case VK_BACK:
@@ -381,7 +391,7 @@ void EditorClientMona::handleKeyboardEvent(KeyboardEvent* event)
     //             return;
     //     }
     // }
-    // event->setDefaultHandled();
+    event->setDefaultHandled();
   notImplemented();
 }
 

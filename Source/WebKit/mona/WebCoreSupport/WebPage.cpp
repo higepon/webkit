@@ -49,17 +49,19 @@ WebPage::WebPage(WebView* web_view) :
   // todo: life cycle of clients
   Page::PageClients* clients = new Page::PageClients;
   ASSERT(clients);
-  clients->chromeClient = new ChromeClientMona();
+  clients->chromeClient = new ChromeClientMona(web_view_);
   clients->contextMenuClient = new ContextMenuClientMona();
-  clients->editorClient = new EditorClientMona();
+  EditorClientMona* editorClient = new EditorClientMona();
+  clients->editorClient = editorClient;
   clients->dragClient = new DragClientMona();
   clients->inspectorClient = new InspectorClientMona();
 
   page_ = new WebCore::Page(*clients);
   page_->settings()->setLoadsImagesAutomatically(true);
   page_->settings()->setJavaScriptEnabled(true);
+  editorClient->setPage(page_);
 
-  // todo: Is this necessary?
+    // todo: Is this necessary?
   // fSettings = new BWebSettings(fPage->settings());
 }
 

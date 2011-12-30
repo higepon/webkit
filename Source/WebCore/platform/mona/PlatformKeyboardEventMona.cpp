@@ -44,6 +44,10 @@ namespace WebCore {
 // {
 //   notImplemented();
 // }
+PlatformKeyboardEvent::PlatformKeyboardEvent(monagui::KeyEvent* evt) : m_monaKeyEvent(evt), m_type(Char) {
+
+
+}
 
 void PlatformKeyboardEvent::disambiguateKeyDownEvent(Type type, bool backwardCompatibilityMode)
 {

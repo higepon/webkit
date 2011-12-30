@@ -38,15 +38,17 @@ namespace WebCore {
 
     class FloatRect;
     class Page;
+    class WebView;
     struct FrameLoadRequest;
 
     class ChromeClientMona : public ChromeClient {
     public:
-        ChromeClientMona();
+        ChromeClientMona(WebView* webview);
         virtual ~ChromeClientMona();
         virtual void chromeDestroyed();
-
-        virtual void* webView() const { return 0; }
+        WebView* m_webview;
+        virtual WebView* webView() const { return m_webview; }
+        virtual void setWebView(WebView* v) { m_webview = v; }
         virtual void setWindowRect(const FloatRect&);
         virtual FloatRect windowRect();
 

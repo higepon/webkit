@@ -59,11 +59,14 @@ int main(int argc, char* argv[]) {
 
   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   //web_view.LoadURL("http://google.com/");
-  //  web_view.LoadURL("http://www.facebook.com/");
-  web_view.LoadURL("http://www.monaos.org/");
+  //   web_view.LoadURL("http://www.facebook.com/");
+  //   web_view.LoadURL("http://youtube.com/");
+  ///////////web_view.LoadURL("http://www.monaos.org/");
   //web_view.LoadURL("http://10.0.2.2/f.html");
-  //   web_view.LoadURL("http://10.0.2.2/");
-  //web_view.LoadURL("http://twitter.com/higepon");
+  //web_view.LoadURL("http://10.0.2.2/");
+  //  web_view.LoadURL("http://10.0.2.2/~taro/f.html");
+      web_view.LoadURL("http://10.0.2.2/~taro/");
+  //   web_view.LoadURL("http://twitter.com/higepon");
   // //  web_view.LoadURL("file://hige.txt/");
   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
