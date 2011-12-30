@@ -49,11 +49,9 @@
 #include "FrameNetworkingContextMona.h"
 #include "GraphicsContext.h"
 #include "WebView.h"
+#include "WebPage.h"
 // #define assert(...) /* */
 // #include <monagui.h>
-
-
-
 
 namespace WebCore {
 
@@ -675,34 +673,36 @@ void FrameLoaderClientMona::dispatchDidReceiveContentLength(DocumentLoader* load
 
 void FrameLoaderClientMona::dispatchDidFinishLoading(DocumentLoader*, unsigned long)
 {
-  cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
-  if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
-    _logprintf("CAIRO failure : %s %s:%d\n", __func__, __FILE__, __LINE__);
-    return;  // create will notice we didn't set m_initialized and fail.
-  }
+  ASSERT(web_page_);
+  web_page_->paint(IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT), true);
+ //  cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+ //                                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
+ //  if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
+ //    _logprintf("CAIRO failure : %s %s:%d\n", __func__, __FILE__, __LINE__);
+ //    return;  // create will notice we didn't set m_initialized and fail.
+ //  }
 
-  GraphicsContext context(cairo_create(surface));
-  ASSERT(frame_);
-  unsigned char* p = cairo_image_surface_get_data(surface);
-  for (int i = 0; i < 10; i++) {
-    _logprintf("before %x ", p[i]);
-  }
+ //  GraphicsContext context(cairo_create(surface));
+ //  ASSERT(frame_);
+ //  unsigned char* p = cairo_image_surface_get_data(surface);
+ //  for (int i = 0; i < 10; i++) {
+ //    _logprintf("before %x ", p[i]);
+ //  }
 
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  frame_->view()->forceLayout(true); // correct place? 
-  frame_->view()->paint(&context, IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT));
- p = cairo_image_surface_get_data(surface);
-  for (int i = 0; i < 10; i++) {
-    _logprintf("after %x ", p[i]);
-  }
-  ASSERT(web_view_);
-  web_view_->SetImageBuffer(p);
-  web_view_->repaint();
-    // MonaLauncher r;
-  // r.SetData(p);
-  // r.run();
-  notImplemented();
+ //  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+ //  frame_->view()->forceLayout(true); // correct place? 
+ //  frame_->view()->paint(&context, IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT));
+ // p = cairo_image_surface_get_data(surface);
+ //  for (int i = 0; i < 10; i++) {
+ //    _logprintf("after %x ", p[i]);
+ //  }
+ //  ASSERT(web_view_);
+ //  web_view_->SetImageBuffer(p);
+ //  web_view_->repaint();
+ //    // MonaLauncher r;
+ //  // r.SetData(p);
+ //  // r.run();
+ //  notImplemented();
 }
 
 void FrameLoaderClientMona::dispatchDidFailLoading(DocumentLoader* loader,
