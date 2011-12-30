@@ -46,7 +46,14 @@ using namespace WebCore;
 WebPage::WebPage(WebView* web_view) :
     page_(0),
     main_frame_(0),
-    web_view_(web_view) {
+    web_view_(web_view),
+    surface_(cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
+                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT)) {
+
+  if (cairo_surface_status(surface_) != CAIRO_STATUS_SUCCESS) {
+    monapi_fatal("cairo cairo_image_surface_create failure");
+  }
+  cairo_ = cairo_create(surface_);
 
   // todo: life cycle of clients
   Page::PageClients* clients = new Page::PageClients;
@@ -67,24 +74,20 @@ WebPage::WebPage(WebView* web_view) :
   // fSettings = new BWebSettings(fPage->settings());
 }
 
+WebPage::~WebPage() {
+  cairo_destroy(cairo_);
+  cairo_surface_destroy(surface_);
+}
+
 // todo: Handle rect and immediate.
 void WebPage::paint(const IntRect& rect, bool immediate) {
   ASSERT(web_view_);
   ASSERT(main_frame_);
   ASSERT(main_frame_->Frame());
-
-  // todo destruct surface
-  cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
-  if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
-    _logprintf("CAIRO failure : %s %s:%d\n", __func__, __FILE__, __LINE__);
-    return;  // create will notice we didn't set m_initialized and fail.
-  }
-
-  GraphicsContext context(cairo_create(surface));
+  GraphicsContext context(cairo_);
   main_frame_->Frame()->view()->forceLayout(true); // correct place? 
   main_frame_->Frame()->view()->paint(&context, IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT));
-  web_view_->SetImageBuffer(cairo_image_surface_get_data(surface));
+  web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
   web_view_->repaint();
 }
 

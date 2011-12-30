@@ -27,6 +27,8 @@
 #ifndef _WEB_PAGE_H_
 #define _WEB_PAGE_H_
 
+#include <cairo.h>
+
 namespace WebCore {
 
 class Page;
@@ -37,6 +39,7 @@ class IntRect;
 class WebPage {
  public:
   WebPage(WebView* web_view);
+  virtual ~WebPage();
   void Init();
   void LoadURL(const char* urlString);
   void paint(const IntRect& rect, bool immediate);
@@ -46,9 +49,11 @@ class WebPage {
   }
 
  private:
-  Page* page_;;
+  Page* page_;
   WebFrame* main_frame_;
   WebView* web_view_;
+  cairo_surface_t* surface_;
+  cairo_t* cairo_;
 };
 
 };
