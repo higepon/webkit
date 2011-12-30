@@ -81,6 +81,9 @@ WebPage::~WebPage() {
 
 void WebPage::paint(const IntRect& rect, bool immediate) {
   _logprintf("(%d %d %d %d) immediate=%s %s %s:%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate ? "true" : "false", __func__, __FILE__, __LINE__);
+  if (rect.isEmpty()) {
+    return;
+  }
   ASSERT(web_view_);
   ASSERT(main_frame_);
   ASSERT(main_frame_->Frame());
