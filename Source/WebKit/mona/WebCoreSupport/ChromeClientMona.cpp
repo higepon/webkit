@@ -52,7 +52,7 @@
 
 namespace WebCore {
 
-ChromeClientMona::ChromeClientMona(WebView* webview) : m_webview()
+ChromeClientMona::ChromeClientMona(WebPage* webpage) : webpage_(webpage)
 {
 }
 
@@ -267,13 +267,17 @@ IntRect ChromeClientMona::windowResizerRect() const
     return IntRect();
 }
 
-void ChromeClientMona::invalidateWindow(const IntRect&, bool)
+void ChromeClientMona::invalidateWindow(const IntRect& rect, bool immediate)
 {
     notImplemented();
 }
 
-void ChromeClientMona::invalidateContentsAndWindow(const IntRect&, bool)
+void ChromeClientMona::invalidateContentsAndWindow(const IntRect& rect, bool immediate)
 {
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    ASSERT(webpage_);
+    webpage_->paint(rect, immediate);
+
 //	cairo_surface_t* surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
 //	                                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
 //	  if (cairo_surface_status(surface) != CAIRO_STATUS_SUCCESS) {
@@ -299,7 +303,7 @@ void ChromeClientMona::invalidateContentsAndWindow(const IntRect&, bool)
 //	  ASSERT(webView());
 //	  webView()->SetImageBuffer(p);
    // webView()->repaint();
-    notImplemented();
+    //    notImplemented();
 }
 
 void ChromeClientMona::invalidateContentsForSlowScroll(const IntRect&, bool)
