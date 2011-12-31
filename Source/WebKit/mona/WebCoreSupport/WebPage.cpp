@@ -79,7 +79,7 @@ WebPage::~WebPage() {
   cairo_surface_destroy(surface_);
 }
 
-void WebPage::paint(const IntRect& rect, bool immediate) {
+void WebPage::paint(const IntRect& rect, bool immediate, bool needsLayout) {
   _logprintf("(%d %d %d %d) immediate=%s %s %s:%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate ? "true" : "false", __func__, __FILE__, __LINE__);
   if (rect.isEmpty()) {
     return;
@@ -87,12 +87,23 @@ void WebPage::paint(const IntRect& rect, bool immediate) {
   ASSERT(web_view_);
   ASSERT(main_frame_);
   ASSERT(main_frame_->Frame());
+  static bool fLayoutingView = false;
+  if (fLayoutingView) {
+    _logprintf("PPPPPPPPHEY recursively");
+    return;
+  }
+
   GraphicsContext context(cairo_);
-  main_frame_->Frame()->view()->forceLayout(true); // correct place? 
+  if (needsLayout) {
+    fLayoutingView = true;
+    main_frame_->Frame()->view()->forceLayout(true);
+    fLayoutingView = false;
+  }
+
   main_frame_->Frame()->view()->paint(&context, rect);
   web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
   if (immediate) {
-    web_view_->repaint();
+     web_view_->repaint();
   }
 }
 
