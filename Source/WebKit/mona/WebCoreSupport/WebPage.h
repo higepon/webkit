@@ -42,7 +42,7 @@ class WebPage {
   virtual ~WebPage();
   void Init();
   void LoadURL(const char* urlString);
-  void paint(const IntRect& rect, bool immediate, bool layout);
+  void paint(const IntRect& rect, bool immediate);
 
   Page* page() {
     return page_;

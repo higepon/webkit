@@ -276,10 +276,7 @@ void ChromeClientMona::invalidateContentsAndWindow(const IntRect& rect, bool imm
 {
     _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     ASSERT(webpage_);
-
-    // calling forceLayout from invalidateContentsAndWindow causes crash.
-    bool needsLayout = false;
-    webpage_->paint(rect, immediate, needsLayout);
+    webpage_->paint(rect, immediate);
 }
 
 void ChromeClientMona::invalidateContentsForSlowScroll(const IntRect&, bool)

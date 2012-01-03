@@ -674,8 +674,7 @@ void FrameLoaderClientMona::dispatchDidReceiveContentLength(DocumentLoader* load
 void FrameLoaderClientMona::dispatchDidFinishLoading(DocumentLoader*, unsigned long)
 {
   ASSERT(web_page_);
-  bool needsLayout = true;
-  web_page_->paint(IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT), true, needsLayout);
+  web_page_->paint(IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT), true);
 }
 
 void FrameLoaderClientMona::dispatchDidFailLoading(DocumentLoader* loader,

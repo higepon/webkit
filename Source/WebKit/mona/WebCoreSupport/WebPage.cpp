@@ -79,7 +79,7 @@ WebPage::~WebPage() {
   cairo_surface_destroy(surface_);
 }
 
-void WebPage::paint(const IntRect& rect, bool immediate, bool needsLayout) {
+void WebPage::paint(const IntRect& rect, bool immediate) {
   _logprintf("(%d %d %d %d) immediate=%s %s %s:%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate ? "true" : "false", __func__, __FILE__, __LINE__);
   if (rect.isEmpty()) {
     return;
@@ -94,9 +94,10 @@ void WebPage::paint(const IntRect& rect, bool immediate, bool needsLayout) {
   }
 
   GraphicsContext context(cairo_);
-  if (needsLayout) {
+  if (main_frame_->Frame()->view()->needsLayout()) {
     fLayoutingView = true;
     main_frame_->Frame()->view()->forceLayout(true);
+    ASSERT(!main_frame_->Frame()->view()->needsLayout());
     fLayoutingView = false;
   }
 
