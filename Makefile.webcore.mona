@@ -80,7 +80,7 @@ ADDINCLUDE  =  \
               -I$(SOURCE_DIR) \
               -I$(SOURCE_DIR)/WebKit/mona \
               -I$(SOURCE_DIR)/WebKit/mona/WebCoreSupport \
-              -I/Users/taro/mingw/include
+              -I$(HOME)/mingw/include
 # todo libxml
 # $(WEBCORE_DIR)/platform/graphics/WOFFFileFormat.cpp \
 # $(WEBCORE_DIR)/platform/graphics/mona/ImageBufferMona.cpp \
