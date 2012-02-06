@@ -5,7 +5,7 @@ INSTDIR = $(BINDIR)/APPS/MONAGUI
 INSTFILES = $(TARGET).map
 SHAREDIR   = $(MONADIR)/share
 ADDLINK    =  -lmonalibc-imp -lamonagui-imp --enable-auto-import -L ../../ --start-group -lwebcore -ljscore -licuin -licuuc -lmonalibc-imp -lamonagui-imp -lz-imp -lpng-imp -lcairo-imp -lxml2-imp -lcurl-imp --end-group
-ADDLINKDEP = $(MONADIR)/lib/libamonagui-imp.a $(MONADIR)/lib/libmonalibc-imp.a
+ADDLINKDEP = $(MONADIR)/lib/libamonagui-imp.a $(MONADIR)/lib/libmonalibc-imp.a ../../libwebcore.a
 include $(SHAREDIR)/configs/monapi-ex5.inc
 include ../../mona.inc
 

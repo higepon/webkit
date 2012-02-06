@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
   //web_view.LoadURL("http://10.0.2.2/f.html");
   //web_view.LoadURL("http://10.0.2.2/");
   //  web_view.LoadURL("http://10.0.2.2/~taro/f.html");
-      web_view.LoadURL("http://10.0.2.2/~taro/");
+      web_view.LoadURL("http://10.0.2.2/input.html");
   //   web_view.LoadURL("http://twitter.com/higepon");
   // //  web_view.LoadURL("file://hige.txt/");
   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
