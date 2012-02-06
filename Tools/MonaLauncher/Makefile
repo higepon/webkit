@@ -68,7 +68,7 @@ INCLUDE +=    -I$(WEBCORE_DIR) \
               -I $(MONADIR)/core/icu/icu/source/i18n/ \
               -I $(MONADIR)/include/cairo \
               -I ../../Source/WebKit/mona/WebCoreSupport/ \
-              -I/Users/taro/mingw/include
+              -I $(HOME)/mingw/include
 
 -include dependencies
 

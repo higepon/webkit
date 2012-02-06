@@ -30,7 +30,7 @@ ADDINCLUDE = -I$(JSC_DIR) \
              -I$(SOURCE_DIR)   \
              -I $(MONADIR)/core/icu/icu/source/common  \
              -I $(MONADIR)/core/icu/icu/source/i18n/  \
-             -I /Users/taro/mingw/include
+             -I $(MONADIR)/mingw/include
 
 include $(SHAREDIR)/configs/monapi-exe.inc
 
