@@ -56,7 +56,6 @@ int main(int argc, char* argv[]) {
   // MonaLauncher app("http://10.0.2.2/");
   // app.run();
   WebCore::WebView web_view;
-
   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   //web_view.LoadURL("http://google.com/");
   //   web_view.LoadURL("http://www.facebook.com/");
