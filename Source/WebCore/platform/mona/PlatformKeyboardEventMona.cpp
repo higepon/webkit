@@ -36,7 +36,7 @@ namespace WebCore {
 
 PlatformKeyboardEvent::PlatformKeyboardEvent(monagui::KeyEvent* evt) :
     m_monaKeyEvent(evt),
-    m_type(evt->getType() == monagui::Event::KEY_PRESSED ? RawKeyDown : KeyUp), // FIXME Char should be here?
+    m_type(evt->getType() == monagui::Event::KEY_PRESSED ? KeyDown : KeyUp), // FIXME Char should be here?
     m_text(singleCharacterString(evt->getKeycode())),
     m_unmodifiedText(m_text), // FIXME
     m_autoRepeat(false), // FIXME
@@ -439,7 +439,20 @@ int PlatformKeyboardEvent::windowsKeyCodeForMonaGuiKeyCode(unsigned keycode)
 
 void PlatformKeyboardEvent::disambiguateKeyDownEvent(Type type, bool backwardCompatibilityMode)
 {
-  notImplemented();
+    // Can only change type from KeyDown to RawKeyDown or Char, as we lack information for other conversions.
+    ASSERT(m_type == KeyDown);
+    m_type = type;
+
+    if (backwardCompatibilityMode)
+        return;
+
+    if (type == RawKeyDown) {
+        m_text = WTF::String();
+        m_unmodifiedText = WTF::String();
+    } else {
+        m_keyIdentifier = WTF::String();
+        m_windowsVirtualKeyCode = 0;
+    }
 }
 
 bool PlatformKeyboardEvent::currentCapsLockState()

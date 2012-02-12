@@ -243,17 +243,19 @@ void EditorClientMona::redo()
 
 bool EditorClientMona::handleEditingKeyboardEvent(KeyboardEvent* event)
 {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     Node* node = event->target()->toNode();
     ASSERT(node);
     Frame* frame = node->document()->frame();
     ASSERT(frame);
-
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     const PlatformKeyboardEvent* keyEvent = event->keyEvent();
     if (!keyEvent)
         return false;
-
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     bool caretBrowsing = frame->settings()->caretBrowsingEnabled();
     if (caretBrowsing) {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
         switch (keyEvent->windowsVirtualKeyCode()) {
         case VK_LEFT:
             frame->selection()->modify(keyEvent->shiftKey() ? FrameSelection::AlterationExtend : FrameSelection::AlterationMove,
@@ -283,25 +285,26 @@ bool EditorClientMona::handleEditingKeyboardEvent(KeyboardEvent* event)
     }
 
     Editor::Command command = frame->editor()->command(interpretKeyEvent(event));
-
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     if (keyEvent->type() == PlatformKeyboardEvent::RawKeyDown) {
         // WebKit doesn't have enough information about mode to decide how commands that just insert text if executed via Editor should be treated,
         // so we leave it upon WebCore to either handle them immediately (e.g. Tab that changes focus) or let a keypress event be generated
         // (e.g. Tab that inserts a Tab character, or Enter).
+      _logprintf("%d %s %s %s:%d\n", command.isTextInsertion(), interpretKeyEvent(event), __func__, __FILE__, __LINE__);
         return !command.isTextInsertion() && command.execute(event);
     }
 
     if (command.execute(event))
         return true;
-
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // Don't insert null or control characters as they can result in unexpected behaviour
     if (event->charCode() < ' ')
         return false;
-
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // Don't insert anything if a modifier is pressed
     if (keyEvent->ctrlKey() || keyEvent->altKey())
         return false;
-
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     return frame->editor()->insertText(event->keyEvent()->text(), event);
 }
 void EditorClientMona::handleKeyboardEvent(KeyboardEvent* event)
