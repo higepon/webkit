@@ -243,19 +243,15 @@ void EditorClientMona::redo()
 
 bool EditorClientMona::handleEditingKeyboardEvent(KeyboardEvent* event)
 {
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     Node* node = event->target()->toNode();
     ASSERT(node);
     Frame* frame = node->document()->frame();
     ASSERT(frame);
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     const PlatformKeyboardEvent* keyEvent = event->keyEvent();
     if (!keyEvent)
         return false;
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     bool caretBrowsing = frame->settings()->caretBrowsingEnabled();
     if (caretBrowsing) {
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
         switch (keyEvent->windowsVirtualKeyCode()) {
         case VK_LEFT:
             frame->selection()->modify(keyEvent->shiftKey() ? FrameSelection::AlterationExtend : FrameSelection::AlterationMove,
@@ -285,26 +281,21 @@ bool EditorClientMona::handleEditingKeyboardEvent(KeyboardEvent* event)
     }
 
     Editor::Command command = frame->editor()->command(interpretKeyEvent(event));
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     if (keyEvent->type() == PlatformKeyboardEvent::RawKeyDown) {
         // WebKit doesn't have enough information about mode to decide how commands that just insert text if executed via Editor should be treated,
         // so we leave it upon WebCore to either handle them immediately (e.g. Tab that changes focus) or let a keypress event be generated
         // (e.g. Tab that inserts a Tab character, or Enter).
-      _logprintf("%d %s %s %s:%d\n", command.isTextInsertion(), interpretKeyEvent(event), __func__, __FILE__, __LINE__);
         return !command.isTextInsertion() && command.execute(event);
     }
 
     if (command.execute(event))
         return true;
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // Don't insert null or control characters as they can result in unexpected behaviour
     if (event->charCode() < ' ')
         return false;
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // Don't insert anything if a modifier is pressed
     if (keyEvent->ctrlKey() || keyEvent->altKey())
         return false;
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     return frame->editor()->insertText(event->keyEvent()->text(), event);
 }
 void EditorClientMona::handleKeyboardEvent(KeyboardEvent* event)
@@ -312,44 +303,6 @@ void EditorClientMona::handleKeyboardEvent(KeyboardEvent* event)
     if (handleEditingKeyboardEvent(event)) {
         event->setDefaultHandled();
     }
-  //   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   _logprintf("%s %s:%d %d\n", __func__, __FILE__, __LINE__, m_page);
-  //   _logprintf("%s %s:%d %d\n", __func__, __FILE__, __LINE__, m_page->focusController());
-  //   _logprintf("%s %s:%d %d\n", __func__, __FILE__, __LINE__, m_page->focusController()->focusedOrMainFrame());
-  //   Frame* frame = m_page->focusController()->focusedOrMainFrame();
-  //   _logprintf("frame=%x %x %s %s:%d\n", frame, frame->document()->focusedNode(), __func__, __FILE__, __LINE__);
-  //   if (!frame || !frame->document()->focusedNode())
-  //       return;
-  //   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   const PlatformKeyboardEvent* kevent = event->keyEvent();
-  //   if (!kevent || kevent->type() == PlatformKeyboardEvent::KeyUp)
-  //       return;
-  //   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   Node* start = frame->selection()->start().containerNode();
-  //   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   if (!start)
-  //       return;
-  //   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   _logprintf("delete?=%d\n", kevent->getKeyEvent()->getKeycode() == monagui::KeyEvent::VKEY_BACKSPACE);
-  //   _logprintf("tab?=%d\n", kevent->getKeyEvent()->getKeycode() == monagui::KeyEvent::VKEY_TAB);
-  //   _logprintf("key=%c %s %s:%d\n", kevent->getKeyEvent()->getKeycode(), __func__, __FILE__, __LINE__);
-  //   switch (kevent->getKeyEvent()->getKeycode()) {
-  //     case monagui::KeyEvent::VKEY_BACKSPACE:
-  //     {
-  //       Editor::Command command = frame->editor()->command("DeleteBackward");
-  //       command.execute();
-  //       return;
-  //       break;
-
-  //     }
-  //   }
-  //   char buf[2];
-  //   buf[0] = kevent->getKeyEvent()->getKeycode();
-  //   buf[1] = '\0';
-  //   frame->editor()->insertText(buf, event);
-  //   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   event->setDefaultHandled();
-  // notImplemented();
 }
 
 void EditorClientMona::handleInputMethodKeydown(KeyboardEvent*)
