@@ -87,25 +87,37 @@ void WebPage::paint(const IntRect& rect, bool immediate) {
   ASSERT(web_view_);
   ASSERT(main_frame_);
   ASSERT(main_frame_->Frame());
-  static bool fLayoutingView = false;
-  if (fLayoutingView) {
-    _logprintf("PPPPPPPPHEY recursively");
+
+  //  static bool fLayoutingView = false;
+  if (!main_frame_->Frame()->contentRenderer()) {
+    _logprintf("skip becase of contentRenderer");
     return;
   }
 
-  GraphicsContext context(cairo_);
-  if (main_frame_->Frame()->view()->needsLayout()) {
-    fLayoutingView = true;
-    main_frame_->Frame()->view()->forceLayout(true);
-    ASSERT(!main_frame_->Frame()->view()->needsLayout());
-    fLayoutingView = false;
+  if (!main_frame_->Frame()->view()->isInLayout()) {
+    main_frame_->Frame()->view()->updateLayoutAndStyleIfNeededRecursive();
+    paintWithoutLayout(rect, immediate);
   }
+  //   ASSERT(!main_frame_->Frame()->view()->needsLayout());
+  //   fLayoutingView = false;
+  // } else {
+  //   _logprintf("NOT LAYOUT %s %s:%d\n", __func__, __FILE__, __LINE__);
+  // }
+}
 
+void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
+  GraphicsContext context(cairo_);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   main_frame_->Frame()->view()->paint(&context, rect);
+_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
+_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   if (immediate) {
+_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
      web_view_->repaint();
+_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   }
+_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 void WebPage::Init() {
