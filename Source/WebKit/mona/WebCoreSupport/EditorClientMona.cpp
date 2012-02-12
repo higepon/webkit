@@ -42,7 +42,8 @@
 #include "Page.h"
 #include "PlatformKeyboardEvent.h"
 #include "WindowsKeyboardCodes.h"
-
+#define assert(x) /* */
+#include <monagui.h>
 
 namespace WebCore {
 
@@ -133,7 +134,7 @@ bool EditorClientMona::shouldInsertNode(Node*, Range*, EditorInsertAction)
     return true;
 }
 
-bool EditorClientMona::shouldInsertText(const String&, Range*, EditorInsertAction)
+bool EditorClientMona::shouldInsertText(const WTF::String&, Range*, EditorInsertAction)
 {
     notImplemented();
     return true;
@@ -254,7 +255,6 @@ void EditorClientMona::handleKeyboardEvent(KeyboardEvent* event)
         return;
     _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     const PlatformKeyboardEvent* kevent = event->keyEvent();
-    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     if (!kevent || kevent->type() == PlatformKeyboardEvent::KeyUp)
         return;
     _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
@@ -263,7 +263,11 @@ void EditorClientMona::handleKeyboardEvent(KeyboardEvent* event)
     if (!start)
         return;
     _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-    frame->editor()->insertText("abc", event);
+    _logprintf("key=%c %s %s:%d\n", kevent->getKeyEvent()->getKeycode(), __func__, __FILE__, __LINE__);
+    char buf[2];
+    buf[0] = kevent->getKeyEvent()->getKeycode();
+    buf[1] = '\0';
+    frame->editor()->insertText(buf, event);
     _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // if (start->isContentEditable()) {
     //     switch (kevent->windowsVirtualKeyCode()) {
@@ -430,12 +434,12 @@ void EditorClientMona::textDidChangeInTextArea(Element*)
     notImplemented();
 }
 
-void EditorClientMona::ignoreWordInSpellDocument(const String&)
+void EditorClientMona::ignoreWordInSpellDocument(const WTF::String&)
 {
     notImplemented();
 }
 
-void EditorClientMona::learnWord(const String&)
+void EditorClientMona::learnWord(const WTF::String&)
 {
     notImplemented();
 }
@@ -445,23 +449,23 @@ void EditorClientMona::checkSpellingOfString(const UChar*, int, int*, int*)
     notImplemented();
 }
 
-String EditorClientMona::getAutoCorrectSuggestionForMisspelledWord(const String& misspelledWord)
+WTF::String EditorClientMona::getAutoCorrectSuggestionForMisspelledWord(const WTF::String& misspelledWord)
 {
     notImplemented();
-    return String();
+    return WTF::String();
 }
 
-void EditorClientMona::checkGrammarOfString(const UChar*, int, Vector<GrammarDetail>&, int*, int*)
-{
-    notImplemented();
-}
-
-void EditorClientMona::updateSpellingUIWithGrammarString(const String&, const GrammarDetail&)
+void EditorClientMona::checkGrammarOfString(const UChar*, int, WTF::Vector<GrammarDetail>&, int*, int*)
 {
     notImplemented();
 }
 
-void EditorClientMona::updateSpellingUIWithMisspelledWord(const String&)
+void EditorClientMona::updateSpellingUIWithGrammarString(const WTF::String&, const GrammarDetail&)
+{
+    notImplemented();
+}
+
+void EditorClientMona::updateSpellingUIWithMisspelledWord(const WTF::String&)
 {
     notImplemented();
 }
@@ -477,7 +481,7 @@ bool EditorClientMona::spellingUIIsShowing()
     return false;
 }
 
-void EditorClientMona::getGuessesForWord(const String& word, const String& context, Vector<String>& guesses)
+void EditorClientMona::getGuessesForWord(const WTF::String& word, const WTF::String& context, WTF::Vector<WTF::String>& guesses)
 {
     notImplemented();
 }

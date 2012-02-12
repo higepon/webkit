@@ -218,6 +218,7 @@ namespace WebCore {
 
 #if OS(MONA)
        PlatformKeyboardEvent(monagui::KeyEvent*);
+      monagui::KeyEvent* getKeyEvent() const { return m_monaKeyEvent; }
 #endif
 
     protected:
