@@ -190,7 +190,7 @@ static void printCallSite(const char* file, int line, const char* function)
 
 void WTFReportAssertionFailure(const char* file, int line, const char* function, const char* assertion)
 {
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  _logprintf("%s %s:%d %s %d %s %s\n", __func__, __FILE__, __LINE__, file, line, function, assertion);
   if (assertion) {
   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
         printf_stderr_common("ASSERTION FAILED: %s\n", assertion);

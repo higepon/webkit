@@ -43,6 +43,7 @@ class WebPage {
   void Init();
   void LoadURL(const char* urlString);
   void paint(const IntRect& rect, bool immediate);
+  void paintWithoutLayout(const IntRect& rect, bool immediate);
 
   Page* page() {
     return page_;

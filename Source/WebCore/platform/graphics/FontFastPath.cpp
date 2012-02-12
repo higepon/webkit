@@ -354,7 +354,7 @@ float Font::getGlyphsAndAdvancesForSimpleText(const TextRun& run, int from, int 
 
 void Font::drawSimpleText(GraphicsContext* context, const TextRun& run, const FloatPoint& point, int from, int to) const
 {
-	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  //_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // This glyph buffer holds our glyphs+advances+font data for each glyph.
     GlyphBuffer glyphBuffer;
 
@@ -380,7 +380,7 @@ void Font::drawEmphasisMarksForSimpleText(GraphicsContext* context, const TextRu
 
 void Font::drawGlyphBuffer(GraphicsContext* context, const TextRun& run, const GlyphBuffer& glyphBuffer, const FloatPoint& point) const
 {   
-	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  //	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // Draw each contiguous run of glyphs that use the same font data.
     const SimpleFontData* fontData = glyphBuffer.fontDataAt(0);
     FloatSize offset = glyphBuffer.offsetAt(0);

@@ -369,8 +369,10 @@ bool FrameView::didFirstLayout() const
 void FrameView::invalidateRect(const LayoutRect& rect)
 {
     if (!parent()) {
-        if (hostWindow())
+      if (hostWindow()) {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
             hostWindow()->invalidateContentsAndWindow(rect, false /*immediate*/);
+      }
         return;
     }
 
@@ -1072,12 +1074,13 @@ void FrameView::layout(bool allowSubtree)
         }
         LayoutStateDisabler layoutStateDisabler(disableLayoutState ? root->view() : 0);
 
+        _logprintf("IN_LAYOUT become TRUE%s %s:%d\n", __func__, __FILE__, __LINE__);
         m_inLayout = true;
         beginDeferredRepaints();
         root->layout();
         endDeferredRepaints();
         m_inLayout = false;
-
+        _logprintf("IN_LAYOUT become FALSE%s %s:%d\n", __func__, __FILE__, __LINE__);
         if (subtree)
             root->view()->popLayoutState(root);
     }

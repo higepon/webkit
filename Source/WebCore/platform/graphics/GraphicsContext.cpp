@@ -354,7 +354,7 @@ bool GraphicsContext::paintingDisabled() const
 #if !OS(WINCE) || (PLATFORM(QT) && !HAVE(QRAWFONT))
 void GraphicsContext::drawText(const Font& font, const TextRun& run, const FloatPoint& point, int from, int to)
 {
-	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  //	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     if (paintingDisabled())
         return;
 
@@ -372,7 +372,7 @@ void GraphicsContext::drawEmphasisMarks(const Font& font, const TextRun& run, co
 
 void GraphicsContext::drawBidiText(const Font& font, const TextRun& run, const FloatPoint& point)
 {
-	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+  //	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     if (paintingDisabled())
         return;
 

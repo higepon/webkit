@@ -217,13 +217,9 @@ void* fastZeroedMalloc(size_t n)
 
 char* fastStrDup(const char* src)
 {
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     size_t len = strlen(src) + 1;
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     char* dup = static_cast<char*>(fastMalloc(len));
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     memcpy(dup, src, len);
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     return dup;
 }
 

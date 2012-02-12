@@ -277,6 +277,7 @@ void ChromeClientMona::invalidateContentsAndWindow(const IntRect& rect, bool imm
     _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     ASSERT(webpage_);
     webpage_->paint(rect, immediate);
+    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 void ChromeClientMona::invalidateContentsForSlowScroll(const IntRect&, bool)

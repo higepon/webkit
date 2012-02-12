@@ -249,7 +249,7 @@ void EditorClientMona::handleKeyboardEvent(KeyboardEvent* event)
 	_logprintf("%s %s:%d %d\n", __func__, __FILE__, __LINE__, m_page->focusController());
 	_logprintf("%s %s:%d %d\n", __func__, __FILE__, __LINE__, m_page->focusController()->focusedOrMainFrame());
     Frame* frame = m_page->focusController()->focusedOrMainFrame();
-    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    _logprintf("frame=%x %x %s %s:%d\n", frame, frame->document()->focusedNode(), __func__, __FILE__, __LINE__);
     if (!frame || !frame->document()->focusedNode())
         return;
     _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);

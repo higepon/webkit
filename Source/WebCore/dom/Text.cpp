@@ -244,7 +244,6 @@ RenderObject* Text::createRenderer(RenderArena* arena, RenderStyle* style)
 
     if (style->hasTextCombine())
         return new (arena) RenderCombineText(this, dataImpl());
-
     return new (arena) RenderText(this, dataImpl());
 }
 

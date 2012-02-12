@@ -91,7 +91,7 @@ void Font::drawGlyphs(GraphicsContext* graphicsContext, const SimpleFontData* fo
           int height = 0;
 
         if (g_fontMetrics) {
-          _logprintf("PONHIGE %c\n", glyphs[i].index);
+          //          _logprintf("PONHIGE %c\n", glyphs[i].index);
           if (g_fontMetrics->decodeCharacter(glyphs[i].index, &offset, &width, &height, fp)) {
             _logprintf("offset=%d width=%d height=%d\n", offset, width, height);
             int x = point.x();
@@ -100,8 +100,8 @@ void Font::drawGlyphs(GraphicsContext* graphicsContext, const SimpleFontData* fo
               for (int k = 0; k < width; k++) {
                 int x0 = x + w + k + (offset - width) / 2;
                 if ((fp[pos] & bit) != 0) {
-                  _logprintf("(%d, %d)\n", j, k);
-                  _logprintf("(%d, %d)\n", x0, y + h + j);
+                  //                  _logprintf("(%d, %d)\n", j, k);
+                  //                  _logprintf("(%d, %d)\n", x0, y + h + j);
                   graphicsContext->drawLine(IntPoint(x0, y + h + j), IntPoint(x0 + 1, y + h + j));
                 }
                 bit <<= 1;

@@ -109,7 +109,6 @@ ImageDecoder* ImageDecoder::create(const SharedBuffer& data, ImageSource::AlphaO
         return new GIFImageDecoder(alphaOption, gammaAndColorProfileOption);
 #endif
     if (matchesPNGSignature(contents)) {
-    	_logprintf("PPPPPPPPPPPPPPPPNNNG\n");
         return new PNGImageDecoder(alphaOption, gammaAndColorProfileOption);
     }
 #if !OS(MONA)

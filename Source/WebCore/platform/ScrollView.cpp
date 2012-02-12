@@ -627,7 +627,9 @@ void ScrollView::scrollContents(const IntSize& scrollDelta)
         IntPoint panIconDirtySquareLocation = IntPoint(m_panScrollIconPoint.x() - (panIconDirtySquareSizeLength / 2), m_panScrollIconPoint.y() - (panIconDirtySquareSizeLength / 2));
         IntRect panScrollIconDirtyRect = IntRect(panIconDirtySquareLocation , IntSize(panIconDirtySquareSizeLength, panIconDirtySquareSizeLength));
         panScrollIconDirtyRect.intersect(clipRect);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
         hostWindow()->invalidateContentsAndWindow(panScrollIconDirtyRect, false /*immediate*/);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     }
 
     if (canBlitOnScroll()) { // The main frame can just blit the WebView window
@@ -644,10 +646,16 @@ void ScrollView::scrollContents(const IntSize& scrollDelta)
     IntRect horizontalOverhangRect;
     IntRect verticalOverhangRect;
     calculateOverhangAreasForPainting(horizontalOverhangRect, verticalOverhangRect);
-    if (!horizontalOverhangRect.isEmpty())
+    if (!horizontalOverhangRect.isEmpty()) {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
         hostWindow()->invalidateContentsAndWindow(horizontalOverhangRect, false /*immediate*/);
-    if (!verticalOverhangRect.isEmpty())
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    }
+    if (!verticalOverhangRect.isEmpty()) {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
         hostWindow()->invalidateContentsAndWindow(verticalOverhangRect, false /*immediate*/);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    }
 
     // This call will move children with native widgets (plugins) and invalidate them as well.
     frameRectsChanged();
@@ -1216,7 +1224,9 @@ void ScrollView::addPanScrollIcon(const IntPoint& iconPosition)
         return;
     m_drawPanScrollIcon = true;    
     m_panScrollIconPoint = IntPoint(iconPosition.x() - panIconSizeLength / 2 , iconPosition.y() - panIconSizeLength / 2) ;
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     hostWindow()->invalidateContentsAndWindow(IntRect(m_panScrollIconPoint, IntSize(panIconSizeLength, panIconSizeLength)), true /*immediate*/);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 void ScrollView::removePanScrollIcon()
@@ -1224,7 +1234,9 @@ void ScrollView::removePanScrollIcon()
     if (!hostWindow())
         return;
     m_drawPanScrollIcon = false; 
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     hostWindow()->invalidateContentsAndWindow(IntRect(m_panScrollIconPoint, IntSize(panIconSizeLength, panIconSizeLength)), true /*immediate*/);
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 void ScrollView::setScrollOrigin(const IntPoint& origin, bool updatePositionAtAll, bool updatePositionSynchronously)

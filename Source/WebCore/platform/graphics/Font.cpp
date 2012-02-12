@@ -142,7 +142,6 @@ void Font::update(PassRefPtr<FontSelector> fontSelector) const
 
 void Font::drawText(GraphicsContext* context, const TextRun& run, const FloatPoint& point, int from, int to) const
 {
-	  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // Don't draw anything while we are using custom fonts that are in the process of loading.
     if (loadingCustomFonts())
         return;

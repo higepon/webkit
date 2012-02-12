@@ -111,11 +111,11 @@ void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
 _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
 _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  if (immediate) {
+//  if (immediate) {
 _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
      web_view_->repaint();
 _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  }
+//  }
 _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
