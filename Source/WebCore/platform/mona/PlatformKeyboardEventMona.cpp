@@ -27,26 +27,46 @@
 
 #include "config.h"
 #include "PlatformKeyboardEvent.h"
-
 #include "NotImplemented.h"
-//#include "WindowsKeyboardCodes.h"
+#define assert(x) /* */
+#include <monagui.h>
 
 namespace WebCore {
 
+PlatformKeyboardEvent::PlatformKeyboardEvent(monagui::KeyEvent* evt) :
+    m_monaKeyEvent(evt),
+    m_type(evt->getType() == monagui::Event::KEY_PRESSED ? RawKeyDown : KeyUp), // FIXME Char should be here?
+    m_text(singleCharacterString(evt->getKeycode())),
+    m_unmodifiedText(m_text), // FIXME
+    m_autoRepeat(false), // FIXME
+    m_windowsVirtualKeyCode(3),
+    m_nativeVirtualKeyCode(evt->getKeycode()),
+    m_isKeypad(false),   // FIXME
+    m_shiftKey((evt->getModifiers() & monagui::KeyEvent::VKEY_LSHIFT) ||
+               (evt->getModifiers() & monagui::KeyEvent::VKEY_RSHIFT)),
+    m_ctrlKey(evt->getModifiers() & monagui::KeyEvent::VKEY_CTRL),
+    m_altKey(evt->getModifiers() & monagui::KeyEvent::VKEY_ALT),
+    m_metaKey(evt->getModifiers() & monagui::KeyEvent::VKEY_ALT) // FIXME
+{
+}
 
-// PlatformKeyboardEvent::PlatformKeyboardEvent()
-//     : m_autoRepeat(false)
-//     , m_isKeypad(false)
-//     , m_shiftKey(false)
-//     , m_ctrlKey(false)
-//     , m_altKey(false)
-//     , m_metaKey(false)
-// {
-//   notImplemented();
-// }
-PlatformKeyboardEvent::PlatformKeyboardEvent(monagui::KeyEvent* evt) : m_monaKeyEvent(evt), m_type(Char) {
-
-
+WTF::String PlatformKeyboardEvent::singleCharacterString(unsigned val)
+{
+    switch (val) {
+      case monagui::KeyEvent::VKEY_ENTER:
+        return WTF::String("\r");
+      case monagui::KeyEvent::VKEY_BACKSPACE:
+        return WTF::String("\x8");
+      case monagui::KeyEvent::VKEY_TAB:
+        return WTF::String("\t");
+      default:
+      {
+        char buf[2];
+        buf[0] = val;
+        buf[1] = '\0';
+        return WTF::String(buf);
+      }
+    }
 }
 
 void PlatformKeyboardEvent::disambiguateKeyDownEvent(Type type, bool backwardCompatibilityMode)

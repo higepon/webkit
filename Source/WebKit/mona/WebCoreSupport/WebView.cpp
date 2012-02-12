@@ -122,7 +122,8 @@ void WebView::processEvent(monagui::Event* event) {
         SharedTimerFiredFunction();
         _logprintf("after timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
       }
-    } else if (event->getType() == monagui::Event::KEY_PRESSED) {
+    } else if (event->getType() == monagui::Event::KEY_PRESSED ||
+               event->getType() == monagui::Event::KEY_RELEASED) {
         int keycode = ((KeyEvent *)event)->getKeycode();
         int modifiers = ((KeyEvent *)event)->getModifiers();
         WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();

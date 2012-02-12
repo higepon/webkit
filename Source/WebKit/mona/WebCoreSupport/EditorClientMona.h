@@ -118,6 +118,8 @@ class EditorClientMona : public EditorClient, public TextCheckerClient {
         bool isEditing() const;
 
     private:
+        bool handleEditingKeyboardEvent(KeyboardEvent* event);
+        const char* interpretKeyEvent(const KeyboardEvent* event);
         Page* m_page;
         bool m_editing;
         bool m_inUndoRedo; // our undo stack works differently - don't re-enter!
