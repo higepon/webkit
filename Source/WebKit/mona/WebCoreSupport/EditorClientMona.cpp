@@ -43,8 +43,6 @@
 #include "PlatformKeyboardEvent.h"
 #include "WindowsKeyboardCodes.h"
 #include "Settings.h"
-#define assert(x) /* */
-#include <monagui.h>
 
 namespace WebCore {
 
@@ -257,26 +255,26 @@ bool EditorClientMona::handleEditingKeyboardEvent(KeyboardEvent* event)
 
     bool caretBrowsing = frame->settings()->caretBrowsingEnabled();
     if (caretBrowsing) {
-        switch (keyEvent->getKeyEvent()->getKeycode()) {
-        case monagui::KeyEvent::VKEY_LEFT:
+        switch (keyEvent->windowsVirtualKeyCode()) {
+        case VK_LEFT:
             frame->selection()->modify(keyEvent->shiftKey() ? FrameSelection::AlterationExtend : FrameSelection::AlterationMove,
                     DirectionLeft,
                     keyEvent->ctrlKey() ? WordGranularity : CharacterGranularity,
                     UserTriggered);
             return true;
-        case monagui::KeyEvent::VKEY_RIGHT:
+        case VK_RIGHT:
             frame->selection()->modify(keyEvent->shiftKey() ? FrameSelection::AlterationExtend : FrameSelection::AlterationMove,
                     DirectionRight,
                     keyEvent->ctrlKey() ? WordGranularity : CharacterGranularity,
                     UserTriggered);
             return true;
-        case monagui::KeyEvent::VKEY_UP:
+        case VK_UP:
             frame->selection()->modify(keyEvent->shiftKey() ? FrameSelection::AlterationExtend : FrameSelection::AlterationMove,
                     DirectionBackward,
                     keyEvent->ctrlKey() ? ParagraphGranularity : LineGranularity,
                     UserTriggered);
             return true;
-        case monagui::KeyEvent::VKEY_DOWN:
+        case VK_DOWN:
             frame->selection()->modify(keyEvent->shiftKey() ? FrameSelection::AlterationExtend : FrameSelection::AlterationMove,
                     DirectionForward,
                     keyEvent->ctrlKey() ? ParagraphGranularity : LineGranularity,
@@ -471,55 +469,60 @@ struct KeyDownEntry {
 };
 
 static const KeyDownEntry keyDownEntries[] = {
-    { monagui::KeyEvent::VKEY_LEFT,   0,                  "MoveLeft"                                    },
-    { monagui::KeyEvent::VKEY_LEFT,   ShiftKey,           "MoveLeftAndModifySelection"                  },
-    { monagui::KeyEvent::VKEY_LEFT,   CtrlKey,            "MoveWordLeft"                                },
-    { monagui::KeyEvent::VKEY_LEFT,   CtrlKey | ShiftKey, "MoveWordLeftAndModifySelection"              },
-    { monagui::KeyEvent::VKEY_RIGHT,  0,                  "MoveRight"                                   },
-    { monagui::KeyEvent::VKEY_RIGHT,  ShiftKey,           "MoveRightAndModifySelection"                 },
-    { monagui::KeyEvent::VKEY_RIGHT,  CtrlKey,            "MoveWordRight"                               },
-    { monagui::KeyEvent::VKEY_RIGHT,  CtrlKey | ShiftKey, "MoveWordRightAndModifySelection"             },
-    { monagui::KeyEvent::VKEY_UP,     0,                  "MoveUp"                                      },
-    { monagui::KeyEvent::VKEY_UP,     ShiftKey,           "MoveUpAndModifySelection"                    },
-    { monagui::KeyEvent::VKEY_PGUP,   ShiftKey,           "MovePageUpAndModifySelection"                },
-    { monagui::KeyEvent::VKEY_DOWN,   0,                  "MoveDown"                                    },
-    { monagui::KeyEvent::VKEY_DOWN,   ShiftKey,           "MoveDownAndModifySelection"                  },
-    { monagui::KeyEvent::VKEY_PGDOWN, ShiftKey,           "MovePageDownAndModifySelection"              },
-    { monagui::KeyEvent::VKEY_PGUP,   0,                  "MovePageUp"                                  },
-    { monagui::KeyEvent::VKEY_PGDOWN, 0,                  "MovePageDown"                                },
-    { monagui::KeyEvent::VKEY_HOME,   0,                  "MoveToBeginningOfLine"                       },
-    { monagui::KeyEvent::VKEY_HOME,   ShiftKey,           "MoveToBeginningOfLineAndModifySelection"     },
-    { monagui::KeyEvent::VKEY_HOME,   CtrlKey,            "MoveToBeginningOfDocument"                   },
-    { monagui::KeyEvent::VKEY_HOME,   CtrlKey | ShiftKey, "MoveToBeginningOfDocumentAndModifySelection" },
-    { monagui::KeyEvent::VKEY_END,    0,                  "MoveToEndOfLine"                             },
-    { monagui::KeyEvent::VKEY_END,    ShiftKey,           "MoveToEndOfLineAndModifySelection"           },
-    { monagui::KeyEvent::VKEY_END,    CtrlKey,            "MoveToEndOfDocument"                         },
-    { monagui::KeyEvent::VKEY_END,    CtrlKey | ShiftKey, "MoveToEndOfDocumentAndModifySelection"       },
-    { monagui::KeyEvent::VKEY_ESC,    0,                  "DeleteBackward"                              },
-    { monagui::KeyEvent::VKEY_ESC,    ShiftKey,           "DeleteBackward"                              },
-    { monagui::KeyEvent::VKEY_DELETE, 0,                  "DeleteForward"                               },
-    { monagui::KeyEvent::VKEY_ESC,    CtrlKey,            "DeleteWordBackward"                          },
-    { monagui::KeyEvent::VKEY_DELETE, CtrlKey,            "DeleteWordForward"                           },
-    { 'B',                            CtrlKey,            "ToggleBold"                                  },
-    { 'I',                            CtrlKey,            "ToggleItalic"                                },
-    { monagui::KeyEvent::VKEY_ESC,    0,                  "Cancel"                                      },
-    { monagui::KeyEvent::VKEY_TAB,    0,                  "InsertTab"                                   },
-    { monagui::KeyEvent::VKEY_TAB,    ShiftKey,           "InsertBacktab"                               },
-    { monagui::KeyEvent::VKEY_ENTER,  0,                  "InsertNewline"                               },
-    { monagui::KeyEvent::VKEY_ENTER,  CtrlKey,            "InsertNewline"                               },
-    { monagui::KeyEvent::VKEY_ENTER,  AltKey,             "InsertNewline"                               },
-    { monagui::KeyEvent::VKEY_ENTER,  AltKey | ShiftKey,  "InsertNewline"                               },
+    { VK_LEFT,   0,                  "MoveLeft"                                    },
+    { VK_LEFT,   ShiftKey,           "MoveLeftAndModifySelection"                  },
+    { VK_LEFT,   CtrlKey,            "MoveWordLeft"                                },
+    { VK_LEFT,   CtrlKey | ShiftKey, "MoveWordLeftAndModifySelection"              },
+    { VK_RIGHT,  0,                  "MoveRight"                                   },
+    { VK_RIGHT,  ShiftKey,           "MoveRightAndModifySelection"                 },
+    { VK_RIGHT,  CtrlKey,            "MoveWordRight"                               },
+    { VK_RIGHT,  CtrlKey | ShiftKey, "MoveWordRightAndModifySelection"             },
+    { VK_UP,     0,                  "MoveUp"                                      },
+    { VK_UP,     ShiftKey,           "MoveUpAndModifySelection"                    },
+    { VK_PRIOR,  ShiftKey,           "MovePageUpAndModifySelection"                },
+    { VK_DOWN,   0,                  "MoveDown"                                    },
+    { VK_DOWN,   ShiftKey,           "MoveDownAndModifySelection"                  },
+    { VK_NEXT,   ShiftKey,           "MovePageDownAndModifySelection"              },
+    { VK_PRIOR,  0,                  "MovePageUp"                                  },
+    { VK_NEXT,   0,                  "MovePageDown"                                },
+    { VK_HOME,   0,                  "MoveToBeginningOfLine"                       },
+    { VK_HOME,   ShiftKey,           "MoveToBeginningOfLineAndModifySelection"     },
+    { VK_HOME,   CtrlKey,            "MoveToBeginningOfDocument"                   },
+    { VK_HOME,   CtrlKey | ShiftKey, "MoveToBeginningOfDocumentAndModifySelection" },
+
+    { VK_END,    0,                  "MoveToEndOfLine"                             },
+    { VK_END,    ShiftKey,           "MoveToEndOfLineAndModifySelection"           },
+    { VK_END,    CtrlKey,            "MoveToEndOfDocument"                         },
+    { VK_END,    CtrlKey | ShiftKey, "MoveToEndOfDocumentAndModifySelection"       },
+
+    { VK_BACK,   0,                  "DeleteBackward"                              },
+    { VK_BACK,   ShiftKey,           "DeleteBackward"                              },
+    { VK_DELETE, 0,                  "DeleteForward"                               },
+    { VK_BACK,   CtrlKey,            "DeleteWordBackward"                          },
+    { VK_DELETE, CtrlKey,            "DeleteWordForward"                           },
+
+    { 'B',       CtrlKey,            "ToggleBold"                                  },
+    { 'I',       CtrlKey,            "ToggleItalic"                                },
+
+    { VK_ESCAPE, 0,                  "Cancel"                                      },
+    { VK_TAB,    0,                  "InsertTab"                                   },
+    { VK_TAB,    ShiftKey,           "InsertBacktab"                               },
+    { VK_RETURN, 0,                  "InsertNewline"                               },
+    { VK_RETURN, CtrlKey,            "InsertNewline"                               },
+    { VK_RETURN, AltKey,             "InsertNewline"                               },
+    { VK_RETURN, AltKey | ShiftKey,  "InsertNewline"                               },
+
     // It's not quite clear whether clipboard shortcuts and Undo/Redo should be handled
     // in the application or in WebKit. We chose WebKit for now.
-    { 'C',                            CtrlKey,            "Copy"                                        },
-    { 'V',                            CtrlKey,            "Paste"                                       },
-    { 'X',                            CtrlKey,            "Cut"                                         },
-    { 'A',                            CtrlKey,            "SelectAll"                                   },
-    { monagui::KeyEvent::VKEY_INSERT, CtrlKey,            "Copy"                                        },
-    { monagui::KeyEvent::VKEY_DELETE, ShiftKey,           "Cut"                                         },
-    { monagui::KeyEvent::VKEY_INSERT, ShiftKey,           "Paste"                                       },
-    { 'Z',                            CtrlKey,            "Undo"                                        },
-    { 'Z',                            CtrlKey | ShiftKey, "Redo"                                        }
+    { 'C',       CtrlKey,            "Copy"                                        },
+    { 'V',       CtrlKey,            "Paste"                                       },
+    { 'X',       CtrlKey,            "Cut"                                         },
+    { 'A',       CtrlKey,            "SelectAll"                                   },
+    { VK_INSERT, CtrlKey,            "Copy"                                        },
+    { VK_DELETE, ShiftKey,           "Cut"                                         },
+    { VK_INSERT, ShiftKey,           "Paste"                                       },
+    { 'Z',       CtrlKey,            "Undo"                                        },
+    { 'Z',       CtrlKey | ShiftKey, "Redo"                                        }
 };
 
 static const KeyPressEntry keyPressEntries[] = {
