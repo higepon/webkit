@@ -43,11 +43,12 @@ PlatformKeyboardEvent::PlatformKeyboardEvent(monagui::KeyEvent* evt) :
     m_windowsVirtualKeyCode(windowsKeyCodeForMonaGuiKeyCode(evt->getKeycode())),
     m_nativeVirtualKeyCode(evt->getKeycode()),
     m_isKeypad(false),   // FIXME
-    m_shiftKey((evt->getModifiers() & monagui::KeyEvent::VKEY_LSHIFT) ||
-               (evt->getModifiers() & monagui::KeyEvent::VKEY_RSHIFT)),
-    m_ctrlKey(evt->getModifiers() & monagui::KeyEvent::VKEY_CTRL),
-    m_altKey(evt->getModifiers() & monagui::KeyEvent::VKEY_ALT),
-    m_metaKey(evt->getModifiers() & monagui::KeyEvent::VKEY_ALT) // FIXME
+    // monagui key modifiers is broken!!!!!
+    m_shiftKey((evt->getModifiers() == monagui::KeyEvent::VKEY_LSHIFT) ||
+               (evt->getModifiers() == monagui::KeyEvent::VKEY_RSHIFT)),
+    m_ctrlKey(evt->getModifiers() == monagui::KeyEvent::VKEY_CTRL),
+    m_altKey(evt->getModifiers() == monagui::KeyEvent::VKEY_ALT),
+    m_metaKey(evt->getModifiers() == monagui::KeyEvent::VKEY_ALT) // FIXME
 {
 }
 
