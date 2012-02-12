@@ -54,7 +54,6 @@ EditorClientMona::EditorClientMona()
 
 void EditorClientMona::setPage(Page* page)
 {
-    _logprintf("SET_PAGE!!! %s %s:%d\n", __func__, __FILE__, __LINE__);
     m_page = page;
 }
 
