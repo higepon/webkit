@@ -88,21 +88,20 @@ void WebPage::paint(const IntRect& rect, bool immediate) {
   ASSERT(main_frame_);
   ASSERT(main_frame_->Frame());
 
-  //  static bool fLayoutingView = false;
-  if (!main_frame_->Frame()->contentRenderer()) {
+  Frame* frame = main_frame_->Frame();
+  if (!frame->contentRenderer()) {
     _logprintf("skip becase of contentRenderer");
     return;
   }
 
-  if (!main_frame_->Frame()->view()->isInLayout()) {
-    main_frame_->Frame()->view()->updateLayoutAndStyleIfNeededRecursive();
+  FrameView* view = frame->view();
+
+  // N.B.
+  // I'm not sure this is correct place whether view isInLayout().
+  if (!view->isInLayout()) {
+    view->updateLayoutAndStyleIfNeededRecursive();
     paintWithoutLayout(rect, immediate);
   }
-  //   ASSERT(!main_frame_->Frame()->view()->needsLayout());
-  //   fLayoutingView = false;
-  // } else {
-  //   _logprintf("NOT LAYOUT %s %s:%d\n", __func__, __FILE__, __LINE__);
-  // }
 }
 
 void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
