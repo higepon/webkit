@@ -220,6 +220,7 @@ namespace WebCore {
        PlatformKeyboardEvent(monagui::KeyEvent*);
       monagui::KeyEvent* getKeyEvent() const { return m_monaKeyEvent; }
       static String singleCharacterString(unsigned);
+      static int windowsKeyCodeForMonaGuiKeyCode(unsigned);
 #endif
 
     protected:
