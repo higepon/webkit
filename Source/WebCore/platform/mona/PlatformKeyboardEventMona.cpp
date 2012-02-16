@@ -34,11 +34,72 @@
 
 namespace WebCore {
 
+WTF::String PlatformKeyboardEvent::keyIdentifierForMonaKeyCode(unsigned keyCode)
+{
+    switch (keyCode) {
+        case monagui::KeyEvent::VKEY_ALT:
+            return "Alt";
+        case monagui::KeyEvent::VKEY_DOWN:
+            return "Down";
+            // "End"
+        case monagui::KeyEvent::VKEY_END:
+            return "End";
+            // "Enter"
+        case monagui::KeyEvent::VKEY_ENTER:
+            return "Enter";
+        case monagui::KeyEvent::VKEY_F1:
+            return "F1";
+        case monagui::KeyEvent::VKEY_F2:
+            return "F2";
+        case monagui::KeyEvent::VKEY_F3:
+            return "F3";
+        case monagui::KeyEvent::VKEY_F4:
+            return "F4";
+        case monagui::KeyEvent::VKEY_F5:
+            return "F5";
+        case monagui::KeyEvent::VKEY_F6:
+            return "F6";
+        case monagui::KeyEvent::VKEY_F7:
+            return "F7";
+        case monagui::KeyEvent::VKEY_F8:
+            return "F8";
+        case monagui::KeyEvent::VKEY_F9:
+            return "F9";
+        case monagui::KeyEvent::VKEY_F10:
+            return "F10";
+        case monagui::KeyEvent::VKEY_F11:
+            return "F11";
+        case monagui::KeyEvent::VKEY_F12:
+            return "F12";
+        case monagui::KeyEvent::VKEY_LEFT:
+            return "Left";
+        case monagui::KeyEvent::VKEY_PGDOWN:
+            return "PageDown";
+        case monagui::KeyEvent::VKEY_PGUP:
+            return "PageUp";
+        case monagui::KeyEvent::VKEY_RIGHT:
+            return "Right";
+        case monagui::KeyEvent::VKEY_UP:
+            return "Up";
+            // Standard says that DEL becomes U+007F.
+        // case monagui::KeyEvent::VKEY_Delete:
+        //     return "U+007F";
+        case monagui::KeyEvent::VKEY_BACKSPACE:
+            return "U+0008";
+        case monagui::KeyEvent::VKEY_TAB:
+            return "U+0009";
+        default:
+            return WTF::String::format("U+%04X", (keyCode)); // FIXME
+    }
+}
+
+
 PlatformKeyboardEvent::PlatformKeyboardEvent(monagui::KeyEvent* evt) :
     m_monaKeyEvent(evt),
     m_type(evt->getType() == monagui::Event::KEY_PRESSED ? KeyDown : KeyUp), // FIXME Char should be here?
     m_text(singleCharacterString(evt->getKeycode())),
     m_unmodifiedText(m_text), // FIXME
+    m_keyIdentifier(keyIdentifierForMonaKeyCode(evt->getKeycode())),
     m_autoRepeat(false), // FIXME
     m_windowsVirtualKeyCode(windowsKeyCodeForMonaGuiKeyCode(evt->getKeycode())),
     m_nativeVirtualKeyCode(evt->getKeycode()),
