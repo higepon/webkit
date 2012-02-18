@@ -31,46 +31,43 @@
 
 namespace WebCore {
 
-PlatformMouseEvent::PlatformMouseEvent(monagui::MouseEvent* event)
-    // : m_position(message->FindPoint("be:view_where"))
+PlatformMouseEvent::PlatformMouseEvent(monagui::MouseEvent* e)
+    : m_position(LayoutPoint(e->getX(), e->getY())),
     // , m_globalPosition(message->FindPoint("screen_where"))
-    // , m_clickCount(message->FindInt32("clicks"))
-    // , m_timestamp(message->FindInt64("when") / 1000000.0)
+      m_clickCount(1),
+      m_timestamp(0), // FIXME
+      m_shiftKey(false),
+      m_ctrlKey(false),
+      m_altKey(false),
+      m_metaKey(false)
 {
-    // int32 buttons = 0;
-    // if (message->what == B_MOUSE_UP)
-    //     message->FindInt32("previous buttons", &buttons);
-    // else
-    //     message->FindInt32("buttons", &buttons);
+  switch(e->getButton()) {
+    case MouseEvent::BUTTON_LEFT:
+      m_button = LeftButton;
+      break;
+    case MouseEvent::BUTTON_RIGHT:
+      m_button = RightButton;
+      break;
+    default:
+      m_button = MiddleButton;
+      break;
+  }
 
-    // if (buttons & B_PRIMARY_MOUSE_BUTTON)
-    //     m_button = LeftButton;
-    // else if (buttons & B_SECONDARY_MOUSE_BUTTON)
-    //     m_button = RightButton;
-    // else if (buttons & B_TERTIARY_MOUSE_BUTTON)
-    //     m_button = MiddleButton;
-    // else
-    //     m_button = NoButton;
-
-    // switch (message->what) {
-    // case B_MOUSE_DOWN:
-    //     m_eventType = MouseEventPressed;
-    //     break;
-    // case B_MOUSE_UP:
-    //     m_eventType = MouseEventReleased;
-    //     break;
-    // case B_MOUSE_MOVED:
-    // default:
-    //     m_eventType = MouseEventMoved;
-    //     break;
-    // };
-
-    // int32 modifiers = message->FindInt32("modifiers");
-    // m_shiftKey = modifiers & B_SHIFT_KEY;
-    // m_ctrlKey = modifiers & B_CONTROL_KEY;
-    // m_altKey = modifiers & B_COMMAND_KEY;
-    // m_metaKey = modifiers & B_OPTION_KEY;
+  switch(e->getType()) {
+    case MouseEvent::MOUSE_PRESSED:
+      m_eventType = MouseEventPressed;
+      break;
+    case MouseEvent::MOUSE_RELEASED:
+      m_eventType = MouseEventReleased;
+      break;
+    case MouseEvent::MOUSE_MOVED:
+      m_eventType = MouseEventMoved;
+      break;
+    default:
+      _logprintf("MouseEvent=%d not handled %s %s:%d\n", e->getType(), __func__, __FILE__, __LINE__);
+      m_eventType = MouseEventPressed;
+      break;
+  }
 }
 
 } // namespace WebCore
-
