@@ -118,20 +118,31 @@ void WebView::processEvent(monagui::Event* event) {
     if (event->getType() == monagui::Event::TIMER) {
       if (SharedTimerFiredFunction) {
         kill_timer(event->arg1);
-        _logprintf("before timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
+        //        _logprintf("before timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
         SharedTimerFiredFunction();
-        _logprintf("after timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
+        //        _logprintf("after timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
       }
     } else if (event->getType() == monagui::Event::KEY_PRESSED ||
                event->getType() == monagui::Event::KEY_RELEASED) {
         int keycode = ((KeyEvent *)event)->getKeycode();
         int modifiers = ((KeyEvent *)event)->getModifiers();
-        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
-        _logprintf("KEY %s %s:%d\n", __func__, __FILE__, __LINE__);
         PlatformKeyboardEvent keyEvent((monagui::KeyEvent *)event);
+        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
         frame->eventHandler()->keyEvent(keyEvent);
+    } else if (event->getType() == monagui::Event::MOUSE_PRESSED) {
+        PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
+        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
+        frame->eventHandler()->handleMousePressEvent(mouseEvent);
+    } else if (event->getType() == monagui::Event::MOUSE_RELEASED) {
+        PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
+        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
+        frame->eventHandler()->handleMouseReleaseEvent(mouseEvent);
+    } else if (event->getType() == monagui::Event::MOUSE_MOVED) {
+        PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
+        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
+        frame->eventHandler()->handleMouseMoveEvent(mouseEvent);
+    } else {
     }
-
 }
 
 void WebView::LoadURL(const char* urlString, bool aquireFocus /* = true */) {
