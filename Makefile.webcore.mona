@@ -1816,6 +1816,7 @@ $(WEBCORE_DIR)/platform/mona/ScreenMona.cpp \
 $(WEBCORE_DIR)/platform/mona/ScrollbarThemeMona.cpp \
 $(WEBCORE_DIR)/platform/mona/RenderThemeMona.cpp \
 $(WEBCORE_DIR)/platform/mona/PlatformKeyboardEventMona.cpp \
+$(WEBCORE_DIR)/platform/mona/PlatformMouseEventMona.cpp \
 $(WEBCORE_DIR)/platform/network/curl/CookieJarCurl.cpp \
 $(WEBCORE_DIR)/platform/network/curl/CredentialStorageCurl.cpp \
 $(WEBCORE_DIR)/platform/network/curl/DNSCurl.cpp \

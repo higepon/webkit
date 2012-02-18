@@ -61,6 +61,12 @@ class wxMouseEvent;
 class BMessage;
 #endif
 
+#if OS(MONA)
+namespace monagui {
+class MouseEvent;
+};
+#endif
+
 #if PLATFORM(BREWMP)
 typedef unsigned short    uint16;
 typedef unsigned long int uint32;
@@ -171,6 +177,10 @@ namespace WebCore {
 
 #if PLATFORM(HAIKU)
         PlatformMouseEvent(const BMessage*);
+#endif
+
+#if OS(MONA)
+        PlatformMouseEvent(monagui::MouseEvent*);
 #endif
 
 #if PLATFORM(BREWMP)
