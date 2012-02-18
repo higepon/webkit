@@ -35,8 +35,8 @@ namespace WebCore {
 
 class WebPage;
 
-#define WEBVIEW_WIDTH 400
-#define WEBVIEW_HEIGHT 400
+#define WEBVIEW_WIDTH 700
+#define WEBVIEW_HEIGHT 480
 
 class WebView : public monagui::Frame {
  public:
