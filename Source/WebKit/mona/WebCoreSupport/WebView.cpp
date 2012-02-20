@@ -152,10 +152,12 @@ void WebView::processEvent(monagui::Event* event) {
 }
 
 void WebView::LoadURL(const char* urlString, bool aquireFocus /* = true */) {
-  web_page_->LoadURL(urlString);
-  run();
+    web_page_->LoadURL(urlString);
+    run();
 }
 
-void WebView::SetStatus(const char* text) {
-  status_->setText(text);
+void WebView::SetStatus(const std::string& text) {
+    std::string content(" ");
+    content += text;
+    status_->setText(content.c_str());
 }

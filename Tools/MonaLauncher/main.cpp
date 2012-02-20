@@ -58,7 +58,7 @@ int main(int argc, char* argv[]) {
   WebCore::WebView web_view;
   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   //web_view.LoadURL("https://mail.google.com/");
-         web_view.LoadURL("http://www.google.com/");
+     web_view.LoadURL("http://www.google.com/");
   //  web_view.LoadURL("http://www.bing.com/");
   //     web_view.LoadURL("http://www.facebook.com/");
   //   web_view.LoadURL("http://youtube.com/");

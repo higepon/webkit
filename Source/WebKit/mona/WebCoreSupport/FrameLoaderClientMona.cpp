@@ -398,6 +398,9 @@ void FrameLoaderClientMona::didChangeTitle(DocumentLoader* docLoader)
 
 void FrameLoaderClientMona::finishedLoading(DocumentLoader*)
 {
+    if (web_view_) {
+        web_view_->SetStatus(__func__);
+    }
     notImplemented();
 }
 
@@ -477,8 +480,6 @@ void FrameLoaderClientMona::prepareForDataSourceReplacement()
 
 void FrameLoaderClientMona::setTitle(const StringWithDirection& title, const KURL&)
 {
-  _logprintf("TTITLE%s %s:%d\n", __func__, __FILE__, __LINE__);
-  _logprintf("title=%s", title.string().ascii().data());
   if (web_view_) {
     web_view_->setTitle(title.string().ascii().data());
   }
@@ -904,7 +905,6 @@ void FrameLoaderClientMona::transitionToCommittedForNewPage()
   Color backgroundColor = transparent ? WebCore::Color::transparent : WebCore::Color::gray;
 
   frame->createView(size, backgroundColor, transparent, IntSize(), false);
-
   ASSERT(web_page_);
   // todo ???
   //  frame->view()->setTopLevelPlatformWidget(web_page_->WebView());
@@ -922,7 +922,6 @@ void FrameLoaderClientMona::didRestoreFromPageCache()
 
 void FrameLoaderClientMona::dispatchDidBecomeFrameset(bool)
 {
-    notImplemented();
 }
 
 } // namespace WebCore
