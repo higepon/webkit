@@ -93,7 +93,6 @@ void Font::drawGlyphs(GraphicsContext* graphicsContext, const SimpleFontData* fo
         if (g_fontMetrics) {
           //          _logprintf("PONHIGE %c\n", glyphs[i].index);
           if (g_fontMetrics->decodeCharacter(glyphs[i].index, &offset, &width, &height, fp)) {
-            _logprintf("offset=%d width=%d height=%d\n", offset, width, height);
             int x = point.x();
             int y = point.y();
             for (int j = 0; j < height; j++) {

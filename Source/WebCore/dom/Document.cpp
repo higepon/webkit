@@ -1580,7 +1580,6 @@ bail_out:
 void Document::updateStyleIfNeeded()
 {
     ASSERT(isMainThread());
-    _logprintf("FrameView=%x isInLayout=%d isPainting=%d\n", view(), view() && view()->isInLayout(), view() && view()->isPainting());
     ASSERT(!view() || (!view()->isInLayout() && !view()->isPainting()));
     
     if ((!m_pendingStyleRecalcShouldForce && !childNeedsStyleRecalc()) || inPageCache())
@@ -1594,7 +1593,6 @@ void Document::updateStyleIfNeeded()
     // Tell the animation controller that updateStyleIfNeeded is finished and it can do any post-processing
     if (m_frame)
         m_frame->animation()->endAnimationUpdate();
-    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 void Document::updateStyleForAllDocuments()

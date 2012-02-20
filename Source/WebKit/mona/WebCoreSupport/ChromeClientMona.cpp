@@ -49,6 +49,10 @@
 ///#include <Alert.h>
 //#include <String.h>
 
+#ifdef notImplemented
+#undef notImplemented
+#define notImplemented() ((void)0)
+#endif
 
 namespace WebCore {
 
@@ -389,7 +393,6 @@ void ChromeClientMona::runOpenPanel(Frame*, PassRefPtr<FileChooser>)
 
 void ChromeClientMona::loadIconForFiles(const WTF::Vector<WTF::String>& filenames, FileIconLoader* loader)
 {
-    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     loader->notifyFinished(Icon::createIconForFiles(filenames));
 }
 

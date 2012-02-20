@@ -80,7 +80,6 @@ WebPage::~WebPage() {
 }
 
 void WebPage::paint(const IntRect& rect, bool immediate) {
-  _logprintf("(%d %d %d %d) immediate=%s %s %s:%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate ? "true" : "false", __func__, __FILE__, __LINE__);
   if (rect.isEmpty()) {
     return;
   }
@@ -106,28 +105,19 @@ void WebPage::paint(const IntRect& rect, bool immediate) {
 
 void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
   GraphicsContext context(cairo_);
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   main_frame_->Frame()->view()->paint(&context, rect);
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 //  if (immediate) {
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
      web_view_->repaint();
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 //  }
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 void WebPage::Init() {
   WebFramePrivate* data = new WebFramePrivate;
   data->name = "Hello";
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   data->page = page_;
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   main_frame_ = new WebFrame(this, 0, data, web_view_);
 // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  _logprintf("END of WebFrame %s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 void WebPage::LoadURL(const char* urlString) {

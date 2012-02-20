@@ -139,7 +139,6 @@ RenderText::RenderText(Node* node, PassRefPtr<StringImpl> str)
      , m_knownToHaveNoOverflowAndNoFallbackFonts(false)
      , m_needsTranscoding(false)
 {
-  _logprintf("RenderText created=%x\n", this);
     ASSERT(m_text);
 
     setIsText();

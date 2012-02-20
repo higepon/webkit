@@ -59,16 +59,10 @@ using namespace WebCore;
 
 WebFrame::WebFrame(WebPage* web_page, WebFrame* parent_frame, WebFramePrivate* data, WebView* web_view)
     : data_(data) {
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   data_->loaderClient = new WebCore::FrameLoaderClientMona(web_page, this);
   data_->loaderClient->setWebView(web_view);
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   RefPtr<WebCore::Frame> frame = WebCore::Frame::create(data_->page, data_->ownerElement,
                                                         data_->loaderClient);
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-
-
-
   // We don't keep the reference to the Frame, see WebFramePrivate.h.
   data_->frame = frame.get();
 
@@ -76,15 +70,11 @@ _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   // But necessary.
   data_->loaderClient->setFrame(data_->frame);
 
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   if (parent_frame) {
     parent_frame->Frame()->tree()->appendChild(data_->frame);
   }
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     data_->frame->tree()->setName(data_->name);
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     data_->frame->init();
-    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 // BWebFrame::BWebFrame(BWebPage* webPage, BWebFrame* parentFrame, WebFramePrivate* data)

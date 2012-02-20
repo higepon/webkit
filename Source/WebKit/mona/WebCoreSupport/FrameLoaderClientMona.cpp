@@ -53,6 +53,11 @@
 // #define assert(...) /* */
 // #include <monagui.h>
 
+#ifdef notImplemented
+#undef notImplemented
+#define notImplemented() ((void)0)
+#endif
+
 namespace WebCore {
 
 FrameLoaderClientMona::FrameLoaderClientMona(WebPage* web_page, WebFrame* web_frame)
@@ -569,7 +574,6 @@ void FrameLoaderClientMona::setMainDocumentError(WebCore::DocumentLoader*, const
 
 void FrameLoaderClientMona::committedLoad(WebCore::DocumentLoader* loader, const char* data, int length)
 {
-    _logprintf("committedLoad called %s %s:%d\n", __func__, __FILE__, __LINE__);
     loader->commitData(data, length);
 }
 
@@ -750,20 +754,14 @@ void FrameLoaderClientMona::dispatchDecidePolicyForNavigationAction(FramePolicyF
                                                                      const ResourceRequest& request,
                                                                      PassRefPtr<FormState>)
 {
-  //    notImplemented();
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-if (!frame_ || !function)
-    return;
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-if (web_view_) {
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    if (!frame_ || !function)
+        return;
+    if (web_view_) {
     // BMessage message(NAVIGATION_REQUESTED);
     // message.AddString("url", request.url().string());
     // m_messenger->SendMessage(&message);
-_logprintf("%s %s:%d loader %x checker %x\n", __func__, __FILE__, __LINE__, frame_->loader(), frame_->loader()->policyChecker());
-    (frame_->loader()->policyChecker()->*function)(PolicyUse);
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-}
+        (frame_->loader()->policyChecker()->*function)(PolicyUse);
+   }
 }
 
 void FrameLoaderClientMona::dispatchUnableToImplementPolicy(const ResourceError&)

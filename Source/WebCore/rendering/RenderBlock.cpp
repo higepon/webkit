@@ -5438,7 +5438,6 @@ static inline bool shouldSkipForFirstLetter(UChar c)
 
 void RenderBlock::updateFirstLetter()
 {
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     if (!document()->usesFirstLetterRules())
         return;
     // Don't recur
