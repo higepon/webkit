@@ -331,10 +331,12 @@ void ChromeClientMona::updateBackingStore()
 {
 }
 
-void ChromeClientMona::mouseDidMoveOverElement(const HitTestResult& hit, unsigned /*modifierFlags*/)
+void ChromeClientMona::mouseDidMoveOverElement(const HitTestResult& result, unsigned modifierFlags)
 {
-    // Some extra info
-    notImplemented();
+  bool isHover = result.isLiveLink() && !result.absoluteLinkURL().string().isEmpty();
+  if (!monapi_call_mouse_set_moved_over(isHover)) {
+    monapi_warn("monapi_call_mouse_set_moved_over failed");
+  }
 }
 
 void ChromeClientMona::setToolTip(const WTF::String& tip)

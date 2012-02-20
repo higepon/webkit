@@ -140,7 +140,10 @@ void WebView::processEvent(monagui::Event* event) {
     } else if (event->getType() == monagui::Event::MOUSE_MOVED) {
         PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
         WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
-        frame->eventHandler()->handleMouseMoveEvent(mouseEvent);
+        // We call mouseMoved here instead of handleMouseMovedEvent because we need
+        // our ChromeClient to receive changes to the mouse position and
+        // tooltip text, and mouseMoved handles all of that.
+        frame->eventHandler()->mouseMoved(mouseEvent);
     } else {
     }
 }
