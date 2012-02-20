@@ -333,10 +333,16 @@ void ChromeClientMona::updateBackingStore()
 
 void ChromeClientMona::mouseDidMoveOverElement(const HitTestResult& result, unsigned modifierFlags)
 {
-  bool isHover = result.isLiveLink() && !result.absoluteLinkURL().string().isEmpty();
-  if (!monapi_call_mouse_set_moved_over(isHover)) {
-    monapi_warn("monapi_call_mouse_set_moved_over failed");
-  }
+    bool isHover = result.isLiveLink() && !result.absoluteLinkURL().string().isEmpty();
+    if (!monapi_call_mouse_set_moved_over(isHover)) {
+        monapi_warn("monapi_call_mouse_set_moved_over failed");
+    }
+    std::string text(" ");
+    KURL url = result.absoluteLinkURL();
+    for (int i = 0; i < url.string().length(); i++) {
+      text += url.string()[i];
+    }
+    webpage_->SetStatus(text.c_str());
 }
 
 void ChromeClientMona::setToolTip(const WTF::String& tip)

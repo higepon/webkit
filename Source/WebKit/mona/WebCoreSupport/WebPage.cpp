@@ -134,3 +134,7 @@ void WebPage::LoadURL(const char* urlString) {
   ASSERT(main_frame_);
   main_frame_->LoadURL(urlString);
 }
+
+void WebPage::SetStatus(const char* text) {
+  web_view_->SetStatus(text);
+}

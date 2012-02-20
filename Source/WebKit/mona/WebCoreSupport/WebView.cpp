@@ -87,19 +87,23 @@ extern monagui::FontMetrics* g_fontMetrics;
 
 using namespace WebCore;
 
-WebView::WebView() : web_page_(new WebPage(this)), image_buffer_(0), Frame("browser") {
+WebView::WebView() : web_page_(new WebPage(this)),
+                     image_buffer_(0),
+                     Frame("browser"),
+                     status_(new Label("")) {
   ASSERT(web_page_);
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   web_page_->Init();
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   setBackground(monagui::Color::blue);
-  setBounds(40, 40, WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
+  setBounds(40, 40, WEBVIEW_WIDTH, WEBVIEW_HEIGHT + 55);
   g_fontMetrics = getFontMetrics();
+
+  status_->setBackground(monagui::Color::lightGray);
+  status_->setBounds(0, WEBVIEW_HEIGHT, WEBVIEW_WIDTH, 30);
+  add(status_.get());
 }
 
 void WebView::paint(Graphics *g) {
   if (image_buffer_) {
-    _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     for (int i = 0; i < WEBVIEW_WIDTH; i++) {
       for (int j = 0; j < WEBVIEW_HEIGHT; j++) {
         g->drawPixel(i, j, ((uint32_t*)(image_buffer_))[i + j * WEBVIEW_WIDTH]);
@@ -110,7 +114,6 @@ void WebView::paint(Graphics *g) {
 
 
 void WebView::SetImageBuffer(unsigned char* p) {
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   image_buffer_ = p;
 }
 
@@ -151,4 +154,8 @@ void WebView::processEvent(monagui::Event* event) {
 void WebView::LoadURL(const char* urlString, bool aquireFocus /* = true */) {
   web_page_->LoadURL(urlString);
   run();
+}
+
+void WebView::SetStatus(const char* text) {
+  status_->setText(text);
 }

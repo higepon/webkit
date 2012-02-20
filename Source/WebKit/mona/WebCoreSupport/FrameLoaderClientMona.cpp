@@ -406,7 +406,7 @@ bool FrameLoaderClientMona::canShowMIMETypeAsHTML(const WTF::String& MIMEType) c
     notImplemented();
     return false;
 }
-    
+
 bool FrameLoaderClientMona::canShowMIMEType(const WTF::String& MIMEType) const
 {
     notImplemented();

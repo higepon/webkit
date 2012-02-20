@@ -45,8 +45,9 @@ class WebView : public monagui::Frame {
   void paint(monagui::Graphics *g);
   void processEvent(monagui::Event* event);
   void SetImageBuffer(unsigned char* p);
+  void SetStatus(const char* text);
   WebPage* webPage() {
-	  return web_page_;
+      return web_page_;
   }
 //     class UserData {
 //     public:
@@ -151,6 +152,7 @@ class WebView : public monagui::Frame {
 //             UserData*           fUserData;
   WebPage* web_page_;
   unsigned char* image_buffer_;
+  MonAPI::scoped_ptr<Label> status_;
 };
 };
 
