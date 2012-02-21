@@ -302,6 +302,10 @@ void FrameLoaderClientMona::dispatchDidCommitLoad()
 
 void FrameLoaderClientMona::dispatchDidFinishDocumentLoad()
 {
+    if (web_view_) {
+        web_view_->SetStatus("Done");
+    }
+
     // if (web_view_) {
     //     BMessage message(LOAD_DOC_COMPLETED);
     //     message.AddString("url", frame_->document()->url().string());
@@ -355,6 +359,9 @@ void FrameLoaderClientMona::revertToProvisionalState(DocumentLoader*)
 
 void FrameLoaderClientMona::postProgressStartedNotification()
 {
+    if (web_view_) {
+        web_view_->SetStatus("Connecting...");
+    }
     notImplemented();
 }
 
@@ -404,7 +411,7 @@ void FrameLoaderClientMona::didChangeTitle(DocumentLoader* docLoader)
 void FrameLoaderClientMona::finishedLoading(DocumentLoader*)
 {
     if (web_view_) {
-        web_view_->SetStatus(__func__);
+        web_view_->SetStatus("Transfer completed");
     }
     notImplemented();
 }
@@ -665,7 +672,9 @@ void FrameLoaderClientMona::dispatchDidCancelAuthenticationChallenge(DocumentLoa
 void FrameLoaderClientMona::dispatchDidReceiveResponse(DocumentLoader* loader, unsigned long id,
                                                         const ResourceResponse& response)
 {
-    notImplemented();
+    if (web_view_) {
+        web_view_->SetStatus("Transfering...");
+    }
     m_response = response;
     m_firstData = true;
 }

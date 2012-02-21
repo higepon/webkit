@@ -157,7 +157,9 @@ void WebView::LoadURL(const char* urlString, bool aquireFocus /* = true */) {
 }
 
 void WebView::SetStatus(const std::string& text) {
-    std::string content(" ");
-    content += text;
-    status_->setText(content.c_str());
+    if (getGraphics()) {
+        std::string content(" ");
+        content += text;
+        status_->setText(content.c_str());
+    }
 }
