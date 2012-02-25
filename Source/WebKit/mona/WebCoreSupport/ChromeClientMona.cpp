@@ -243,8 +243,9 @@ void ChromeClientMona::closeWindowSoon()
 
 void ChromeClientMona::runJavaScriptAlert(Frame*, const WTF::String& msg)
 {
-    std::string m = toStdString(msg);
-    webpage_->SetStatus(m);
+    std::string m("alert:");
+    m += toStdString(msg);
+    webpage_->SetStatus(m.c_str());
     _logprintf("JavaScriptAlert:");
     _logprintf(m.c_str());
 }
@@ -354,7 +355,7 @@ void ChromeClientMona::mouseDidMoveOverElement(const HitTestResult& result, unsi
         monapi_warn("monapi_call_mouse_set_moved_over failed");
     }
     KURL url = result.absoluteLinkURL();
-    webpage_->SetStatus(toStdString(url.string()));
+    webpage_->SetStatus(toStdString(url.string()).c_str());
 }
 
 void ChromeClientMona::setToolTip(const WTF::String& tip)
@@ -445,4 +446,3 @@ PassRefPtr<SearchPopupMenu> ChromeClientMona::createSearchPopupMenu(PopupMenuCli
 
 
 } // namespace WebCore
-
