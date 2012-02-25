@@ -56,6 +56,17 @@
 
 namespace WebCore {
 
+static std::string toStdString(const WTF::String& s)
+{
+    std::string text;
+    size_t len = s.length();
+    for (size_t i = 0; i < len; i++) {
+        text += s[i];
+    }
+    return text;
+}
+
+
 ChromeClientMona::ChromeClientMona(WebPage* webpage) : webpage_(webpage)
 {
 }
@@ -232,9 +243,10 @@ void ChromeClientMona::closeWindowSoon()
 
 void ChromeClientMona::runJavaScriptAlert(Frame*, const WTF::String& msg)
 {
-    notImplemented();
-    // BAlert* alert = new BAlert("JavaScript", BString(msg).String(), "OK");
-    // alert->Go();
+    std::string m = toStdString(msg);
+    webpage_->SetStatus(m);
+    _logprintf("JavaScriptAlert:");
+    _logprintf(m.c_str());
 }
 
 bool ChromeClientMona::runJavaScriptConfirm(Frame*, const WTF::String& msg)
@@ -341,12 +353,8 @@ void ChromeClientMona::mouseDidMoveOverElement(const HitTestResult& result, unsi
     if (!monapi_call_mouse_set_moved_over(isHover)) {
         monapi_warn("monapi_call_mouse_set_moved_over failed");
     }
-    std::string text(" ");
     KURL url = result.absoluteLinkURL();
-    for (int i = 0; i < url.string().length(); i++) {
-      text += url.string()[i];
-    }
-    webpage_->SetStatus(text.c_str());
+    webpage_->SetStatus(toStdString(url.string()));
 }
 
 void ChromeClientMona::setToolTip(const WTF::String& tip)
