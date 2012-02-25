@@ -292,10 +292,9 @@ void ChromeClientMona::invalidateWindow(const IntRect& rect, bool immediate)
 void ChromeClientMona::invalidateContentsAndWindow(const IntRect& rect, bool immediate)
 {
     // Calling layout or paint from here causes bad recursive call.
-    // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-    // ASSERT(webpage_);
-    // webpage_->paint(rect, immediate);
-    // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    // But without this call, text input is not painted. So we again enabled it.
+    ASSERT(webpage_);
+    webpage_->paint(rect, immediate);
 }
 
 void ChromeClientMona::invalidateContentsForSlowScroll(const IntRect&, bool)
