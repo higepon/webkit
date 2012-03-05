@@ -1891,6 +1891,8 @@ $(SOURCE_DIR)/WebKit/mona/WebCoreSupport/WebFrame.cpp\
 
 include $(MONADIR)/share/configs/monapi-static-lib.inc
 
+export FEATURE_DEFINES
+
 gen-derived:
 	@if [ ! -e "$(WEBCORE_DIR)/DerivedSources/WebCore/CSSPropertyNames.h" ]; then \
 	(cd $(WEBCORE_DIR) && ./make-generated-sources.sh) \

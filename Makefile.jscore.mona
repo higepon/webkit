@@ -228,6 +228,7 @@ SOURCES       = $(JSC_DIR)/yarr/YarrInterpreter.cpp \
 
 include $(MONADIR)/share/configs/monapi-static-lib.inc
 
+export FEATURE_DEFINES
 gen-derived:
 	@if [ ! -e "$(JSC_DIR)/DerivedSources/JavaScriptCore/ArrayConstructor.lut.h" ]; then \
 	(cd $(JSC_DIR) && ./make-generated-sources.sh) \
