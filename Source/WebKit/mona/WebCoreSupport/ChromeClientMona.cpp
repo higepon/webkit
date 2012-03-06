@@ -206,22 +206,52 @@ void ChromeClientMona::setResizable(bool)
 void ChromeClientMona::addMessageToConsole(const WTF::String& message, unsigned int lineNumber,
                                             const WTF::String& sourceID)
 {
-    notImplemented();
-  //    printf("MESSAGE %s:%i %s\n", BString(sourceID).String(), lineNumber, BString(message).String());
+    std::string m("console:");
+    m += toStdString(message);
+    m += " at ";
+    char buf[16];
+    snprintf(buf, 16, "%d", lineNumber);
+    m += buf;
+    m += " sourceID:";
+    m += toStdString(sourceID);
+
+    webpage_->SetStatus(m.c_str());
+    _logprintf("console:");
+    _logprintf(m.c_str());
 }
 
 void ChromeClientMona::addMessageToConsole(MessageSource, MessageLevel, const WTF::String& message,
                                             unsigned int lineNumber, const WTF::String& sourceID)
 {
-    notImplemented();
-  //    printf("MESSAGE %s:%i %s\n", BString(sourceID).String(), lineNumber, BString(message).String());
+    std::string m("console:");
+    m += toStdString(message);
+    m += " at ";
+    char buf[16];
+    snprintf(buf, 16, "%d", lineNumber);
+    m += buf;
+    m += " sourceID:";
+    m += toStdString(sourceID);
+
+    webpage_->SetStatus(m.c_str());
+    _logprintf("console:");
+    _logprintf(m.c_str());
 }
 
 void ChromeClientMona::addMessageToConsole(MessageSource, MessageType, MessageLevel, const WTF::String& message,
                                             unsigned int lineNumber, const WTF::String& sourceID)
 {
-    notImplemented();
-  //    printf("MESSAGE %s:%i %s\n", BString(sourceID).String(), lineNumber, BString(message).String());
+    std::string m("console:");
+    m += toStdString(message);
+    m += " at ";
+    char buf[16];
+    snprintf(buf, 16, "%d", lineNumber);
+    m += buf;
+    m += " sourceID:";
+    m += toStdString(sourceID);
+
+    webpage_->SetStatus(m.c_str());
+    _logprintf("console:");
+    _logprintf(m.c_str());
 }
 
 bool ChromeClientMona::canRunBeforeUnloadConfirmPanel()
