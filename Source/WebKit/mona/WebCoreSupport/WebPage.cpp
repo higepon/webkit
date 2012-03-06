@@ -69,7 +69,8 @@ WebPage::WebPage(WebView* web_view) :
   page_->settings()->setLoadsImagesAutomatically(true);
   page_->settings()->setJavaScriptEnabled(true);
   page_->settings()->setCaretBrowsingEnabled(true);
-  //  page_->settings()->setPasswordEchoEnabled(true);
+  page_->settings()->setDeveloperExtrasEnabled(true);
+  page_->settings()->setPasswordEchoEnabled(true);
   editorClient->setPage(page_);
 
     // todo: Is this necessary?
