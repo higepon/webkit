@@ -120,8 +120,8 @@ void WebView::SetImageBuffer(unsigned char* p) {
 void WebView::processEvent(monagui::Event* event) {
     if (event->getType() == monagui::Event::TIMER) {
       if (SharedTimerFiredFunction) {
-        kill_timer(event->arg1);
-        //        _logprintf("before timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
+        //        kill_timer(event->arg1);
+        _logprintf("before timer call %s %s:%d function=%x\n", __func__, __FILE__, __LINE__, SharedTimerFiredFunction);
         SharedTimerFiredFunction();
         //        _logprintf("after timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
       }
