@@ -147,6 +147,9 @@ void WebView::processEvent(monagui::Event* event) {
         // our ChromeClient to receive changes to the mouse position and
         // tooltip text, and mouseMoved handles all of that.
         frame->eventHandler()->mouseMoved(mouseEvent);
+    } else if (event->getType() == monagui::Event::CUSTOM_EVENT && event->header == MSG_UPDATE) {
+      web_page_->paint(IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT), true);
+      paint(getGraphics());
     } else {
     }
 }

@@ -331,6 +331,15 @@ void ChromeClientMona::invalidateContentsAndWindow(const IntRect& rect, bool imm
     //   Accessing http://google.com can reproduce the crash.
   //    ASSERT(webpage_);
   //    webpage_->paint(rect, immediate);
+
+  // To prevent recursive call of doDeferredRepaints,
+  // We use MSG_UPDATE for immediate repaint.
+  // Borrowed from WinCE port.
+  if (immediate) {
+    if (MonAPI::Message::send(MonAPI::System::getThreadID(), MSG_UPDATE) != M_OK) {
+      monapi_warn("message send failure");
+    }
+  }
 }
 
 void ChromeClientMona::invalidateContentsForSlowScroll(const IntRect&, bool)
