@@ -321,10 +321,16 @@ void ChromeClientMona::invalidateWindow(const IntRect& rect, bool immediate)
 
 void ChromeClientMona::invalidateContentsAndWindow(const IntRect& rect, bool immediate)
 {
-    // Calling layout or paint from here causes bad recursive call.
-    // But without this call, text input is not painted. So we again enabled it.
-    ASSERT(webpage_);
-    webpage_->paint(rect, immediate);
+    // Old comment :
+    //   Calling layout or paint from here causes bad recursive call.
+    //   But without this call, text input is not painted. So we again enabled it.
+    // Latest comment:
+    //   Calling paint from here causes crash, I'm sure.
+    //   void FrameView::doDeferredRepaints will be called recursive via ScrollView then ChoromeClient::invalidateContentsAndWindow
+    //   it makes crash on doDeferredRepaints, which breaks Vecotr<IntRect>.
+    //   Accessing http://google.com can reproduce the crash.
+  //    ASSERT(webpage_);
+  //    webpage_->paint(rect, immediate);
 }
 
 void ChromeClientMona::invalidateContentsForSlowScroll(const IntRect&, bool)
