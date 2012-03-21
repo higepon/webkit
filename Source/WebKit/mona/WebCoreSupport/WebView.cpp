@@ -112,6 +112,17 @@ void WebView::paint(Graphics *g) {
   }
 }
 
+void WebView::paint(Graphics *g, const IntRect& rect) {
+  if (image_buffer_) {
+    for (int i = rect.x(); i < rect.width(); i++) {
+      for (int j = rect.y(); j < rect.height(); j++) {
+        g->drawPixel(i, j, ((uint32_t*)(image_buffer_))[i + j * WEBVIEW_WIDTH]);
+      }
+    }
+  }
+}
+
+
 
 void WebView::SetImageBuffer(unsigned char* p) {
   image_buffer_ = p;
@@ -148,8 +159,12 @@ void WebView::processEvent(monagui::Event* event) {
         // tooltip text, and mouseMoved handles all of that.
         frame->eventHandler()->mouseMoved(mouseEvent);
     } else if (event->getType() == monagui::Event::CUSTOM_EVENT && event->header == MSG_UPDATE) {
-      web_page_->paint(IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT), true);
-      paint(getGraphics());
+        int x = event->arg1 & 0xffff;
+        int y = event->arg1 >> 16;
+        int w = event->arg2 & 0xffff;
+        int h = event->arg2 >> 16;
+        IntRect rect(x, y, w, h);
+        web_page_->paint(rect, true);
     } else {
     }
 }

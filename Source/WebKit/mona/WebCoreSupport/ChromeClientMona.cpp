@@ -329,17 +329,17 @@ void ChromeClientMona::invalidateContentsAndWindow(const IntRect& rect, bool imm
     //   void FrameView::doDeferredRepaints will be called recursive via ScrollView then ChoromeClient::invalidateContentsAndWindow
     //   it makes crash on doDeferredRepaints, which breaks Vecotr<IntRect>.
     //   Accessing http://google.com can reproduce the crash.
-  //    ASSERT(webpage_);
-  //    webpage_->paint(rect, immediate);
+    //    ASSERT(webpage_);
+    //    webpage_->paint(rect, immediate);
 
-  // To prevent recursive call of doDeferredRepaints,
-  // We use MSG_UPDATE for immediate repaint.
-  // Borrowed from WinCE port.
-  if (immediate) {
-    if (MonAPI::Message::send(MonAPI::System::getThreadID(), MSG_UPDATE) != M_OK) {
-      monapi_warn("message send failure");
+    // To prevent recursive call of doDeferredRepaints,
+    // We use MSG_UPDATE for immediate repaint.
+    // Borrowed from WinCE port.
+    uint32_t xy =  (rect.y() << 16) | rect.x();
+    uint32_t wh =  (rect.height() << 16) | rect.width();
+    if (MonAPI::Message::send(MonAPI::System::getThreadID(), MSG_UPDATE, xy, wh) != M_OK) {
+        monapi_warn("message send failure");
     }
-  }
 }
 
 void ChromeClientMona::invalidateContentsForSlowScroll(const IntRect&, bool)

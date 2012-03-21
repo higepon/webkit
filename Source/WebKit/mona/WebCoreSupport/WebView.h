@@ -43,6 +43,7 @@ class WebView : public monagui::Frame {
   WebView();
   virtual ~WebView() {}
   void paint(monagui::Graphics *g);
+  void paint(monagui::Graphics *g, const IntRect& rect);
   void processEvent(monagui::Event* event);
   void SetImageBuffer(unsigned char* p);
   void SetStatus(const std::string& text);

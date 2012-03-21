@@ -110,9 +110,9 @@ void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
   GraphicsContext context(cairo_);
   main_frame_->Frame()->view()->paint(&context, rect);
   web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
-//  if (immediate) {
-     web_view_->repaint();
-//  }
+
+  // TODO: apply rect and immediate
+  web_view_->repaint();
 }
 
 void WebPage::Init() {
