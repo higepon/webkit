@@ -55,7 +55,6 @@ void Widget::setFrameRect(const IntRect& rect)
 
 void Widget::setFocus(bool focused)
 {
-  notImplemented();
 }
 
 void Widget::setCursor(const Cursor& cursor)
