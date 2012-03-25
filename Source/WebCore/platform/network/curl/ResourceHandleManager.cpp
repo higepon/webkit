@@ -62,8 +62,11 @@ const int selectTimeoutMS = 5;
 const double pollTimeSeconds = 0.05;
 const int maxRunningJobs = 5;
 
+#if OS(MONA)
+static const bool ignoreSSLErrors = true;
+#else
 static const bool ignoreSSLErrors = getenv("WEBKIT_IGNORE_SSL_ERRORS");
-
+#endif
 static CString certificatePath()
 {
 #if USE(CF)

@@ -44,8 +44,8 @@
 
 #define notImplemented() do { \
         static bool havePrinted = false; \
-        _logprintf("not implemented %s %s:%d\n", __func__, __FILE__, __LINE__);\
         if (!havePrinted && !supressNotImplementedWarning()) { \
+            _logprintf("not implemented %s %s:%d\n", __func__, __FILE__, __LINE__);\
             WTFLogVerbose(__FILE__, __LINE__, WTF_PRETTY_FUNCTION, &::WebCore::LogNotYetImplemented, "UNIMPLEMENTED: "); \
             havePrinted = true; \
         } \
