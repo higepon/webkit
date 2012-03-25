@@ -103,33 +103,24 @@ WebView::WebView() : web_page_(new WebPage(this)),
 }
 
 void WebView::paint(Graphics *g) {
-  static int counter = 0;
   if (image_buffer_) {
-    counter++;
-    uint64_t start = MonAPI::Date::nowInMsec();
 
-    for (int j = 0; j < WEBVIEW_HEIGHT; j++) {
-      for (int i = 0; i < WEBVIEW_WIDTH; i++) {
+    int rx = currentRect_.x() - 2;
+    int ry = currentRect_.y() +2;
+    g->setColor(monagui::Color::red);
+    g->drawRect(rx, ry,  currentRect_.width(), currentRect_.height());
+
+    //    uint64_t start = MonAPI::Date::nowInMsec();
+    for (int j = currentRect_.y(); j < currentRect_.y() + currentRect_.height(); j++) {
+      for (int i = currentRect_.x(); i < currentRect_.x() + currentRect_.width(); i++) {
         g->drawPixel(i, j, ((uint32_t*)(image_buffer_))[i + j * WEBVIEW_WIDTH]);
       }
     }
-    uint64_t end = MonAPI::Date::nowInMsec();
-    _logprintf("[2]paint time = %d count=%d\n", (int)(end - start), counter);
+    //    uint64_t end = MonAPI::Date::nowInMsec();
+    //    _logprintf("[2]paint time = %d count=%d\n", (int)(end - start), counter);
 
   }
 }
-
-void WebView::paint(Graphics *g, const IntRect& rect) {
-  if (image_buffer_) {
-    for (int i = rect.x(); i < rect.width(); i++) {
-      for (int j = rect.y(); j < rect.height(); j++) {
-        g->drawPixel(i, j, ((uint32_t*)(image_buffer_))[i + j * WEBVIEW_WIDTH]);
-      }
-    }
-  }
-}
-
-
 
 void WebView::SetImageBuffer(unsigned char* p) {
   image_buffer_ = p;
@@ -139,7 +130,7 @@ void WebView::processEvent(monagui::Event* event) {
     if (event->getType() == monagui::Event::TIMER) {
       if (SharedTimerFiredFunction) {
         //        kill_timer(event->arg1);
-        _logprintf("before timer call %s %s:%d function=%x\n", __func__, __FILE__, __LINE__, SharedTimerFiredFunction);
+        //        _logprintf("before timer call %s %s:%d function=%x\n", __func__, __FILE__, __LINE__, SharedTimerFiredFunction);
         SharedTimerFiredFunction();
         //        _logprintf("after timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
       }
@@ -171,8 +162,9 @@ void WebView::processEvent(monagui::Event* event) {
         int w = event->arg2 & 0xffff;
         int h = event->arg2 >> 16;
         //        IntRect rect(x, y, w, h);
-        IntRect rect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
-        web_page_->paint(rect, true);
+        //        IntRect rect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
+        currentRect_ = IntRect(x, y, w, h);
+        web_page_->paint(currentRect_, true);
     } else {
     }
 }

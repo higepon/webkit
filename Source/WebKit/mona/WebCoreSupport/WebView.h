@@ -30,6 +30,7 @@
 #define assert(...) /* */
 //#include <assert.h>
 #include <monagui.h>
+#include <IntRect.h>
 
 namespace WebCore {
 
@@ -43,7 +44,6 @@ class WebView : public monagui::Frame {
   WebView();
   virtual ~WebView() {}
   void paint(monagui::Graphics *g);
-  void paint(monagui::Graphics *g, const IntRect& rect);
   void processEvent(monagui::Event* event);
   void SetImageBuffer(unsigned char* p);
   void SetStatus(const std::string& text);
@@ -154,6 +154,7 @@ class WebView : public monagui::Frame {
   WebPage* web_page_;
   unsigned char* image_buffer_;
   MonAPI::scoped_ptr<Label> status_;
+  IntRect currentRect_;
 };
 };
 
