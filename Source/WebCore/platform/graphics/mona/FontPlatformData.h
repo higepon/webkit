@@ -72,7 +72,7 @@ namespace WebCore {
         float size() const { return m_size; }
         bool bold() const { return m_bold; }
         bool oblique() const { return m_oblique; }
-      FontOrientation orientation() const { notImplemented(); }
+      FontOrientation orientation() const { return Horizontal; } // TODO
       unsigned hash() const { 
         notImplemented();
         if (!m_data)

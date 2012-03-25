@@ -94,7 +94,7 @@ WebView::WebView() : web_page_(new WebPage(this)),
   ASSERT(web_page_);
   web_page_->Init();
   setBackground(monagui::Color::blue);
-  setBounds(40, 40, WEBVIEW_WIDTH, WEBVIEW_HEIGHT + 55);
+  setBounds(40, 150, WEBVIEW_WIDTH, WEBVIEW_HEIGHT + 55);
   g_fontMetrics = getFontMetrics();
 
   status_->setBackground(monagui::Color::lightGray);
@@ -163,7 +163,8 @@ void WebView::processEvent(monagui::Event* event) {
         int y = event->arg1 >> 16;
         int w = event->arg2 & 0xffff;
         int h = event->arg2 >> 16;
-        IntRect rect(x, y, w, h);
+        //        IntRect rect(x, y, w, h);
+        IntRect rect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
         web_page_->paint(rect, true);
     } else {
     }
