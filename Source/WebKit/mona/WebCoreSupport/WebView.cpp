@@ -103,12 +103,19 @@ WebView::WebView() : web_page_(new WebPage(this)),
 }
 
 void WebView::paint(Graphics *g) {
+  static int counter = 0;
   if (image_buffer_) {
-    for (int i = 0; i < WEBVIEW_WIDTH; i++) {
-      for (int j = 0; j < WEBVIEW_HEIGHT; j++) {
+    counter++;
+    uint64_t start = MonAPI::Date::nowInMsec();
+
+    for (int j = 0; j < WEBVIEW_HEIGHT; j++) {
+      for (int i = 0; i < WEBVIEW_WIDTH; i++) {
         g->drawPixel(i, j, ((uint32_t*)(image_buffer_))[i + j * WEBVIEW_WIDTH]);
       }
     }
+    uint64_t end = MonAPI::Date::nowInMsec();
+    _logprintf("[2]paint time = %d count=%d\n", (int)(end - start), counter);
+
   }
 }
 
