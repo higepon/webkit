@@ -108,11 +108,13 @@ void WebPage::paint(const IntRect& rect, bool immediate) {
 
 void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
   GraphicsContext context(cairo_);
+  //    _logprintf("MSG_PAINT end0 %d %s %s:%d\n", (int)MonAPI::Date::nowInMsec(), __func__, __FILE__, __LINE__);
   main_frame_->Frame()->view()->paint(&context, rect);
+  //    _logprintf("MSG_PAINT end1 %d %s %s:%d\n", (int)MonAPI::Date::nowInMsec(), __func__, __FILE__, __LINE__);
   web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
 
   // TODO: apply rect and immediate
-  _logprintf("(%d %d %d %d) immediate=%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate);
+  //  _logprintf("(%d %d %d %d) immediate=%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate);
     web_view_->repaint();
   //  web_view_->paint(rect);
 }

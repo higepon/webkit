@@ -270,6 +270,7 @@ void ShadowBlur::clear()
 
 void ShadowBlur::blurLayerImage(unsigned char* imageData, const IntSize& size, int rowStride)
 {
+#if !OS(MONA)
     const int channels[4] = { 3, 0, 1, 3 };
 
     int lobes[3][2]; // indexed by pass, and left/right lobe
@@ -348,6 +349,7 @@ void ShadowBlur::blurLayerImage(unsigned char* imageData, const IntSize& size, i
         if (m_blurRadius.width() != m_blurRadius.height())
             calculateLobes(lobes, m_blurRadius.height(), m_shadowsIgnoreTransforms);
     }
+#endif
 }
 
 void ShadowBlur::adjustBlurRadius(GraphicsContext* context)
@@ -458,6 +460,7 @@ IntRect ShadowBlur::calculateLayerBoundingRect(GraphicsContext* context, const F
 
 void ShadowBlur::drawShadowBuffer(GraphicsContext* graphicsContext)
 {
+#if !OS(MONA)
     if (!m_layerImage)
         return;
 
@@ -474,6 +477,7 @@ void ShadowBlur::drawShadowBuffer(GraphicsContext* graphicsContext)
 
     graphicsContext->clearShadow();
     graphicsContext->fillRect(FloatRect(m_layerOrigin, m_sourceRect.size()));
+#endif
 }
 
 static void computeSliceSizesFromRadii(const IntSize& twiceRadius, const RoundedRect::Radii& radii, int& leftSlice, int& rightSlice, int& topSlice, int& bottomSlice)
@@ -505,6 +509,7 @@ IntSize ShadowBlur::templateSize(const IntSize& radiusPadding, const RoundedRect
 
 void ShadowBlur::drawRectShadow(GraphicsContext* graphicsContext, const FloatRect& shadowedRect, const RoundedRect::Radii& radii)
 {
+#if !OS(MONA)
     IntRect layerRect = calculateLayerBoundingRect(graphicsContext, shadowedRect, graphicsContext->clipBounds());
     if (layerRect.isEmpty())
         return;
@@ -528,6 +533,7 @@ void ShadowBlur::drawRectShadow(GraphicsContext* graphicsContext, const FloatRec
     }
 
     drawRectShadowWithTiling(graphicsContext, shadowedRect, radii, templateSize, edgeSize);
+#endif
 }
 
 void ShadowBlur::drawInsetShadow(GraphicsContext* graphicsContext, const FloatRect& rect, const FloatRect& holeRect, const RoundedRect::Radii& holeRadii)
@@ -559,6 +565,7 @@ void ShadowBlur::drawInsetShadow(GraphicsContext* graphicsContext, const FloatRe
 
 void ShadowBlur::drawRectShadowWithoutTiling(GraphicsContext* graphicsContext, const FloatRect& shadowedRect, const RoundedRect::Radii& radii, const IntRect& layerRect)
 {
+#if !OS(MONA)
     m_layerImage = ScratchBuffer::shared().getScratchBuffer(layerRect.size());
     if (!m_layerImage)
         return;
@@ -589,6 +596,7 @@ void ShadowBlur::drawRectShadowWithoutTiling(GraphicsContext* graphicsContext, c
     drawShadowBuffer(graphicsContext);
     m_layerImage = 0;
     ScratchBuffer::shared().scheduleScratchBufferPurge();
+#endif
 }
 
 void ShadowBlur::drawInsetShadowWithoutTiling(GraphicsContext* graphicsContext, const FloatRect& rect, const FloatRect& holeRect, const RoundedRect::Radii& holeRadii, const IntRect& layerRect)
@@ -666,6 +674,7 @@ void ShadowBlur::drawInsetShadowWithoutTiling(GraphicsContext* graphicsContext, 
 
 void ShadowBlur::drawInsetShadowWithTiling(GraphicsContext* graphicsContext, const FloatRect& rect, const FloatRect& holeRect, const RoundedRect::Radii& radii, const IntSize& templateSize, const IntSize& edgeSize)
 {
+#if !OS(MONA)
     m_layerImage = ScratchBuffer::shared().getScratchBuffer(templateSize);
     if (!m_layerImage)
         return;
@@ -722,10 +731,12 @@ void ShadowBlur::drawInsetShadowWithTiling(GraphicsContext* graphicsContext, con
 
     m_layerImage = 0;
     ScratchBuffer::shared().scheduleScratchBufferPurge();
+#endif
 }
 
 void ShadowBlur::drawRectShadowWithTiling(GraphicsContext* graphicsContext, const FloatRect& shadowedRect, const RoundedRect::Radii& radii, const IntSize& templateSize, const IntSize& edgeSize)
 {
+#if !OS(MONA)
     m_layerImage = ScratchBuffer::shared().getScratchBuffer(templateSize);
     if (!m_layerImage)
         return;
@@ -762,10 +773,12 @@ void ShadowBlur::drawRectShadowWithTiling(GraphicsContext* graphicsContext, cons
 
     m_layerImage = 0;
     ScratchBuffer::shared().scheduleScratchBufferPurge();
+#endif
 }
 
 void ShadowBlur::drawLayerPieces(GraphicsContext* graphicsContext, const FloatRect& shadowBounds, const RoundedRect::Radii& radii, const IntSize& bufferPadding, const IntSize& templateSize, ShadowDirection direction)
 {
+#if !OS(MONA)
     const IntSize twiceRadius = IntSize(bufferPadding.width() * 2, bufferPadding.height() * 2);
 
     int leftSlice;
@@ -839,6 +852,7 @@ void ShadowBlur::drawLayerPieces(GraphicsContext* graphicsContext, const FloatRe
     tileRect = FloatRect(0, templateSize.height() - bottomSlice, leftSlice, bottomSlice);
     destRect = FloatRect(centerRect.x() - leftSlice, centerRect.maxY(), leftSlice, bottomSlice);
     graphicsContext->drawImageBuffer(m_layerImage, ColorSpaceDeviceRGB, destRect, tileRect);
+#endif
 }
 
 
@@ -855,6 +869,7 @@ void ShadowBlur::blurShadowBuffer(const IntSize& templateSize)
 
 void ShadowBlur::blurAndColorShadowBuffer(const IntSize& templateSize)
 {
+#if !OS(MONA)
     blurShadowBuffer(templateSize);
 
     // Mask the image with the shadow color.
@@ -863,6 +878,7 @@ void ShadowBlur::blurAndColorShadowBuffer(const IntSize& templateSize)
     shadowContext->setCompositeOperation(CompositeSourceIn);
     shadowContext->setFillColor(m_color, m_colorSpace);
     shadowContext->fillRect(FloatRect(0, 0, templateSize.width(), templateSize.height()));
+#endif
 }
 
 GraphicsContext* ShadowBlur::beginShadowLayer(GraphicsContext *context, const FloatRect& layerArea)
@@ -906,6 +922,9 @@ void ShadowBlur::endShadowLayer(GraphicsContext* context)
 #if PLATFORM(QT) || USE(CAIRO)
 bool ShadowBlur::mustUseShadowBlur(GraphicsContext* context) const
 {
+#if OS(MONA)
+  return false;
+#endif
     // We can't avoid ShadowBlur, since the shadow has blur.
     if (type() == BlurShadow)
         return true;
