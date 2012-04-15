@@ -27,6 +27,7 @@
 
 #include <assert.h>
 #include "config.h"
+#include "ResourceHandleManager.h"
 #include "FocusController.h"
 #include "Page.h"
 #include "WebPage.h"
@@ -99,6 +100,7 @@ WebView::WebView() : web_page_(new WebPage(this)),
 
   status_->setBackground(monagui::Color::lightGray);
   status_->setBounds(0, WEBVIEW_HEIGHT, WEBVIEW_WIDTH, 30);
+  ResourceHandleManager::sharedInstance()->setCookieJarFileName("/USER/COOKIE.TXT");
   add(status_.get());
 }
 
