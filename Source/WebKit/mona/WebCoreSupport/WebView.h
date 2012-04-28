@@ -31,6 +31,7 @@
 //#include <assert.h>
 #include <monagui.h>
 #include <IntRect.h>
+#include <KURL.h>
 
 namespace WebCore {
 
@@ -50,6 +51,7 @@ class WebView : public monagui::Frame {
   WebPage* webPage() {
       return web_page_;
   }
+  PassRefPtr<WebCore::Frame> createFrame(const KURL&, const WTF::String&, HTMLFrameOwnerElement*, const WTF::String&, bool, int, int, FrameLoaderClientMona* loader);
 //     class UserData {
 //     public:
 //         virtual                 ~UserData();

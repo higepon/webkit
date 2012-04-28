@@ -48,15 +48,16 @@
 #include "WebFrame.h"
 #include "FrameNetworkingContextMona.h"
 #include "GraphicsContext.h"
+#include "RenderPart.h"
 #include "WebView.h"
 #include "WebPage.h"
 // #define assert(...) /* */
 // #include <monagui.h>
 
-#ifdef notImplemented
-#undef notImplemented
-#define notImplemented() ((void)0)
-#endif
+// #ifdef notImplemented
+// #undef notImplemented
+// #define notImplemented() ((void)0)
+// #endif
 
 namespace WebCore {
 
@@ -788,25 +789,28 @@ PassRefPtr<Frame> FrameLoaderClientMona::createFrame(const KURL& url, const WTF:
                                                       const WTF::String& referrer, bool allowsScrolling,
                                                       int marginWidth, int marginHeight)
 {
+  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+
+  return web_view_->createFrame(url, name, ownerElement, referrer, allowsScrolling, marginWidth, marginHeight, this);
     // // FIXME: We should apply the right property to the frameView. (scrollbar,margins)
 
-    // RefPtr<Frame> childFrame = Frame::create(frame_->page(), ownerElement, this);
-    // setFrame(childFrame.get());
+    // refptr<frame> childframe = frame::create(frame_->page(), ownerelement, this);
+    // setframe(childframe.get());
 
-    // RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
+    // refptr<frameview> frameview = frameview::create(childframe.get());
 
-    // frameView->setAllowsScrolling(allowsScrolling);
-    // frameView->deref();
-    // childFrame->setView(frameView.get());
-    // childFrame->init();
+    // frameview->setallowsscrolling(allowsscrolling);
+    // frameview->deref();
+    // childframe->setview(frameview.get());
+    // childframe->init();
 
-    // childFrame->tree()->setName(name);
-    // frame_->tree()->appendChild(childFrame);
+    // childframe->tree()->setname(name);
+    // frame_->tree()->appendchild(childframe);
 
-    // frame_->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
+    // frame_->loader()->loadurlintochildframe(url, referrer, childframe.get());
 
-    // // The frame's onload handler may have removed it from the document.
-    // if (!childFrame->tree()->parent())
+    // // the frame's onload handler may have removed it from the document.
+    // if (!childframe->tree()->parent())
     //     return 0;
 
     // return childFrame.release();
@@ -905,6 +909,10 @@ void FrameLoaderClientMona::transitionToCommittedFromCachedFrame(CachedFrame*)
 
 void FrameLoaderClientMona::transitionToCommittedForNewPage()
 {
+  _logprintf("HERE WE ARE %s %s:%d\n", __func__, __FILE__, __LINE__);
+
+// old one
+#if 1
   ASSERT(web_frame_);
   Frame* frame = web_frame_->Frame();
   IntSize size = IntSize(WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
@@ -913,8 +921,33 @@ void FrameLoaderClientMona::transitionToCommittedForNewPage()
 
   frame->createView(size, backgroundColor, transparent, IntSize(), false);
   ASSERT(web_page_);
+#else
   // todo ???
   //  frame->view()->setTopLevelPlatformWidget(web_page_->WebView());
+
+  Page* page = web_frame_->Frame()->page();
+  ASSERT(page);
+
+  bool isMainFrame = web_frame_->Frame() == page->mainFrame();
+
+  web_frame_->Frame()->setView(0);
+
+  RefPtr<FrameView> frameView;
+  if (isMainFrame) {
+    //RECT rect;
+    // m_webView->frameRect(&rect);
+    IntSize size = IntSize(WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
+    frameView = FrameView::create(web_frame_->Frame(), size);
+  } else {
+    frameView = FrameView::create(web_frame_->Frame());
+  }
+
+  web_frame_->Frame()->setView(frameView);
+
+  if (web_frame_->Frame()->ownerRenderer()) {
+    web_frame_->Frame()->ownerRenderer()->setWidget(frameView);
+  }
+#endif
 }
 
 void FrameLoaderClientMona::didSaveToPageCache()

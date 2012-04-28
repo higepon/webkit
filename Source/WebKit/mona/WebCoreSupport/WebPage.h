@@ -28,6 +28,8 @@
 #define _WEB_PAGE_H_
 
 #include <cairo.h>
+#include <PassRefPtr.h>
+#include <KURL.h>
 
 namespace WebCore {
 
@@ -35,6 +37,9 @@ class Page;
 class WebFrame;
 class WebView;
 class IntRect;
+class Frame;
+class HTMLFrameOwnerElement;
+class FrameLoaderClientMona;
 
 class WebPage {
  public:
@@ -45,6 +50,9 @@ class WebPage {
   void SetStatus(const char* text);
   void paint(const IntRect& rect, bool immediate);
   void paintWithoutLayout(const IntRect& rect, bool immediate);
+  PassRefPtr<Frame> createFrame(const KURL& url,
+                                const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
+                                bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader);
 
   Page* page() {
     return page_;

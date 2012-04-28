@@ -34,6 +34,7 @@
 #include "NotImplemented.h"
 #include "PlatformKeyboardEvent.h"
 #include "Frame.h"
+#include "FrameLoaderClientMona.h"
 #include "WebView.h"
 
 extern void (*SharedTimerFiredFunction)();
@@ -182,4 +183,10 @@ void WebView::SetStatus(const std::string& text) {
         content += text;
         status_->setText(content.c_str());
     }
+}
+
+PassRefPtr<WebCore::Frame> WebView::createFrame(const WebCore::KURL& url,
+                                                const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
+                                                bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader) {
+    return web_page_->createFrame(url, name, ownerElement, referrer, allowsScrolling, marginWidth, marginHeight, loader);
 }
