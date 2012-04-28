@@ -144,27 +144,16 @@ void WebPage::SetStatus(const char* text) {
 PassRefPtr<WebCore::Frame> WebPage::createFrame(const WebCore::KURL& url,
                                                 const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
                                                 bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader) {
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     RefPtr<Frame> childFrame = Frame::create(main_frame_->Frame()->page(), ownerElement, loader);
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     loader->setFrame(childFrame.get());
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
-
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     //    frameView->setAllowsScrolling(allowsScrolling);
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     childFrame->setView(frameView.get());
     //    frameView->deref();
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     childFrame->init();
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     childFrame->tree()->setName(name);
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     main_frame_->Frame()->tree()->appendChild(childFrame);
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     main_frame_->Frame()->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
-_logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
     // The frame's onload handler may have removed it from the document.
     if (!childFrame->tree()->parent())
         return 0;
