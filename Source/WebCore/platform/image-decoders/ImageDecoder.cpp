@@ -28,10 +28,10 @@
 
 #include "BMPImageDecoder.h"
 #include "PNGImageDecoder.h"
+#include "JPEGImageDecoder.h"
 #if !OS(MONA)
 #include "GIFImageDecoder.h"
 #include "ICOImageDecoder.h"
-#include "JPEGImageDecoder.h"
 #include "WEBPImageDecoder.h"
 #endif
 #include "SharedBuffer.h"
@@ -111,10 +111,10 @@ ImageDecoder* ImageDecoder::create(const SharedBuffer& data, ImageSource::AlphaO
     if (matchesPNGSignature(contents)) {
         return new PNGImageDecoder(alphaOption, gammaAndColorProfileOption);
     }
-#if !OS(MONA)
+
     if (matchesJPEGSignature(contents))
         return new JPEGImageDecoder(alphaOption, gammaAndColorProfileOption);
-
+#if !OS(MONA)
 #if USE(WEBP)
     if (matchesWebPSignature(contents))
         return new WEBPImageDecoder(alphaOption, gammaAndColorProfileOption);
