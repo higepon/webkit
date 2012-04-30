@@ -94,7 +94,7 @@ WebView::WebView() : web_page_(new WebPage(this)),
                      Frame("browser"),
                      status_(new Label("")) {
   ASSERT(web_page_);
-  web_page_->Init();
+  //  web_page_->Init();
   setBackground(monagui::Color::blue);
   setBounds(40, 150, WEBVIEW_WIDTH, WEBVIEW_HEIGHT + 55);
   g_fontMetrics = getFontMetrics();
@@ -142,19 +142,19 @@ void WebView::processEvent(monagui::Event* event) {
         int keycode = ((KeyEvent *)event)->getKeycode();
         int modifiers = ((KeyEvent *)event)->getModifiers();
         PlatformKeyboardEvent keyEvent((monagui::KeyEvent *)event);
-        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
+        WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
         frame->eventHandler()->keyEvent(keyEvent);
     } else if (event->getType() == monagui::Event::MOUSE_PRESSED) {
         PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
-        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
+        WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
         frame->eventHandler()->handleMousePressEvent(mouseEvent);
     } else if (event->getType() == monagui::Event::MOUSE_RELEASED) {
         PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
-        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
+        WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
         frame->eventHandler()->handleMouseReleaseEvent(mouseEvent);
     } else if (event->getType() == monagui::Event::MOUSE_MOVED) {
         PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
-        WebCore::Frame* frame = web_page_->page()->focusController()->focusedOrMainFrame();
+        WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
         // We call mouseMoved here instead of handleMouseMovedEvent because we need
         // our ChromeClient to receive changes to the mouse position and
         // tooltip text, and mouseMoved handles all of that.
@@ -183,10 +183,4 @@ void WebView::SetStatus(const std::string& text) {
         content += text;
         status_->setText(content.c_str());
     }
-}
-
-PassRefPtr<WebCore::Frame> WebView::createFrame(const WebCore::KURL& url,
-                                                const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
-                                                bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader) {
-    return web_page_->createFrame(url, name, ownerElement, referrer, allowsScrolling, marginWidth, marginHeight, loader);
 }

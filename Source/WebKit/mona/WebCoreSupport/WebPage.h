@@ -30,6 +30,7 @@
 #include <cairo.h>
 #include <PassRefPtr.h>
 #include <KURL.h>
+#include <IntSize.h>
 
 namespace WebCore {
 
@@ -50,16 +51,29 @@ class WebPage {
   void SetStatus(const char* text);
   void paint(const IntRect& rect, bool immediate);
   void paintWithoutLayout(const IntRect& rect, bool immediate);
-  PassRefPtr<Frame> createFrame(const KURL& url,
-                                const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
-                                bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader);
+  // PassRefPtr<Frame> createFrame(const KURL& url,
+  //                               const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
+  //                               bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader);
 
   WebCore::Page* corePage() const {
     return m_page.get();
   }
 
+  const IntSize& size() const {
+    return m_viewSize;
+  }
+
+  WebFrame* mainFrame() const {
+    return m_mainFrame.get();
+  }
+
   // todo
   bool drawsBackground() const {
+    return true;
+  }
+
+  // todo
+  bool drawsTransparentBackground() const {
     return true;
   }
 
@@ -69,6 +83,7 @@ class WebPage {
   WebView* web_view_;
   cairo_surface_t* surface_;
   cairo_t* cairo_;
+  IntSize m_viewSize;
 };
 
 };

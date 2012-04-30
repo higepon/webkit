@@ -48,7 +48,8 @@ using namespace WebCore;
 WebPage::WebPage(WebView* web_view) :
     web_view_(web_view),
     surface_(cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
-                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT)) {
+                                        WEBVIEW_WIDTH, WEBVIEW_HEIGHT)),
+    m_viewSize(400, 400) {
 
   if (cairo_surface_status(surface_) != CAIRO_STATUS_SUCCESS) {
     monapi_fatal("cairo cairo_image_surface_create failure");
@@ -146,76 +147,76 @@ void WebPage::SetStatus(const char* text) {
   web_view_->SetStatus(text);
 }
 
-PassRefPtr<WebCore::Frame> WebPage::createFrame(const WebCore::KURL& url,
-                                                const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
-                                                bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader) {
-    RefPtr<Frame> childFrame = Frame::create(m_mainFrame->coreFrame()->page(), ownerElement, loader);
-    loader->setFrame(childFrame.get());
-    RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
-    //    frameView->setAllowsScrolling(allowsScrolling);
-    childFrame->setView(frameView.get());
-    //    frameView->deref();
-    childFrame->init();
-    childFrame->tree()->setName(name);
-    m_mainFrame->coreFrame()->tree()->appendChild(childFrame);
-    m_mainFrame->coreFrame()->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
-    // The frame's onload handler may have removed it from the document.
-    if (!childFrame->tree()->parent())
-        return 0;
+// PassRefPtr<WebCore::Frame> WebPage::createFrame(const WebCore::KURL& url,
+//                                                 const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
+//                                                 bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader) {
+//     RefPtr<Frame> childFrame = Frame::create(m_mainFrame->coreFrame()->page(), ownerElement, loader);
+//     loader->setFrame(childFrame.get());
+//     RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
+//     //    frameView->setAllowsScrolling(allowsScrolling);
+//     childFrame->setView(frameView.get());
+//     //    frameView->deref();
+//     childFrame->init();
+//     childFrame->tree()->setName(name);
+//     m_mainFrame->coreFrame()->tree()->appendChild(childFrame);
+//     m_mainFrame->coreFrame()->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
+//     // The frame's onload handler may have removed it from the document.
+//     if (!childFrame->tree()->parent())
+//         return 0;
 
-    return childFrame.release();
+//     return childFrame.release();
 
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   ASSERT(m_mainFrame);
-  //   ASSERT(m_mainFrame->coreFrame());
-  //   Frame* coreFrame = m_mainFrame->coreFrame();
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   FrameLoaderClientMona *loaderClient = new FrameLoaderClientMona(this, m_mainFrame);
-  //   RefPtr<Frame> childFrame = Frame::create(m_page, ownerElement, loaderClient);
-  //   loaderClient->setFrame(childFrame.get());
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   childFrame->setView(frameView.get());
-  //   frameView->deref();
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   coreFrame->tree()->appendChild(childFrame);
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   childFrame->tree()->setName(name);
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   childFrame->init();
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   // RefPtr<Frame> childFrame = Frame::create(frame_->page(), ownerElement, this);
-  //   // setFrame(childFrame.get());
+//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//   //   ASSERT(m_mainFrame);
+//   //   ASSERT(m_mainFrame->coreFrame());
+//   //   Frame* coreFrame = m_mainFrame->coreFrame();
+//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//   //   FrameLoaderClientMona *loaderClient = new FrameLoaderClientMona(this, m_mainFrame);
+//   //   RefPtr<Frame> childFrame = Frame::create(m_page, ownerElement, loaderClient);
+//   //   loaderClient->setFrame(childFrame.get());
+//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//   //   RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
+//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//   //   childFrame->setView(frameView.get());
+//   //   frameView->deref();
+//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//   //   coreFrame->tree()->appendChild(childFrame);
+//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//   //   childFrame->tree()->setName(name);
+//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//   //   childFrame->init();
+//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+//   //   // RefPtr<Frame> childFrame = Frame::create(frame_->page(), ownerElement, this);
+//   //   // setFrame(childFrame.get());
 
-  //   // RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
+//   //   // RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
 
-  //   // frameView->setAllowsScrolling(allowsScrolling);
-  //   // frameView->deref();
-  //   // childFrame->setView(frameView.get());
-  //   // childFrame->init();
+//   //   // frameView->setAllowsScrolling(allowsScrolling);
+//   //   // frameView->deref();
+//   //   // childFrame->setView(frameView.get());
+//   //   // childFrame->init();
 
-  //   // childFrame->tree()->setName(name);
-  //   // frame_->tree()->appendChild(childFrame);
+//   //   // childFrame->tree()->setName(name);
+//   //   // frame_->tree()->appendChild(childFrame);
 
-  //   // frame_->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
+//   //   // frame_->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
 
-  //   // // The frame's onload handler may have removed it from the document.
-  //   // if (!childFrame->tree()->parent())
-  //   //     return 0;
+//   //   // // The frame's onload handler may have removed it from the document.
+//   //   // if (!childFrame->tree()->parent())
+//   //   //     return 0;
 
 
 
-  //   // The creation of the frame may have run arbitrary JavaScript that removed it from the page already.
-  //   if (!childFrame->page())
-  //       return 0;
+//   //   // The creation of the frame may have run arbitrary JavaScript that removed it from the page already.
+//   //   if (!childFrame->page())
+//   //       return 0;
 
-  //   coreFrame->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
+//   //   coreFrame->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
 
-  //   // The frame's onload handler may have removed it from the document.
-  //   if (!childFrame->tree()->parent())
-  //       return 0;
+//   //   // The frame's onload handler may have removed it from the document.
+//   //   if (!childFrame->tree()->parent())
+//   //       return 0;
 
-  //   return childFrame.release();
-}
+//   //   return childFrame.release();
+// }
