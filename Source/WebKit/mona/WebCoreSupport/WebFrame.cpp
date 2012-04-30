@@ -49,33 +49,76 @@
 #include <wtf/RefPtr.h>
 #include <wtf/Vector.h>
 #include <Entry.h>
-//#include <support/String.h>
-
-// static const float kMinimumZoomFactorMultiplier = 0.5;
-// static const float kMaximumZoomFactorMultiplier = 3;
-// static const float kZoomFactorMultiplierRatio = 1.1;
 
 using namespace WebCore;
 
-WebFrame::WebFrame(WebPage* web_page, WebFrame* parent_frame, WebFramePrivate* data, WebView* web_view)
-    : data_(data) {
-  data_->loaderClient = new WebCore::FrameLoaderClientMona(web_page, this);
-  data_->loaderClient->setWebView(web_view);
-  RefPtr<WebCore::Frame> frame = WebCore::Frame::create(data_->page, data_->ownerElement,
-                                                        data_->loaderClient);
-  // We don't keep the reference to the Frame, see WebFramePrivate.h.
-  data_->frame = frame.get();
+void WebFrame::init(WebPage* page, const String& frameName, HTMLFrameOwnerElement* ownerElement)
+{
+    ASSERT(m_frameLoaderClient);
+    RefPtr<WebCore::Frame> frame = Frame::create(page->corePage(), ownerElement, m_frameLoaderClient);
+    m_coreFrame = frame.get();
 
-  // I'm not sure this is a right place to setFrame
-  // But necessary.
-  data_->loaderClient->setFrame(data_->frame);
+    frame->tree()->setName(frameName);
 
-  if (parent_frame) {
-    parent_frame->Frame()->tree()->appendChild(data_->frame);
-  }
-    data_->frame->tree()->setName(data_->name);
-    data_->frame->init();
+    if (ownerElement) {
+        ASSERT(ownerElement->document()->frame());
+        ownerElement->document()->frame()->tree()->appendChild(frame);
+    }
+
+    frame->init();
 }
+
+PassRefPtr<WebFrame> WebFrame::createMainFrame(WebPage* page)
+{
+    RefPtr<WebFrame> frame = create();
+
+    frame->init(page, String(), 0);
+
+    return frame.release();
+}
+
+PassRefPtr<WebFrame> WebFrame::create()
+{
+    RefPtr<WebFrame> frame = adoptRef(new WebFrame);
+
+    // Add explict ref() that will be balanced in WebFrameLoaderClient::frameLoaderDestroyed().
+    frame->ref();
+
+    return frame.release();
+}
+
+void WebFrame::createFrameLoaderClient(WebView* webView, WebPage* webPage)
+{
+  m_frameLoaderClient = new WebCore::FrameLoaderClientMona(webPage, this);
+  m_frameLoaderClient->setWebView(webView);
+  m_frameLoaderClient->setFrame(m_coreFrame); // todo: Is this necessary?
+}
+
+WebFrame::WebFrame()
+    : m_coreFrame(0),
+      m_frameLoaderClient(0)
+{
+}
+
+// WebFrame::WebFrame(WebPage* web_page, WebFrame* parent_frame, WebFramePrivate* data, WebView* web_view)
+//     : data_(data) {
+//   data_->loaderClient = new WebCore::FrameLoaderClientMona(web_page, this);
+//   data_->loaderClient->setWebView(web_view);
+//   RefPtr<WebCore::Frame> frame = WebCore::Frame::create(data_->page, data_->ownerElement,
+//                                                         data_->loaderClient);
+//   // We don't keep the reference to the Frame, see WebFramePrivate.h.
+//   m_coreFrame = frame.get();
+
+//   // I'm not sure this is a right place to setFrame
+//   // But necessary.
+//   data_->loaderClient->setFrame(m_coreFrame);
+
+//   if (parent_frame) {
+//     parent_frame->Frame()->tree()->appendChild(m_coreFrame);
+//   }
+//     m_coreFrame->tree()->setName(data_->name);
+//     m_coreFrame->init();
+// }
 
 // BWebFrame::BWebFrame(BWebPage* webPage, BWebFrame* parentFrame, WebFramePrivate* data)
 //     : fZoomFactor(1.0)
@@ -138,12 +181,12 @@ void WebFrame::LoadURL(const char* url)
 {
   ASSERT(url);
 
-  if (!data_->frame || !data_->frame->loader())
+  if (!m_coreFrame || !m_coreFrame->loader())
     return;
 
   data_->requestedURL = url;
   String u(url);
-  data_->frame->loader()->load(u, false);
+  m_coreFrame->loader()->load(u, false);
 }
 
 // void BWebFrame::StopLoading()
@@ -285,8 +328,8 @@ void WebFrame::LoadURL(const char* url)
 
 bool WebFrame::IsTransparent() const
 {
-  if (data_->frame && data_->frame->view()) {
-    return data_->frame->view()->isTransparent();
+  if (m_coreFrame && m_coreFrame->view()) {
+    return m_coreFrame->view()->isTransparent();
   }
   return false;
 }
@@ -399,5 +442,5 @@ bool WebFrame::IsTransparent() const
 
 WebCore::Frame* WebFrame::Frame() const
 {
-    return data_->frame;
+    return m_coreFrame;
 }

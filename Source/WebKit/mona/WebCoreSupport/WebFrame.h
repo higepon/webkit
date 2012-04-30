@@ -29,6 +29,9 @@
 #define _WEB_FRAME_H_
 
 #include <String.h>
+#include "PlatformString.h"
+#include <RefCounted.h>
+#include <PassRefPtr.h>
 
 namespace WebCore {
 class ChromeClientMona;
@@ -38,12 +41,14 @@ class KURL;
 class WebPage;
 class WebFramePrivate;
 class WebView;
+class HTMLFrameOwnerElement;
 
-class WebFrame {
+class WebFrame : public RefCounted<WebFrame> {
  public:
-//   //            void                SetListener(const BMessenger& listener);
-
+  WebFrame();
   void LoadURL(const char* url);
+  static PassRefPtr<WebFrame> createMainFrame(WebPage*);
+  static PassRefPtr<WebFrame> createSubframe(WebPage*, const WTF::String& frameName, WebCore::HTMLFrameOwnerElement*);
 
 //             void                StopLoading();
 //             void                Reload();
@@ -98,7 +103,11 @@ class WebFrame {
 //             void                SetTitle(const BString& title);
 //             const BString&      Title() const;
 
+  void createFrameLoaderClient(WebView* webView, WebPage* webPage);
+
  private:
+  static PassRefPtr<WebFrame> create();
+  void init(WebPage*, const String& frameName, WebCore::HTMLFrameOwnerElement*);
   friend class WebPage;
 
 //     friend class WebCore::ChromeClientHaiku;
@@ -116,10 +125,9 @@ class WebFrame {
 //             float               fZoomFactor;
 //             bool                fIsEditable;
 //             BString             fTitle;
-
-  WebFramePrivate* data_;
-};
-
+  WebCore::Frame* m_coreFrame;
+  FrameLoaderClientMona* m_frameLoaderClient;
+  WebFramePrivate* data_;};
 }
 
 #endif // _WEB_FRAME_H_

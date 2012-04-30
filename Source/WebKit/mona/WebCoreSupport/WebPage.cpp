@@ -46,8 +46,6 @@
 using namespace WebCore;
 
 WebPage::WebPage(WebView* web_view) :
-    page_(0),
-    main_frame_(0),
     web_view_(web_view),
     surface_(cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                         WEBVIEW_WIDTH, WEBVIEW_HEIGHT)) {
@@ -67,21 +65,26 @@ WebPage::WebPage(WebView* web_view) :
   clients->dragClient = new DragClientMona();
   clients->inspectorClient = new InspectorClientMona();
 
-  page_ = new WebCore::Page(*clients);
-  page_->settings()->setLoadsImagesAutomatically(true);
-  page_->settings()->setJavaScriptEnabled(true);
-  page_->settings()->setCaretBrowsingEnabled(true);
-  page_->settings()->setDeveloperExtrasEnabled(true);
-  page_->settings()->setPasswordEchoEnabled(true);
-  page_->settings()->setShouldPaintCustomScrollbars(true);
-  page_->settings()->setShowDebugBorders(true);
-  page_->settings()->setShowRepaintCounter(true);
-  editorClient->setPage(page_);
+  m_page = adoptPtr(new Page(*clients));
+  m_page->settings()->setLoadsImagesAutomatically(true);
+  m_page->settings()->setJavaScriptEnabled(true);
+  m_page->settings()->setCaretBrowsingEnabled(true);
+  m_page->settings()->setDeveloperExtrasEnabled(true);
+  m_page->settings()->setPasswordEchoEnabled(true);
+  m_page->settings()->setShouldPaintCustomScrollbars(true);
+  m_page->settings()->setShowDebugBorders(true);
+  m_page->settings()->setShowRepaintCounter(true);
+  editorClient->setPage(m_page.get()); // todo: compare to webkit2
 
-  WebFramePrivate* data = new WebFramePrivate;
-  data->name = "Hello";
-  data->page = page_;
-  main_frame_ = new WebFrame(this, 0, data, web_view_);
+  m_mainFrame = WebFrame::createMainFrame(this);
+
+  // Todo: these should be moved to proper place
+  m_mainFrame->createFrameLoaderClient(web_view, this);
+
+  // WebFramePrivate* data = new WebFramePrivate;
+  // data->name = "Hello";
+  // data->page = m_page;
+  // main_frame_ = new WebFrame(this, 0, data, web_view_);
 
 
     // todo: Is this necessary?
@@ -98,10 +101,10 @@ void WebPage::paint(const IntRect& rect, bool immediate) {
     return;
   }
   ASSERT(web_view_);
-  ASSERT(main_frame_);
-  ASSERT(main_frame_->Frame());
+  ASSERT(m_mainFrame.get());
+  ASSERT(m_mainFrame->Frame());
 
-  Frame* frame = main_frame_->Frame();
+  Frame* frame = m_mainFrame->Frame();
   if (!frame->contentRenderer()) {
     _logprintf("skip becase of contentRenderer");
     return;
@@ -120,7 +123,7 @@ void WebPage::paint(const IntRect& rect, bool immediate) {
 void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
   GraphicsContext context(cairo_);
   //    _logprintf("MSG_PAINT end0 %d %s %s:%d\n", (int)MonAPI::Date::nowInMsec(), __func__, __FILE__, __LINE__);
-  main_frame_->Frame()->view()->paint(&context, rect);
+  m_mainFrame->Frame()->view()->paint(&context, rect);
   //    _logprintf("MSG_PAINT end1 %d %s %s:%d\n", (int)MonAPI::Date::nowInMsec(), __func__, __FILE__, __LINE__);
   web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
 
@@ -131,8 +134,8 @@ void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
 }
 
 void WebPage::LoadURL(const char* urlString) {
-  ASSERT(main_frame_);
-  main_frame_->LoadURL(urlString);
+  ASSERT(m_mainFrame);
+  m_mainFrame->LoadURL(urlString);
 }
 
 void WebPage::SetStatus(const char* text) {
@@ -142,7 +145,7 @@ void WebPage::SetStatus(const char* text) {
 PassRefPtr<WebCore::Frame> WebPage::createFrame(const WebCore::KURL& url,
                                                 const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
                                                 bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader) {
-    RefPtr<Frame> childFrame = Frame::create(main_frame_->Frame()->page(), ownerElement, loader);
+    RefPtr<Frame> childFrame = Frame::create(m_mainFrame->Frame()->page(), ownerElement, loader);
     loader->setFrame(childFrame.get());
     RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
     //    frameView->setAllowsScrolling(allowsScrolling);
@@ -150,8 +153,8 @@ PassRefPtr<WebCore::Frame> WebPage::createFrame(const WebCore::KURL& url,
     //    frameView->deref();
     childFrame->init();
     childFrame->tree()->setName(name);
-    main_frame_->Frame()->tree()->appendChild(childFrame);
-    main_frame_->Frame()->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
+    m_mainFrame->Frame()->tree()->appendChild(childFrame);
+    m_mainFrame->Frame()->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
     // The frame's onload handler may have removed it from the document.
     if (!childFrame->tree()->parent())
         return 0;
@@ -159,12 +162,12 @@ PassRefPtr<WebCore::Frame> WebPage::createFrame(const WebCore::KURL& url,
     return childFrame.release();
 
   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   ASSERT(main_frame_);
-  //   ASSERT(main_frame_->Frame());
-  //   Frame* coreFrame = main_frame_->Frame();
+  //   ASSERT(m_mainFrame);
+  //   ASSERT(m_mainFrame->Frame());
+  //   Frame* coreFrame = m_mainFrame->Frame();
   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //   FrameLoaderClientMona *loaderClient = new FrameLoaderClientMona(this, main_frame_);
-  //   RefPtr<Frame> childFrame = Frame::create(page_, ownerElement, loaderClient);
+  //   FrameLoaderClientMona *loaderClient = new FrameLoaderClientMona(this, m_mainFrame);
+  //   RefPtr<Frame> childFrame = Frame::create(m_page, ownerElement, loaderClient);
   //   loaderClient->setFrame(childFrame.get());
   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   //   RefPtr<FrameView> frameView = FrameView::create(childFrame.get());

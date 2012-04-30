@@ -54,15 +54,13 @@ class WebPage {
                                 const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
                                 bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader);
 
-  WebFrame* mainFrame() { return main_frame_; }
-
-  Page* page() {
-    return page_;
+  WebCore::Page* corePage() const {
+    return m_page.get();
   }
 
  private:
-  Page* page_;
-  WebFrame* main_frame_;
+  OwnPtr<WebCore::Page> m_page;
+  RefPtr<WebFrame> m_mainFrame;
   WebView* web_view_;
   cairo_surface_t* surface_;
   cairo_t* cairo_;
