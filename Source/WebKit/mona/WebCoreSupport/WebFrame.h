@@ -67,7 +67,6 @@ class WebFrame : public RefCounted<WebFrame> {
 
   WebCore::Frame* m_coreFrame;
   FrameLoaderClientMona* m_frameLoaderClient;
-  WebFramePrivate* data_;
 };
 }
 

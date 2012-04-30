@@ -44,7 +44,6 @@
 #include "ChromeClientMona.h"
 #include "RenderTreeAsText.h"
 #include "RenderView.h"
-#include "WebFramePrivate.h"
 #include "WebPage.h"
 #include "markup.h"
 #include "ChromeClient.h"

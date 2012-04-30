@@ -89,7 +89,7 @@ extern monagui::FontMetrics* g_fontMetrics;
 
 using namespace WebCore;
 
-WebView::WebView() : web_page_(new WebPage(this)),
+WebView::WebView() : web_page_(new WebPage(this, IntSize(WEBVIEW_WIDTH, WEBVIEW_HEIGHT))),
                      image_buffer_(0),
                      Frame("browser"),
                      status_(new Label("")) {

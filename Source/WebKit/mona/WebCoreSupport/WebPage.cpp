@@ -31,7 +31,6 @@
 #include "WebFrame.h"
 #include "Frame.h"
 #include "FrameView.h"
-#include "WebFramePrivate.h"
 #include "ChromeClientMona.h"
 #include "ContextMenuClientMona.h"
 #include "EditorClientMona.h"
@@ -45,11 +44,11 @@
 
 using namespace WebCore;
 
-WebPage::WebPage(WebView* web_view) :
+WebPage::WebPage(WebView* web_view, const IntSize& viewSize) :
     web_view_(web_view),
     surface_(cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
                                         WEBVIEW_WIDTH, WEBVIEW_HEIGHT)),
-    m_viewSize(400, 400) {
+    m_viewSize(viewSize) {
 
   if (cairo_surface_status(surface_) != CAIRO_STATUS_SUCCESS) {
     monapi_fatal("cairo cairo_image_surface_create failure");

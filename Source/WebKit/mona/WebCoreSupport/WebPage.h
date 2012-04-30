@@ -44,16 +44,13 @@ class FrameLoaderClientMona;
 
 class WebPage {
  public:
-  WebPage(WebView* web_view);
+  WebPage(WebView* web_view, const IntSize& viewSize);
   virtual ~WebPage();
   void Init();
   void LoadURL(const char* urlString);
   void SetStatus(const char* text);
   void paint(const IntRect& rect, bool immediate);
   void paintWithoutLayout(const IntRect& rect, bool immediate);
-  // PassRefPtr<Frame> createFrame(const KURL& url,
-  //                               const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
-  //                               bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader);
 
   WebCore::Page* corePage() const {
     return m_page.get();
