@@ -54,37 +54,34 @@ using namespace WebCore;
 
 void WebFrame::init(WebPage* page, const String& frameName, HTMLFrameOwnerElement* ownerElement)
 {
-    ASSERT(m_frameLoaderClient);
-    RefPtr<WebCore::Frame> frame = Frame::create(page->corePage(), ownerElement, m_frameLoaderClient);
-    m_coreFrame = frame.get();
-
-    frame->tree()->setName(frameName);
-
-    if (ownerElement) {
-        ASSERT(ownerElement->document()->frame());
-        ownerElement->document()->frame()->tree()->appendChild(frame);
-    }
-
-    frame->init();
+  ASSERT(m_frameLoaderClient);
+  RefPtr<WebCore::Frame> frame = Frame::create(page->corePage(), ownerElement, m_frameLoaderClient);
+  m_coreFrame = frame.get();
+  
+  frame->tree()->setName(frameName);
+  
+  if (ownerElement) {
+    ASSERT(ownerElement->document()->frame());
+    ownerElement->document()->frame()->tree()->appendChild(frame);
+  }
+  
+  frame->init();
 }
 
 PassRefPtr<WebFrame> WebFrame::createMainFrame(WebPage* page)
 {
-    RefPtr<WebFrame> frame = create();
-
-    frame->init(page, String(), 0);
-
-    return frame.release();
+  RefPtr<WebFrame> frame = create();
+  frame->init(page, String(), 0);
+  return frame.release();
 }
 
 PassRefPtr<WebFrame> WebFrame::create()
 {
-    RefPtr<WebFrame> frame = adoptRef(new WebFrame);
-
-    // Add explict ref() that will be balanced in WebFrameLoaderClient::frameLoaderDestroyed().
-    frame->ref();
-
-    return frame.release();
+  RefPtr<WebFrame> frame = adoptRef(new WebFrame);
+  
+  // Add explict ref() that will be balanced in WebFrameLoaderClient::frameLoaderDestroyed().
+  frame->ref();
+  return frame.release();
 }
 
 void WebFrame::createFrameLoaderClient(WebView* webView, WebPage* webPage)
