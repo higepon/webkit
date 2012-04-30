@@ -34,7 +34,6 @@
 #include "Element.h"
 #include "Frame.h"
 #include "FrameLoader.h"
-#include "FrameLoaderClientMona.h"
 #include "FrameView.h"
 #include "HTMLFrameOwnerElement.h"
 #include "KURL.h"
@@ -57,12 +56,10 @@ void WebFrame::init(WebPage* page, const String& frameName, HTMLFrameOwnerElemen
 {
   // todo : Move to somewhere
   ASSERT(page);
-  m_frameLoaderClient = new WebCore::FrameLoaderClientMona(page, this);
   ASSERT(page->webView());
-  m_frameLoaderClient->setWebView(page->webView());
+  m_frameLoaderClient.setWebView(page->webView());
 
-  ASSERT(m_frameLoaderClient);
-  RefPtr<WebCore::Frame> frame = Frame::create(page->corePage(), ownerElement, m_frameLoaderClient);
+  RefPtr<WebCore::Frame> frame = Frame::create(page->corePage(), ownerElement, &m_frameLoaderClient);
   m_coreFrame = frame.get();
   
   frame->tree()->setName(frameName);
@@ -105,12 +102,6 @@ PassRefPtr<WebFrame> WebFrame::create()
   return frame.release();
 }
 
-void WebFrame::createFrameLoaderClient(WebView* webView, WebPage* webPage)
-{
-  m_frameLoaderClient = new WebCore::FrameLoaderClientMona(webPage, this);
-  m_frameLoaderClient->setWebView(webView);
-}
-
 WebPage* WebFrame::page() const
 { 
     if (!m_coreFrame)
@@ -123,7 +114,7 @@ WebPage* WebFrame::page() const
 
 WebFrame::WebFrame()
     : m_coreFrame(0),
-      m_frameLoaderClient(0)
+      m_frameLoaderClient(this)
 {
 }
 

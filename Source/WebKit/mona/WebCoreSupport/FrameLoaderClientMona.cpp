@@ -61,8 +61,8 @@
 
 namespace WebCore {
 
-FrameLoaderClientMona::FrameLoaderClientMona(WebPage* web_page, WebFrame* web_frame) :
-      m_frame(web_frame)
+FrameLoaderClientMona::FrameLoaderClientMona(WebFrame* web_frame) :
+    m_frame(web_frame)
 {
 }
 

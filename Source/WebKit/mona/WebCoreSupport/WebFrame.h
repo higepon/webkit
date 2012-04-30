@@ -32,10 +32,10 @@
 #include "PlatformString.h"
 #include <RefCounted.h>
 #include <PassRefPtr.h>
+#include "FrameLoaderClientMona.h"
 
 namespace WebCore {
 class Frame;
-class FrameLoaderClientMona;
 class KURL;
 class WebPage;
 class WebFramePrivate;
@@ -50,7 +50,6 @@ class WebFrame : public RefCounted<WebFrame> {
   static PassRefPtr<WebFrame> createSubframe(WebPage*, const WTF::String& frameName, WebCore::HTMLFrameOwnerElement*);
 
   bool IsTransparent() const;
-  void createFrameLoaderClient(WebView* webView, WebPage* webPage);
   WebPage* page() const;
   WebCore::Frame* coreFrame() const {
     return m_coreFrame;
@@ -64,7 +63,7 @@ class WebFrame : public RefCounted<WebFrame> {
   friend class WebCore::FrameLoaderClientMona;
 
   WebCore::Frame* m_coreFrame;
-  FrameLoaderClientMona* m_frameLoaderClient;
+  FrameLoaderClientMona m_frameLoaderClient;
 };
 }
 

@@ -54,7 +54,7 @@ namespace WebCore {
         // Since FrameLoaderClient is an event handler.
         // We omit almost implementation.
         // Will implement later.
-        FrameLoaderClientMona(WebPage* web_page, WebFrame* web_frame);
+        FrameLoaderClientMona(WebFrame* web_frame);
         ~FrameLoaderClientMona() { }
 
         WebFrame* webFrame() const { return m_frame; }

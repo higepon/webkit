@@ -77,9 +77,6 @@ WebPage::WebPage(WebView* web_view, const IntSize& viewSize) :
   editorClient->setPage(m_page.get()); // todo: compare to webkit2
 
   m_mainFrame = WebFrame::createMainFrame(this);
-
-  // Todo: these should be moved to proper place
-  m_mainFrame->createFrameLoaderClient(web_view, this);
 }
 
 WebPage::~WebPage() {
