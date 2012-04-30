@@ -54,6 +54,8 @@ class WebPage {
                                 const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
                                 bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader);
 
+  WebFrame* mainFrame() { return main_frame_; }
+
   Page* page() {
     return page_;
   }

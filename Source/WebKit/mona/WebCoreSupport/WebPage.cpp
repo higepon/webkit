@@ -78,6 +78,12 @@ WebPage::WebPage(WebView* web_view) :
   page_->settings()->setShowRepaintCounter(true);
   editorClient->setPage(page_);
 
+  WebFramePrivate* data = new WebFramePrivate;
+  data->name = "Hello";
+  data->page = page_;
+  main_frame_ = new WebFrame(this, 0, data, web_view_);
+
+
     // todo: Is this necessary?
   // fSettings = new BWebSettings(fPage->settings());
 }
@@ -122,14 +128,6 @@ void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
   //  _logprintf("(%d %d %d %d) immediate=%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate);
     web_view_->repaint();
   //  web_view_->paint(rect);
-}
-
-void WebPage::Init() {
-  WebFramePrivate* data = new WebFramePrivate;
-  data->name = "Hello";
-  data->page = page_;
-  main_frame_ = new WebFrame(this, 0, data, web_view_);
-// _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
 }
 
 void WebPage::LoadURL(const char* urlString) {

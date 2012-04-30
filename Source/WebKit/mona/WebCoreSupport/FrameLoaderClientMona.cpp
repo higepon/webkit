@@ -911,8 +911,35 @@ void FrameLoaderClientMona::transitionToCommittedForNewPage()
 {
   _logprintf("HERE WE ARE %s %s:%d\n", __func__, __FILE__, __LINE__);
 
+  // from webkit2
+#if 0
+    Color backgroundColor = web_frame_->IsTransparent() ? Color::transparent : Color::white;
+
+    bool isMainFrame = web_page_->mainFrame()->Frame() == frame_;
+
+#if ENABLE(TILED_BACKING_STORE)
+    IntSize currentVisibleContentSize = m_frame->coreFrame()->view() ? m_frame->coreFrame()->view()->visibleContentRect().size() : IntSize();
+    m_frame->coreFrame()->createView(webPage->size(), backgroundColor, false, webPage->resizesToContentsLayoutSize(), isMainFrame && webPage->resizesToContentsEnabled());
+
+    if (isMainFrame && webPage->resizesToContentsEnabled()) {
+        m_frame->coreFrame()->view()->setDelegatesScrolling(true);
+        m_frame->coreFrame()->view()->setPaintsEntireContents(true);
+        // The HistoryController will update the scroll position later if needed.
+        m_frame->coreFrame()->view()->setFixedVisibleContentRect(IntRect(IntPoint::zero(), currentVisibleContentSize));
+    }
+
+#else
+    // const ResourceResponse& response = frame_->coreFrame()->loader()->documentLoader()->response();
+    // m_frameHasCustomRepresentation = isMainFrame && WebProcess::shared().shouldUseCustomRepresentationForResponse(response);
+
+    m_frame->coreFrame()->(webPcreateViewage->size(), backgroundColor, false, IntSize(), false);
+#endif
+
+    m_frame->coreFrame()->view()->setTransparent(!webPage->drawsBackground());
+
+
 // old one
-#if 1
+#elif 1
   ASSERT(web_frame_);
   Frame* frame = web_frame_->Frame();
   IntSize size = IntSize(WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
