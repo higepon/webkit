@@ -50,59 +50,7 @@ class WebFrame : public RefCounted<WebFrame> {
   static PassRefPtr<WebFrame> createMainFrame(WebPage*);
   static PassRefPtr<WebFrame> createSubframe(WebPage*, const WTF::String& frameName, WebCore::HTMLFrameOwnerElement*);
 
-//             void                StopLoading();
-//             void                Reload();
-
-//             BString             RequestedURL() const;
-//             BString             URL() const;
-
-//             bool                CanCopy() const;
-//             bool                CanCut() const;
-//             bool                CanPaste() const;
-
-//             void                Copy();
-//             void                Cut();
-//             void                Paste();
-
-//             bool                CanUndo() const;
-//             bool                CanRedo() const;
-
-//             void                Undo();
-//             void                Redo();
-
-//             bool                AllowsScrolling() const;
-//             void                SetAllowsScrolling(bool enable);
-
-//             BString             FrameSource() const;
-//             void                SetFrameSource(const BString& source);
-
-//             void                SetTransparent(bool transparent);
   bool IsTransparent() const;
-
-//             BString             InnerText() const;
-//             BString             AsMarkup() const;
-//             BString             ExternalRepresentation() const;
-
-//             bool                FindString(const char* string,
-//                                     bool forward = true,
-//                                     bool caseSensitive = false,
-//                                     bool wrapSelection = true,
-//                                     bool startInSelection = true);
-
-//             bool                CanIncreaseZoomFactor() const;
-//             bool                CanDecreaseZoomFactor() const;
-
-//             void                IncreaseZoomFactor(bool textOnly);
-//             void                DecreaseZoomFactor(bool textOnly);
-
-//             void                ResetZoomFactor();
-
-//             void                SetEditable(bool editable);
-//             bool                IsEditable() const;
-
-//             void                SetTitle(const BString& title);
-//             const BString&      Title() const;
-
   void createFrameLoaderClient(WebView* webView, WebPage* webPage);
 
  private:
@@ -110,24 +58,15 @@ class WebFrame : public RefCounted<WebFrame> {
   void init(WebPage*, const String& frameName, WebCore::HTMLFrameOwnerElement*);
   friend class WebPage;
 
-//     friend class WebCore::ChromeClientHaiku;
   friend class WebCore::FrameLoaderClientMona;
 
   WebFrame(WebPage* webPage, WebFrame* parentFrame, WebFramePrivate* data, WebView* web_view);
-//                                 ~BWebFrame();
-
-//             void                Shutdown();
-
-//             void                LoadURL(WebCore::KURL);
   WebCore::Frame* Frame() const;
 
-// private:
-//             float               fZoomFactor;
-//             bool                fIsEditable;
-//             BString             fTitle;
   WebCore::Frame* m_coreFrame;
   FrameLoaderClientMona* m_frameLoaderClient;
-  WebFramePrivate* data_;};
+  WebFramePrivate* data_;
+};
 }
 
 #endif // _WEB_FRAME_H_
