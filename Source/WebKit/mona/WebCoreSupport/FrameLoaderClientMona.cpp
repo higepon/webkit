@@ -63,8 +63,7 @@ namespace WebCore {
 
 FrameLoaderClientMona::FrameLoaderClientMona(WebPage* web_page, WebFrame* web_frame)
     : web_page_(web_page),
-      web_frame_(web_frame),
-      frame_(0)
+      m_frame(web_frame)
 {
 }
 
@@ -86,7 +85,7 @@ void FrameLoaderClient::didRunInsecureContent(SecurityOrigin*, const KURL&)
 
 PassRefPtr<FrameNetworkingContext> FrameLoaderClientMona::createNetworkingContext()
 {
-    return WebKit::FrameNetworkingContextMona::create(frame_);
+  return WebKit::FrameNetworkingContextMona::create(m_frame->coreFrame());
 }
 
 void FrameLoaderClientMona::didDisplayInsecureContent()
@@ -99,12 +98,6 @@ void FrameLoaderClientMona::didRunInsecureContent(SecurityOrigin*, const KURL&)
     notImplemented();
 }
 
-
-void FrameLoaderClientMona::setFrame(Frame* frame)
-{
-    frame_ = frame;
-}
-
 void FrameLoaderClientMona::setWebView(WebView* webview)
 {
     web_view_ = webview;
@@ -112,7 +105,7 @@ void FrameLoaderClientMona::setWebView(WebView* webview)
 
 void FrameLoaderClientMona::detachFrameLoader()
 {
-    frame_ = 0;
+    m_frame = 0;
 }
 
 bool FrameLoaderClientMona::hasWebView() const
@@ -223,7 +216,7 @@ void FrameLoaderClientMona::dispatchDidHandleOnloadEvents()
 {
     // if (web_view_) {
     //     BMessage message(LOAD_ONLOAD_HANDLE);
-    //     message.AddString("url", frame_->loader()->documentLoader()->request().url().string());
+    //     message.AddString("url", m_frame->loader()->documentLoader()->request().url().string());
     //     m_messenger->SendMessage(&message);
     // }
     notImplemented();
@@ -273,7 +266,7 @@ void FrameLoaderClientMona::dispatchDidStartProvisionalLoad()
 {
     // if (web_view_) {
     //     BMessage message(LOAD_NEGOCIATING);
-    //     message.AddString("url", frame_->loader()->provisionalDocumentLoader()->request().url().string());
+    //     message.AddString("url", m_frame->loader()->provisionalDocumentLoader()->request().url().string());
     //     m_messenger->SendMessage(&message);
     // }
     notImplemented();
@@ -295,7 +288,7 @@ void FrameLoaderClientMona::dispatchDidCommitLoad()
 {
     // if (web_view_) {
     //     BMessage message(LOAD_TRANSFERRING);
-    //     message.AddString("url", frame_->loader()->documentLoader()->request().url().string());
+    //     message.AddString("url", m_frame->loader()->documentLoader()->request().url().string());
     //     m_messenger->SendMessage(&message);
     // }
     notImplemented();
@@ -309,7 +302,7 @@ void FrameLoaderClientMona::dispatchDidFinishDocumentLoad()
 
     // if (web_view_) {
     //     BMessage message(LOAD_DOC_COMPLETED);
-    //     message.AddString("url", frame_->document()->url().string());
+    //     message.AddString("url", m_frame->document()->url().string());
     //     m_messenger->SendMessage(&message);
     // }
     notImplemented();
@@ -343,9 +336,9 @@ void FrameLoaderClientMona::cancelPolicyCheck()
 void FrameLoaderClientMona::dispatchWillSubmitForm(FramePolicyFunction function, PassRefPtr<FormState>)
 {
     // FIXME: Send an event to allow for alerts and cancellation.
-    if (!frame_)
+    if (!m_frame)
         return;
-    (frame_->loader()->policyChecker()->*function)(PolicyUse);
+    (m_frame->coreFrame()->loader()->policyChecker()->*function)(PolicyUse);
 }
 
 void FrameLoaderClientMona::dispatchDidLoadMainResource(DocumentLoader*)
@@ -375,7 +368,7 @@ void FrameLoaderClientMona::postProgressFinishedNotification()
 {
     // if (web_view_) {
     //     BMessage message(LOAD_DL_COMPLETED);
-    //     message.AddString("url", frame_->document()->url().string());
+    //     message.AddString("url", m_frame->document()->url().string());
     //     m_messenger->SendMessage(&message);
     // }
     notImplemented();
@@ -511,7 +504,7 @@ void FrameLoaderClientMona::dispatchDidReceiveIcon()
 
 void FrameLoaderClientMona::frameLoaderDestroyed()
 {
-    frame_ = 0;
+    m_frame = 0;
     // m_messenger = 0;
     delete this;
 }
@@ -697,7 +690,7 @@ void FrameLoaderClientMona::dispatchDidFailLoading(DocumentLoader* loader,
 {
     // if (web_view_) {
     //     BMessage message(LOAD_FAILED);
-    //     message.AddString("url", frame_->loader()->documentLoader()->request().url().string());
+    //     message.AddString("url", m_frame->loader()->documentLoader()->request().url().string());
     //     m_messenger->SendMessage(&message);
     // }
     notImplemented();
@@ -731,11 +724,11 @@ void FrameLoaderClientMona::dispatchDecidePolicyForResponse(FramePolicyFunction 
                                                              const ResourceResponse& response,
                                                              const ResourceRequest& request)
 {
-    if (!frame_)
+    if (!m_frame)
         return;
 
     notImplemented();
-    (frame_->loader()->policyChecker()->*function)(PolicyUse);
+    (m_frame->coreFrame()->loader()->policyChecker()->*function)(PolicyUse);
 }
 
 void FrameLoaderClientMona::dispatchDecidePolicyForNewWindowAction(FramePolicyFunction function,
@@ -743,19 +736,19 @@ void FrameLoaderClientMona::dispatchDecidePolicyForNewWindowAction(FramePolicyFu
                                                                     const ResourceRequest& request,
                                                                     PassRefPtr<FormState>, const WTF::String& targetName)
 {
-    // if (!frame_)
+    // if (!m_frame)
     //     return;
 
     // if (web_view_) {
     //     BMessage message(NEW_WINDOW_REQUESTED);
     //     message.AddString("url", request.url().string());
     //     if (m_messenger->SendMessage(&message)) {
-    //         (frame_->loader()->policyChecker()->*function)(PolicyIgnore);
+    //         (m_frame->loader()->policyChecker()->*function)(PolicyIgnore);
     //         return;
     //     }
     // }
 
-    // (frame_->loader()->policyChecker()->*function)(PolicyUse);
+    // (m_frame->loader()->policyChecker()->*function)(PolicyUse);
     notImplemented();
 }
 
@@ -764,13 +757,13 @@ void FrameLoaderClientMona::dispatchDecidePolicyForNavigationAction(FramePolicyF
                                                                      const ResourceRequest& request,
                                                                      PassRefPtr<FormState>)
 {
-    if (!frame_ || !function)
+    if (!m_frame || !function)
         return;
     if (web_view_) {
     // BMessage message(NAVIGATION_REQUESTED);
     // message.AddString("url", request.url().string());
     // m_messenger->SendMessage(&message);
-        (frame_->loader()->policyChecker()->*function)(PolicyUse);
+      (m_frame->coreFrame()->loader()->policyChecker()->*function)(PolicyUse);
    }
 }
 
@@ -789,12 +782,32 @@ PassRefPtr<Frame> FrameLoaderClientMona::createFrame(const KURL& url, const WTF:
                                                       const WTF::String& referrer, bool allowsScrolling,
                                                       int marginWidth, int marginHeight)
 {
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+    WebPage* webPage = m_frame->page();
 
-  return web_view_->createFrame(url, name, ownerElement, referrer, allowsScrolling, marginWidth, marginHeight, this);
+    RefPtr<WebFrame> subframe = WebFrame::createSubframe(webPage, name, ownerElement);
+
+    Frame* coreSubframe = subframe->coreFrame();
+    if (!coreSubframe)
+        return 0;
+
+    // The creation of the frame may have run arbitrary JavaScript that removed it from the page already.
+    if (!coreSubframe->page())
+        return 0;
+
+    m_frame->coreFrame()->loader()->loadURLIntoChildFrame(url, referrer, coreSubframe);
+
+    // The frame's onload handler may have removed it from the document.
+    if (!coreSubframe->tree()->parent())
+        return 0;
+
+    return coreSubframe;
+
+  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+
+  // return web_view_->createFrame(url, name, ownerElement, referrer, allowsScrolling, marginWidth, marginHeight, this);
     // // FIXME: We should apply the right property to the frameView. (scrollbar,margins)
 
-    // refptr<frame> childframe = frame::create(frame_->page(), ownerelement, this);
+    // refptr<frame> childframe = frame::create(m_frame->page(), ownerelement, this);
     // setframe(childframe.get());
 
     // refptr<frameview> frameview = frameview::create(childframe.get());
@@ -805,9 +818,9 @@ PassRefPtr<Frame> FrameLoaderClientMona::createFrame(const KURL& url, const WTF:
     // childframe->init();
 
     // childframe->tree()->setname(name);
-    // frame_->tree()->appendchild(childframe);
+    // m_frame->tree()->appendchild(childframe);
 
-    // frame_->loader()->loadurlintochildframe(url, referrer, childframe.get());
+    // m_frame->loader()->loadurlintochildframe(url, referrer, childframe.get());
 
     // // the frame's onload handler may have removed it from the document.
     // if (!childframe->tree()->parent())
@@ -913,7 +926,7 @@ void FrameLoaderClientMona::transitionToCommittedForNewPage()
 
   // from webkit2
 #if 0
-    Color backgroundColor = web_frame_->IsTransparent() ? Color::transparent : Color::white;
+    Color backgroundColor = web_m_frame->IsTransparent() ? Color::transparent : Color::white;
 
     bool isMainFrame = web_page_->mainFrame()->Frame() == frame_;
 
@@ -940,10 +953,10 @@ void FrameLoaderClientMona::transitionToCommittedForNewPage()
 
 // old one
 #elif 1
-  ASSERT(web_frame_);
-  Frame* frame = web_frame_->Frame();
+  ASSERT(m_frame);
+  Frame* frame = m_frame->coreFrame();
   IntSize size = IntSize(WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
-  bool transparent = web_frame_->IsTransparent();
+  bool transparent = m_frame->IsTransparent();
   Color backgroundColor = transparent ? WebCore::Color::transparent : WebCore::Color::gray;
 
   frame->createView(size, backgroundColor, transparent, IntSize(), false);
@@ -952,27 +965,27 @@ void FrameLoaderClientMona::transitionToCommittedForNewPage()
   // todo ???
   //  frame->view()->setTopLevelPlatformWidget(web_page_->WebView());
 
-  Page* page = web_frame_->Frame()->page();
+  Page* page = m_frame->Frame()->page();
   ASSERT(page);
 
-  bool isMainFrame = web_frame_->Frame() == page->mainFrame();
+  bool isMainFrame = m_frame->Frame() == page->mainFrame();
 
-  web_frame_->Frame()->setView(0);
+  m_frame->Frame()->setView(0);
 
   RefPtr<FrameView> frameView;
   if (isMainFrame) {
     //RECT rect;
     // m_webView->frameRect(&rect);
     IntSize size = IntSize(WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
-    frameView = FrameView::create(web_frame_->Frame(), size);
+    frameView = FrameView::create(m_frame->Frame(), size);
   } else {
-    frameView = FrameView::create(web_frame_->Frame());
+    frameView = FrameView::create(m_frame->Frame());
   }
 
-  web_frame_->Frame()->setView(frameView);
+  m_frame->Frame()->setView(frameView);
 
-  if (web_frame_->Frame()->ownerRenderer()) {
-    web_frame_->Frame()->ownerRenderer()->setWidget(frameView);
+  if (m_frame->Frame()->ownerRenderer()) {
+    m_frame->Frame()->ownerRenderer()->setWidget(frameView);
   }
 #endif
 }

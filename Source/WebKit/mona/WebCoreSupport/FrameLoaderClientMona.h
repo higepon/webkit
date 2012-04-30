@@ -56,7 +56,8 @@ namespace WebCore {
         // Will implement later.
         FrameLoaderClientMona(WebPage* web_page, WebFrame* web_frame);
         ~FrameLoaderClientMona() { }
-        void setFrame(Frame*);
+
+        WebFrame* webFrame() const { return m_frame; }
         void setWebView(WebView*);
         virtual void detachFrameLoader();
 
@@ -259,9 +260,8 @@ namespace WebCore {
 
     private:
         WebPage* web_page_;
-        WebFrame* web_frame_;
+        WebFrame* m_frame;
         WebView* web_view_;
-        Frame* frame_;
         ResourceResponse m_response;
         bool m_firstData;
     };

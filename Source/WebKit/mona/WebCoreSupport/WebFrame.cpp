@@ -28,7 +28,7 @@
 
 #include "config.h"
 #include "WebFrame.h"
-
+#include "Chrome.h"
 #include "Document.h"
 #include "EditorClientMona.h"
 #include "Element.h"
@@ -41,11 +41,13 @@
 #include "Page.h"
 #include "PlatformString.h"
 #include "RenderObject.h"
+#include "ChromeClientMona.h"
 #include "RenderTreeAsText.h"
 #include "RenderView.h"
 #include "WebFramePrivate.h"
 #include "WebPage.h"
 #include "markup.h"
+#include "ChromeClient.h"
 #include <wtf/RefPtr.h>
 #include <wtf/Vector.h>
 #include <Entry.h>
@@ -75,6 +77,20 @@ PassRefPtr<WebFrame> WebFrame::createMainFrame(WebPage* page)
   return frame.release();
 }
 
+PassRefPtr<WebFrame> WebFrame::createSubframe(WebPage* page, const String& frameName, HTMLFrameOwnerElement* ownerElement)
+{
+  RefPtr<WebFrame> frame = create();
+
+  WebFrame* parentFrame = static_cast<FrameLoaderClientMona*>(ownerElement->document()->frame()->loader()->client())->webFrame();
+
+  // Only for WebKit2
+  // page->send(Messages::WebPageProxy::DidCreateSubframe(frame->frameID(), parentFrame->frameID()));
+  
+  frame->init(page, frameName, ownerElement);
+  
+  return frame.release();
+}
+
 PassRefPtr<WebFrame> WebFrame::create()
 {
   RefPtr<WebFrame> frame = adoptRef(new WebFrame);
@@ -88,7 +104,16 @@ void WebFrame::createFrameLoaderClient(WebView* webView, WebPage* webPage)
 {
   m_frameLoaderClient = new WebCore::FrameLoaderClientMona(webPage, this);
   m_frameLoaderClient->setWebView(webView);
-  m_frameLoaderClient->setFrame(m_coreFrame); // todo: Is this necessary?
+}
+
+WebPage* WebFrame::page() const
+{ 
+    if (!m_coreFrame)
+        return 0;
+
+    if (WebCore::Page* page = m_coreFrame->page())
+        return static_cast<ChromeClientMona*>(page->chrome()->client())->page();
+    return 0;
 }
 
 WebFrame::WebFrame()

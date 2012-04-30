@@ -47,6 +47,7 @@ namespace WebCore {
         ChromeClientMona(WebPage* webpage);
         virtual ~ChromeClientMona();
         virtual void chromeDestroyed();
+        WebPage* page() const { return webpage_; }
         WebPage* webpage_;
         virtual WebView* webView() const { ASSERT(false); return 0; }
         virtual void setWebView(WebView* v) { ASSERT(false); }

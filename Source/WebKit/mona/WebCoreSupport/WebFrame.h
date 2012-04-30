@@ -34,7 +34,6 @@
 #include <PassRefPtr.h>
 
 namespace WebCore {
-class ChromeClientMona;
 class Frame;
 class FrameLoaderClientMona;
 class KURL;
@@ -52,6 +51,7 @@ class WebFrame : public RefCounted<WebFrame> {
 
   bool IsTransparent() const;
   void createFrameLoaderClient(WebView* webView, WebPage* webPage);
+  WebPage* page() const;
   WebCore::Frame* coreFrame() const {
     return m_coreFrame;
   }
@@ -63,7 +63,7 @@ class WebFrame : public RefCounted<WebFrame> {
 
   friend class WebCore::FrameLoaderClientMona;
 
-  WebFrame(WebPage* webPage, WebFrame* parentFrame, WebFramePrivate* data, WebView* web_view);
+  //  WebFrame(WebPage* webPage, WebFrame* parentFrame, WebFramePrivate* data, WebView* web_view);
 
   WebCore::Frame* m_coreFrame;
   FrameLoaderClientMona* m_frameLoaderClient;
