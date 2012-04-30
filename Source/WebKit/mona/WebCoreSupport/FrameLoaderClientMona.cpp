@@ -97,11 +97,6 @@ void FrameLoaderClientMona::didRunInsecureContent(SecurityOrigin*, const KURL&)
     notImplemented();
 }
 
-void FrameLoaderClientMona::setWebView(WebView* webview)
-{
-    web_view_ = webview;
-}
-
 void FrameLoaderClientMona::detachFrameLoader()
 {
     m_frame = 0;
@@ -109,7 +104,7 @@ void FrameLoaderClientMona::detachFrameLoader()
 
 bool FrameLoaderClientMona::hasWebView() const
 {
-    return web_view_;
+    return m_frame->page()->webView();
 }
 
 bool FrameLoaderClientMona::hasBackForwardList() const
@@ -268,8 +263,8 @@ void FrameLoaderClientMona::dispatchDidCommitLoad()
 
 void FrameLoaderClientMona::dispatchDidFinishDocumentLoad()
 {
-    if (web_view_) {
-        web_view_->SetStatus("Done");
+    if (m_frame->page()->webView()) {
+        m_frame->page()->webView()->SetStatus("Done");
     }
     notImplemented();
 }
@@ -319,8 +314,8 @@ void FrameLoaderClientMona::revertToProvisionalState(DocumentLoader*)
 
 void FrameLoaderClientMona::postProgressStartedNotification()
 {
-    if (web_view_) {
-        web_view_->SetStatus("Connecting...");
+    if (m_frame->page()->webView()) {
+        m_frame->page()->webView()->SetStatus("Connecting...");
     }
     notImplemented();
 }
@@ -365,8 +360,8 @@ void FrameLoaderClientMona::didChangeTitle(DocumentLoader* docLoader)
 
 void FrameLoaderClientMona::finishedLoading(DocumentLoader*)
 {
-    if (web_view_) {
-        web_view_->SetStatus("Transfer completed");
+    if (m_frame->page()->webView()) {
+        m_frame->page()->webView()->SetStatus("Transfer completed");
     }
     notImplemented();
 }
@@ -443,8 +438,8 @@ void FrameLoaderClientMona::prepareForDataSourceReplacement()
 
 void FrameLoaderClientMona::setTitle(const StringWithDirection& title, const KURL&)
 {
-  if (web_view_) {
-    web_view_->setTitle(title.string().ascii().data());
+  if (m_frame->page()->webView()) {
+    m_frame->page()->webView()->setTitle(title.string().ascii().data());
   }
   notImplemented();
 }
@@ -623,8 +618,8 @@ void FrameLoaderClientMona::dispatchDidCancelAuthenticationChallenge(DocumentLoa
 void FrameLoaderClientMona::dispatchDidReceiveResponse(DocumentLoader* loader, unsigned long id,
                                                         const ResourceResponse& response)
 {
-    if (web_view_) {
-        web_view_->SetStatus("Transfering...");
+    if (m_frame->page()->webView()) {
+        m_frame->page()->webView()->SetStatus("Transfering...");
     }
     m_response = response;
     m_firstData = true;
@@ -699,7 +694,7 @@ void FrameLoaderClientMona::dispatchDecidePolicyForNavigationAction(FramePolicyF
 {
     if (!m_frame || !function)
         return;
-    if (web_view_) {
+    if (m_frame->page()->webView()) {
     // BMessage message(NAVIGATION_REQUESTED);
     // message.AddString("url", request.url().string());
     // m_messenger->SendMessage(&message);
