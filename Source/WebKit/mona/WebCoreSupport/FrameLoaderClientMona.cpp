@@ -801,35 +801,6 @@ PassRefPtr<Frame> FrameLoaderClientMona::createFrame(const KURL& url, const WTF:
         return 0;
 
     return coreSubframe;
-
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-
-  // return web_view_->createFrame(url, name, ownerElement, referrer, allowsScrolling, marginWidth, marginHeight, this);
-    // // FIXME: We should apply the right property to the frameView. (scrollbar,margins)
-
-    // refptr<frame> childframe = frame::create(m_frame->page(), ownerelement, this);
-    // setframe(childframe.get());
-
-    // refptr<frameview> frameview = frameview::create(childframe.get());
-
-    // frameview->setallowsscrolling(allowsscrolling);
-    // frameview->deref();
-    // childframe->setview(frameview.get());
-    // childframe->init();
-
-    // childframe->tree()->setname(name);
-    // m_frame->tree()->appendchild(childframe);
-
-    // m_frame->loader()->loadurlintochildframe(url, referrer, childframe.get());
-
-    // // the frame's onload handler may have removed it from the document.
-    // if (!childframe->tree()->parent())
-    //     return 0;
-
-    // return childFrame.release();
-
-    notImplemented();
-    return 0;
 }
 
 void FrameLoaderClientMona::didTransferChildFrameToNewDocument(Page*)
