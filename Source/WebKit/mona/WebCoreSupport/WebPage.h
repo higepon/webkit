@@ -58,6 +58,11 @@ class WebPage {
     return m_page.get();
   }
 
+  // todo
+  bool drawsBackground() const {
+    return true;
+  }
+
  private:
   OwnPtr<WebCore::Page> m_page;
   RefPtr<WebFrame> m_mainFrame;

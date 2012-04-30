@@ -893,13 +893,10 @@ void FrameLoaderClientMona::transitionToCommittedFromCachedFrame(CachedFrame*)
 
 void FrameLoaderClientMona::transitionToCommittedForNewPage()
 {
-  _logprintf("HERE WE ARE %s %s:%d\n", __func__, __FILE__, __LINE__);
+    WebPage* webPage = m_frame->page();
+    Color backgroundColor = webPage->drawsTransparentBackground() ? Color::transparent : Color::white;
 
-  // from webkit2
-#if 0
-    Color backgroundColor = web_m_frame->IsTransparent() ? Color::transparent : Color::white;
-
-    bool isMainFrame = web_page_->mainFrame()->Frame() == frame_;
+    bool isMainFrame = webPage->mainFrame() == m_frame;
 
 #if ENABLE(TILED_BACKING_STORE)
     IntSize currentVisibleContentSize = m_frame->coreFrame()->view() ? m_frame->coreFrame()->view()->visibleContentRect().size() : IntSize();
@@ -913,52 +910,13 @@ void FrameLoaderClientMona::transitionToCommittedForNewPage()
     }
 
 #else
-    // const ResourceResponse& response = frame_->coreFrame()->loader()->documentLoader()->response();
-    // m_frameHasCustomRepresentation = isMainFrame && WebProcess::shared().shouldUseCustomRepresentationForResponse(response);
+    const ResourceResponse& response = m_frame->coreFrame()->loader()->documentLoader()->response();
+    m_frameHasCustomRepresentation = isMainFrame && WebProcess::shared().shouldUseCustomRepresentationForResponse(response);
 
     m_frame->coreFrame()->(webPcreateViewage->size(), backgroundColor, false, IntSize(), false);
 #endif
 
     m_frame->coreFrame()->view()->setTransparent(!webPage->drawsBackground());
-
-
-// old one
-#elif 1
-  ASSERT(m_frame);
-  Frame* frame = m_frame->coreFrame();
-  IntSize size = IntSize(WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
-  bool transparent = m_frame->IsTransparent();
-  Color backgroundColor = transparent ? WebCore::Color::transparent : WebCore::Color::gray;
-
-  frame->createView(size, backgroundColor, transparent, IntSize(), false);
-  ASSERT(web_page_);
-#else
-  // todo ???
-  //  frame->view()->setTopLevelPlatformWidget(web_page_->WebView());
-
-  Page* page = m_frame->Frame()->page();
-  ASSERT(page);
-
-  bool isMainFrame = m_frame->Frame() == page->mainFrame();
-
-  m_frame->Frame()->setView(0);
-
-  RefPtr<FrameView> frameView;
-  if (isMainFrame) {
-    //RECT rect;
-    // m_webView->frameRect(&rect);
-    IntSize size = IntSize(WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
-    frameView = FrameView::create(m_frame->Frame(), size);
-  } else {
-    frameView = FrameView::create(m_frame->Frame());
-  }
-
-  m_frame->Frame()->setView(frameView);
-
-  if (m_frame->Frame()->ownerRenderer()) {
-    m_frame->Frame()->ownerRenderer()->setWidget(frameView);
-  }
-#endif
 }
 
 void FrameLoaderClientMona::didSaveToPageCache()
