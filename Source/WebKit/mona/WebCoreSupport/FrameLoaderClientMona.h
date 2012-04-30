@@ -259,7 +259,6 @@ namespace WebCore {
         virtual void registerForIconNotification(bool listen = true);
 
     private:
-        WebPage* web_page_;
         WebFrame* m_frame;
         WebView* web_view_;
         ResourceResponse m_response;

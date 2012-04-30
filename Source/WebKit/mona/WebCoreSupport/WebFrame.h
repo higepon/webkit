@@ -63,8 +63,6 @@ class WebFrame : public RefCounted<WebFrame> {
 
   friend class WebCore::FrameLoaderClientMona;
 
-  //  WebFrame(WebPage* webPage, WebFrame* parentFrame, WebFramePrivate* data, WebView* web_view);
-
   WebCore::Frame* m_coreFrame;
   FrameLoaderClientMona* m_frameLoaderClient;
 };

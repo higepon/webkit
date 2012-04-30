@@ -61,8 +61,7 @@
 
 namespace WebCore {
 
-FrameLoaderClientMona::FrameLoaderClientMona(WebPage* web_page, WebFrame* web_frame)
-    : web_page_(web_page),
+FrameLoaderClientMona::FrameLoaderClientMona(WebPage* web_page, WebFrame* web_frame) :
       m_frame(web_frame)
 {
 }
@@ -214,11 +213,6 @@ void FrameLoaderClientMona::detachedFromParent3()
 
 void FrameLoaderClientMona::dispatchDidHandleOnloadEvents()
 {
-    // if (web_view_) {
-    //     BMessage message(LOAD_ONLOAD_HANDLE);
-    //     message.AddString("url", m_frame->loader()->documentLoader()->request().url().string());
-    //     m_messenger->SendMessage(&message);
-    // }
     notImplemented();
 }
 
@@ -264,33 +258,11 @@ void FrameLoaderClientMona::dispatchWillClose()
 
 void FrameLoaderClientMona::dispatchDidStartProvisionalLoad()
 {
-    // if (web_view_) {
-    //     BMessage message(LOAD_NEGOCIATING);
-    //     message.AddString("url", m_frame->loader()->provisionalDocumentLoader()->request().url().string());
-    //     m_messenger->SendMessage(&message);
-    // }
     notImplemented();
 }
 
-// void FrameLoaderClientMona::dispatchDidReceiveTitle(const StringWithTitle& title)
-// {
-//     // if (web_view_) {
-//     //     // FIXME: use direction of title.
-//     //     web_view_->SetPageTitle(title.m_string());
-//     //     BMessage message(TITLE_CHANGED);
-//     //     message.AddString("title", title.string());
-//     //     m_messenger->SendMessage(&message);
-//     // }
-//     notImplemented();
-// }
-
 void FrameLoaderClientMona::dispatchDidCommitLoad()
 {
-    // if (web_view_) {
-    //     BMessage message(LOAD_TRANSFERRING);
-    //     message.AddString("url", m_frame->loader()->documentLoader()->request().url().string());
-    //     m_messenger->SendMessage(&message);
-    // }
     notImplemented();
 }
 
@@ -299,12 +271,6 @@ void FrameLoaderClientMona::dispatchDidFinishDocumentLoad()
     if (web_view_) {
         web_view_->SetStatus("Done");
     }
-
-    // if (web_view_) {
-    //     BMessage message(LOAD_DOC_COMPLETED);
-    //     message.AddString("url", m_frame->document()->url().string());
-    //     m_messenger->SendMessage(&message);
-    // }
     notImplemented();
 }
 
@@ -366,11 +332,6 @@ void FrameLoaderClientMona::postProgressEstimateChangedNotification()
 
 void FrameLoaderClientMona::postProgressFinishedNotification()
 {
-    // if (web_view_) {
-    //     BMessage message(LOAD_DL_COMPLETED);
-    //     message.AddString("url", m_frame->document()->url().string());
-    //     m_messenger->SendMessage(&message);
-    // }
     notImplemented();
 }
 
@@ -436,10 +397,6 @@ WTF::String FrameLoaderClientMona::generatedMIMETypeForURLScheme(const WTF::Stri
 
 void FrameLoaderClientMona::frameLoadCompleted()
 {
-    // if (web_view_->LockLooper()) {
-    //     web_view_->Draw(web_view_->Bounds());
-    //     web_view_->UnlockLooper();
-    // }
     notImplemented();
 }
 
@@ -681,18 +638,14 @@ void FrameLoaderClientMona::dispatchDidReceiveContentLength(DocumentLoader* load
 
 void FrameLoaderClientMona::dispatchDidFinishLoading(DocumentLoader*, unsigned long)
 {
-  ASSERT(web_page_);
-  web_page_->paint(IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT), true);
+  WebPage* webPage = m_frame->page();
+  ASSERT(webPage);
+  webPage->paint(IntRect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT), true);
 }
 
 void FrameLoaderClientMona::dispatchDidFailLoading(DocumentLoader* loader,
                                                     unsigned long, const ResourceError&)
 {
-    // if (web_view_) {
-    //     BMessage message(LOAD_FAILED);
-    //     message.AddString("url", m_frame->loader()->documentLoader()->request().url().string());
-    //     m_messenger->SendMessage(&message);
-    // }
     notImplemented();
 }
 
@@ -736,19 +689,6 @@ void FrameLoaderClientMona::dispatchDecidePolicyForNewWindowAction(FramePolicyFu
                                                                     const ResourceRequest& request,
                                                                     PassRefPtr<FormState>, const WTF::String& targetName)
 {
-    // if (!m_frame)
-    //     return;
-
-    // if (web_view_) {
-    //     BMessage message(NEW_WINDOW_REQUESTED);
-    //     message.AddString("url", request.url().string());
-    //     if (m_messenger->SendMessage(&message)) {
-    //         (m_frame->loader()->policyChecker()->*function)(PolicyIgnore);
-    //         return;
-    //     }
-    // }
-
-    // (m_frame->loader()->policyChecker()->*function)(PolicyUse);
     notImplemented();
 }
 
@@ -858,13 +798,6 @@ WTF::String FrameLoaderClientMona::overrideMediaType() const
 void FrameLoaderClientMona::dispatchDidClearWindowObjectInWorld(DOMWrapperWorld* world)
 {
     notImplemented();
-    // if (world != mainThreadNormalWorld())
-    //     return;
-
-    // if (web_view_) {
-    //     BMessage message(JAVASCRIPT_WINDOW_OBJECT_CLEARED);
-    //     m_messenger->SendMessage(&message);
-    // }
 }
 
 void FrameLoaderClientMona::documentElementAvailable()

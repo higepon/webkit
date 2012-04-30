@@ -38,53 +38,6 @@
 #include "WebView.h"
 
 extern void (*SharedTimerFiredFunction)();
-
-// class MonaLauncher : public monagui::Frame {
-//  public:
-//   MonaLauncher(const std::string& url) : Frame("browser"), data_(0), is_first_(true), url_(url) {
-//     setBackground(monagui::Color::blue);
-//     setBounds(40, 40, 400, 400);
-//     set_timer(10);
-//   }
-
-//   void paint(Graphics *g) {
-//     if (data_) {
-//       _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//       for (int i = 0; i < 400; i++) {
-//         for (int j = 0; j < 400; j++) {
-//           g->drawPixel(i, j, ((uint32_t*)(data_))[i + j * 400]);
-//         }
-//       }
-//     }
-//   }
-
-//   void processEvent(Event* event) {
-//     if (event->getType() == Event::TIMER) {
-//       if (is_first_) {
-//         kill_timer(event->arg1);
-//         is_first_ = false;
-//         web_view_.LoadURL(url_.c_str());
-//         return;
-//       }
-//       if (SharedTimerFiredFunction) {
-//         kill_timer(event->arg1);
-//         _logprintf("before timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
-//         SharedTimerFiredFunction();
-//         _logprintf("after timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
-//       }
-//     }
-//   }
-
-//   void SetData(unsigned char* p) {
-//     data_ = p;
-//   }
-//  private:
-//   unsigned char* data_;
-//   bool is_first_;
-//   std::string url_;
-//   WebCore::WebView web_view_;
-// };
-
 extern monagui::FontMetrics* g_fontMetrics;
 
 using namespace WebCore;
@@ -94,7 +47,7 @@ WebView::WebView() : web_page_(new WebPage(this, IntSize(WEBVIEW_WIDTH, WEBVIEW_
                      Frame("browser"),
                      status_(new Label("")) {
   ASSERT(web_page_);
-  //  web_page_->Init();
+
   setBackground(monagui::Color::blue);
   setBounds(40, 150, WEBVIEW_WIDTH, WEBVIEW_HEIGHT + 55);
   g_fontMetrics = getFontMetrics();
@@ -113,15 +66,11 @@ void WebView::paint(Graphics *g) {
     g->setColor(monagui::Color::red);
     g->drawRect(rx, ry,  currentRect_.width(), currentRect_.height());
 
-    //    uint64_t start = MonAPI::Date::nowInMsec();
     for (int j = currentRect_.y(); j < currentRect_.y() + currentRect_.height(); j++) {
       for (int i = currentRect_.x(); i < currentRect_.x() + currentRect_.width(); i++) {
         g->drawPixel(i, j, ((uint32_t*)(image_buffer_))[i + j * WEBVIEW_WIDTH]);
       }
     }
-    //    uint64_t end = MonAPI::Date::nowInMsec();
-    //    _logprintf("[2]paint time = %d count=%d\n", (int)(end - start), counter);
-
   }
 }
 
@@ -164,8 +113,6 @@ void WebView::processEvent(monagui::Event* event) {
         int y = event->arg1 >> 16;
         int w = event->arg2 & 0xffff;
         int h = event->arg2 >> 16;
-        //        IntRect rect(x, y, w, h);
-        //        IntRect rect(0, 0, WEBVIEW_WIDTH, WEBVIEW_HEIGHT);
         currentRect_ = IntRect(x, y, w, h);
         web_page_->paint(currentRect_, true);
     } else {
