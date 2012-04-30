@@ -81,15 +81,6 @@ WebPage::WebPage(WebView* web_view) :
 
   // Todo: these should be moved to proper place
   m_mainFrame->createFrameLoaderClient(web_view, this);
-
-  // WebFramePrivate* data = new WebFramePrivate;
-  // data->name = "Hello";
-  // data->page = m_page;
-  // main_frame_ = new WebFrame(this, 0, data, web_view_);
-
-
-    // todo: Is this necessary?
-  // fSettings = new BWebSettings(fPage->settings());
 }
 
 WebPage::~WebPage() {
@@ -146,77 +137,3 @@ void WebPage::LoadURL(const char* urlString) {
 void WebPage::SetStatus(const char* text) {
   web_view_->SetStatus(text);
 }
-
-// PassRefPtr<WebCore::Frame> WebPage::createFrame(const WebCore::KURL& url,
-//                                                 const WTF::String& name, HTMLFrameOwnerElement* ownerElement, const WTF::String& referrer,
-//                                                 bool allowsScrolling, int marginWidth, int marginHeight, FrameLoaderClientMona* loader) {
-//     RefPtr<Frame> childFrame = Frame::create(m_mainFrame->coreFrame()->page(), ownerElement, loader);
-//     loader->setFrame(childFrame.get());
-//     RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
-//     //    frameView->setAllowsScrolling(allowsScrolling);
-//     childFrame->setView(frameView.get());
-//     //    frameView->deref();
-//     childFrame->init();
-//     childFrame->tree()->setName(name);
-//     m_mainFrame->coreFrame()->tree()->appendChild(childFrame);
-//     m_mainFrame->coreFrame()->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
-//     // The frame's onload handler may have removed it from the document.
-//     if (!childFrame->tree()->parent())
-//         return 0;
-
-//     return childFrame.release();
-
-//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//   //   ASSERT(m_mainFrame);
-//   //   ASSERT(m_mainFrame->coreFrame());
-//   //   Frame* coreFrame = m_mainFrame->coreFrame();
-//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//   //   FrameLoaderClientMona *loaderClient = new FrameLoaderClientMona(this, m_mainFrame);
-//   //   RefPtr<Frame> childFrame = Frame::create(m_page, ownerElement, loaderClient);
-//   //   loaderClient->setFrame(childFrame.get());
-//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//   //   RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
-//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//   //   childFrame->setView(frameView.get());
-//   //   frameView->deref();
-//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//   //   coreFrame->tree()->appendChild(childFrame);
-//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//   //   childFrame->tree()->setName(name);
-//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//   //   childFrame->init();
-//   // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-//   //   // RefPtr<Frame> childFrame = Frame::create(frame_->page(), ownerElement, this);
-//   //   // setFrame(childFrame.get());
-
-//   //   // RefPtr<FrameView> frameView = FrameView::create(childFrame.get());
-
-//   //   // frameView->setAllowsScrolling(allowsScrolling);
-//   //   // frameView->deref();
-//   //   // childFrame->setView(frameView.get());
-//   //   // childFrame->init();
-
-//   //   // childFrame->tree()->setName(name);
-//   //   // frame_->tree()->appendChild(childFrame);
-
-//   //   // frame_->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
-
-//   //   // // The frame's onload handler may have removed it from the document.
-//   //   // if (!childFrame->tree()->parent())
-//   //   //     return 0;
-
-
-
-//   //   // The creation of the frame may have run arbitrary JavaScript that removed it from the page already.
-//   //   if (!childFrame->page())
-//   //       return 0;
-
-//   //   coreFrame->loader()->loadURLIntoChildFrame(url, referrer, childFrame.get());
-
-//   //   // The frame's onload handler may have removed it from the document.
-//   //   if (!childFrame->tree()->parent())
-//   //       return 0;
-
-//   //   return childFrame.release();
-// }
