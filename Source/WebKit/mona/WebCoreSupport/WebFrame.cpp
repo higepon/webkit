@@ -56,6 +56,12 @@ using namespace WebCore;
 
 void WebFrame::init(WebPage* page, const String& frameName, HTMLFrameOwnerElement* ownerElement)
 {
+  // todo : Move to somewhere
+  ASSERT(page);
+  m_frameLoaderClient = new WebCore::FrameLoaderClientMona(page, this);
+  ASSERT(page->webView());
+  m_frameLoaderClient->setWebView(page->webView());
+
   ASSERT(m_frameLoaderClient);
   RefPtr<WebCore::Frame> frame = Frame::create(page->corePage(), ownerElement, m_frameLoaderClient);
   m_coreFrame = frame.get();

@@ -74,7 +74,11 @@ class WebPage {
 
   // todo
   bool drawsTransparentBackground() const {
-    return true;
+    return false;
+  }
+
+  WebView* webView() const {
+    return web_view_;
   }
 
  private:
