@@ -52,6 +52,9 @@ class WebFrame : public RefCounted<WebFrame> {
 
   bool IsTransparent() const;
   void createFrameLoaderClient(WebView* webView, WebPage* webPage);
+  WebCore::Frame* coreFrame() const {
+    return m_coreFrame;
+  }
 
  private:
   static PassRefPtr<WebFrame> create();
@@ -61,7 +64,6 @@ class WebFrame : public RefCounted<WebFrame> {
   friend class WebCore::FrameLoaderClientMona;
 
   WebFrame(WebPage* webPage, WebFrame* parentFrame, WebFramePrivate* data, WebView* web_view);
-  WebCore::Frame* Frame() const;
 
   WebCore::Frame* m_coreFrame;
   FrameLoaderClientMona* m_frameLoaderClient;

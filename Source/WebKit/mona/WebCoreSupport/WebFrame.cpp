@@ -100,27 +100,10 @@ WebFrame::WebFrame()
 {
 }
 
-void WebFrame::LoadURL(const char* url)
-{
-  ASSERT(url);
-
-  if (!m_coreFrame || !m_coreFrame->loader())
-    return;
-
-  data_->requestedURL = url;
-  String u(url);
-  m_coreFrame->loader()->load(u, false);
-}
-
 bool WebFrame::IsTransparent() const
 {
   if (m_coreFrame && m_coreFrame->view()) {
     return m_coreFrame->view()->isTransparent();
   }
   return false;
-}
-
-WebCore::Frame* WebFrame::Frame() const
-{
-    return m_coreFrame;
 }
