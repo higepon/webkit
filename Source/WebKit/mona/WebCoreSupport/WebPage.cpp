@@ -55,15 +55,17 @@ WebPage::WebPage(WebView* web_view, const IntSize& viewSize) :
   }
   cairo_ = cairo_create(surface_);
 
-  Page::PageClients clients;
-  clients.chromeClient = new ChromeClientMona(this);
-  clients.contextMenuClient = new ContextMenuClientMona();
-  EditorClientMona* editorClient = new EditorClientMona(this);
-  clients.editorClient = editorClient;
-  clients.dragClient = new DragClientMona();
-  clients.inspectorClient = new InspectorClientMona();
+  // todo: life cycle of clients
+  Page::PageClients* clients = new Page::PageClients;
+  ASSERT(clients);
+  clients->chromeClient = new ChromeClientMona(this);
+  clients->contextMenuClient = new ContextMenuClientMona();
+  EditorClientMona* editorClient = new EditorClientMona();
+  clients->editorClient = editorClient;
+  clients->dragClient = new DragClientMona();
+  clients->inspectorClient = new InspectorClientMona();
 
-  m_page = adoptPtr(new Page(clients));
+  m_page = adoptPtr(new Page(*clients));
   m_page->settings()->setLoadsImagesAutomatically(true);
   m_page->settings()->setJavaScriptEnabled(true);
   m_page->settings()->setCaretBrowsingEnabled(true);
@@ -72,6 +74,7 @@ WebPage::WebPage(WebView* web_view, const IntSize& viewSize) :
   m_page->settings()->setShouldPaintCustomScrollbars(true);
   m_page->settings()->setShowDebugBorders(true);
   m_page->settings()->setShowRepaintCounter(true);
+  editorClient->setPage(m_page.get()); // todo: compare to webkit2
 
   m_mainFrame = WebFrame::createMainFrame(this);
 }

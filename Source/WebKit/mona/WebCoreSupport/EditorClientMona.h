@@ -42,11 +42,10 @@
 
 namespace WebCore {
 
-class WebPage;
-
 class EditorClientMona : public EditorClient, public TextCheckerClient {
     public:
-        EditorClientMona(WebPage* webPage);
+        EditorClientMona();
+        void setPage( Page* page );
 
         virtual void pageDestroyed();
 
@@ -121,7 +120,7 @@ class EditorClientMona : public EditorClient, public TextCheckerClient {
     private:
         bool handleEditingKeyboardEvent(KeyboardEvent* event);
         const char* interpretKeyEvent(const KeyboardEvent* event);
-        WebPage* m_page;
+        Page* m_page;
         bool m_editing;
         bool m_inUndoRedo; // our undo stack works differently - don't re-enter!
     };

@@ -38,6 +38,7 @@ namespace WebCore {
 class Frame;
 class KURL;
 class WebPage;
+class WebFramePrivate;
 class WebView;
 class HTMLFrameOwnerElement;
 
@@ -57,6 +58,9 @@ class WebFrame : public RefCounted<WebFrame> {
  private:
   static PassRefPtr<WebFrame> create();
   void init(WebPage*, const String& frameName, WebCore::HTMLFrameOwnerElement*);
+  friend class WebPage;
+
+  friend class WebCore::FrameLoaderClientMona;
 
   WebCore::Frame* m_coreFrame;
   FrameLoaderClientMona m_frameLoaderClient;
