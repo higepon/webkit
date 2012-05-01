@@ -59,6 +59,26 @@
 // #define notImplemented() ((void)0)
 // #endif
 
+static void printResourceResponse(const WebCore::ResourceResponse& response, const char* file, int line, const char* func)
+{
+    _logprintf("ERROR at %s:%d %s URL=", file, line, func);
+    for (int i = 0; i < response.url().string().length(); i++) {
+      _logprintf("%c", response.url().string().characters()[i]);
+    }
+    _logprintf("\nHTTP status = %d \n", response.httpStatusCode());
+    if (response.resourceLoadTiming()) {
+      _logprintf("requestTime = %g\n", response.resourceLoadTiming()->requestTime);
+      _logprintf("proxy %d to %d\n", response.resourceLoadTiming()->proxyStart, response.resourceLoadTiming()->proxyEnd);
+      _logprintf("dns %d to %d\n", response.resourceLoadTiming()->dnsStart, response.resourceLoadTiming()->dnsEnd);
+      _logprintf("connect %d to %d\n", response.resourceLoadTiming()->connectStart, response.resourceLoadTiming()->connectEnd);
+      _logprintf("ssl %d to %d\n", response.resourceLoadTiming()->sslStart, response.resourceLoadTiming()->sslEnd);
+      _logprintf("send %d to %d\n", response.resourceLoadTiming()->sendStart, response.resourceLoadTiming()->sendEnd);
+      _logprintf("receive header end %d\n", response.resourceLoadTiming()->receiveHeadersEnd);
+      _logprintf("requestTime = %g\n", response.resourceLoadTiming()->requestTime);
+    }
+}
+
+
 namespace WebCore {
 
 FrameLoaderClientMona::FrameLoaderClientMona(WebFrame* web_frame) :
@@ -557,12 +577,14 @@ WebCore::ResourceError FrameLoaderClientMona::interruptedForPolicyChangeError(co
 
 WebCore::ResourceError FrameLoaderClientMona::cannotShowMIMETypeError(const WebCore::ResourceResponse& response)
 {
+    printResourceResponse(response, __FILE__, __LINE__, __func__);
     notImplemented();
     //    return ResourceError(String(), WebKitErrorCannotShowMIMEType, response.url().string(), String());
 }
 
 WebCore::ResourceError FrameLoaderClientMona::fileDoesNotExistError(const WebCore::ResourceResponse& response)
 {
+    printResourceResponse(response, __FILE__, __LINE__, __func__);
     notImplemented();
     //    return ResourceError(String(), WebKitErrorCannotShowURL, response.url().string(), String());
 }
@@ -580,8 +602,9 @@ WTF::PassRefPtr<DocumentLoader> FrameLoaderClientMona::createDocumentLoader(cons
 }
 
 void FrameLoaderClientMona::download(ResourceHandle*, const ResourceRequest&,
-                                      const ResourceRequest&, const ResourceResponse&)
+                                      const ResourceRequest&, const ResourceResponse& response)
 {
+    printResourceResponse(response, __FILE__, __LINE__, __func__);
     notImplemented();
 }
 
@@ -594,6 +617,7 @@ void FrameLoaderClientMona::assignIdentifierToInitialRequest(unsigned long ident
 void FrameLoaderClientMona::dispatchWillSendRequest(DocumentLoader*, unsigned long, ResourceRequest& request,
                                                      const ResourceResponse& response)
 {
+    printResourceResponse(response, __FILE__, __LINE__, __func__);
     notImplemented();
 }
 
@@ -646,8 +670,9 @@ void FrameLoaderClientMona::dispatchDidFailLoading(DocumentLoader* loader,
 
 bool FrameLoaderClientMona::dispatchDidLoadResourceFromMemoryCache(DocumentLoader*,
                                                                     const ResourceRequest&,
-                                                                    const ResourceResponse&, int)
+                                                                    const ResourceResponse& response, int)
 {
+    printResourceResponse(response, __FILE__, __LINE__, __func__);
     notImplemented();
     return false;
 }
@@ -674,7 +699,7 @@ void FrameLoaderClientMona::dispatchDecidePolicyForResponse(FramePolicyFunction 
 {
     if (!m_frame)
         return;
-
+    printResourceResponse(response, __FILE__, __LINE__, __func__);
     notImplemented();
     (m_frame->coreFrame()->loader()->policyChecker()->*function)(PolicyUse);
 }
@@ -771,6 +796,7 @@ void FrameLoaderClientMona::redirectDataToPlugin(Widget* pluginWidget)
 
 ResourceError FrameLoaderClientMona::pluginWillHandleLoadError(const ResourceResponse& response)
 {
+    printResourceResponse(response, __FILE__, __LINE__, __func__);
     notImplemented();
     //    return ResourceError(String(), WebKitErrorCannotLoadPlugIn, response.url().string(), String());
 }
