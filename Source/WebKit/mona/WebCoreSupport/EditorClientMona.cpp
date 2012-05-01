@@ -51,15 +51,11 @@
 
 namespace WebCore {
 
-EditorClientMona::EditorClientMona()
-    : m_editing(false)
-    , m_inUndoRedo(false)
+EditorClientMona::EditorClientMona(WebPage* webPage)
+    : m_page(webPage),
+      m_editing(false),
+      m_inUndoRedo(false)
 {
-}
-
-void EditorClientMona::setPage(Page* page)
-{
-    m_page = page;
 }
 
 void EditorClientMona::pageDestroyed()
