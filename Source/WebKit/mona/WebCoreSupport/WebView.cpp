@@ -63,8 +63,12 @@ void WebView::paint(Graphics *g) {
 
     int rx = currentRect_.x() - 2;
     int ry = currentRect_.y() +2;
+
+    // Draw border for debug
+#if 0
     g->setColor(monagui::Color::red);
     g->drawRect(rx, ry,  currentRect_.width(), currentRect_.height());
+#endif
 
     for (int j = currentRect_.y(); j < currentRect_.y() + currentRect_.height(); j++) {
       for (int i = currentRect_.x(); i < currentRect_.x() + currentRect_.width(); i++) {
