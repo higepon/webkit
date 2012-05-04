@@ -67,14 +67,14 @@ int main(int argc, char* argv[]) {
   //   web_view.LoadURL("http://youtube.com/");
   //web_view.LoadURL("http://www.monaos.org/");
   //web_view.LoadURL("http://10.0.2.2/f.html");
-  web_view.LoadURL("http://myhost/");
+  //web_view.LoadURL("http://myhost/");
   //  web_view.LoadURL("http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/");
   //  web_view.LoadURL("http://localhost.twitter.com:3000/");
 
   //  web_view.LoadURL("http://10.0.2.2/~taro/f.html");
   //    web_view.LoadURL("http://10.0.2.2/input.html");
   //    web_view.LoadURL("http://10.0.2.2/twitter.html");
-  //     web_view.LoadURL("http://twitter.com/");
+     web_view.LoadURL("http://twitter.com/");
   //web_view.LoadURL("http://acid3.acidtests.org/");
 
   // //  web_view.LoadURL("file://hige.txt/");

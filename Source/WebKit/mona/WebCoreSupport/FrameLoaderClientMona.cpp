@@ -530,41 +530,46 @@ void FrameLoaderClientMona::committedLoad(WebCore::DocumentLoader* loader, const
     loader->commitData(data, length);
 }
 
+// copied from WebKit/Misc/WebKitErrors[Private].h
+enum {
+    WebKitErrorCannotShowMIMEType = 100,
+    WebKitErrorCannotShowURL = 101,
+    WebKitErrorFrameLoadInterruptedByPolicyChange = 102,
+    WebKitErrorCannotUseRestrictedPort = 103,
+    WebKitErrorCannotFindPlugIn = 200,
+    WebKitErrorCannotLoadPlugIn = 201,
+    WebKitErrorJavaUnavailable = 202,
+};
+
 WebCore::ResourceError FrameLoaderClientMona::cancelledError(const WebCore::ResourceRequest& request)
 {
-    notImplemented();
-    //    return ResourceError(String(), WebKitErrorCannotShowURL, request.url().string(), String());
+    return ResourceError(WTF::String(), WebKitErrorCannotShowURL, request.url().string(), WTF::String());
 }
 
 WebCore::ResourceError FrameLoaderClientMona::blockedError(const ResourceRequest& request)
 {
-    notImplemented();
-    //    return ResourceError(String(), WebKitErrorCannotShowURL, request.url().string(), String());
+    return ResourceError(WTF::String(), WebKitErrorCannotShowURL, request.url().string(), WTF::String());
 }
 
 WebCore::ResourceError FrameLoaderClientMona::cannotShowURLError(const WebCore::ResourceRequest& request)
 {
 
-    notImplemented();
-  //    return ResourceError(String(), WebKitErrorCannotShowURL, request.url().string(), String());
+    return ResourceError(WTF::String(), WebKitErrorCannotShowURL, request.url().string(), WTF::String());
 }
 
 WebCore::ResourceError FrameLoaderClientMona::interruptedForPolicyChangeError(const WebCore::ResourceRequest& request)
 {
-    notImplemented();
-    //    return ResourceError(String(), WebKitErrorFrameLoadInterruptedByPolicyChange, request.url().string(), String());
+    return ResourceError(WTF::String(), WebKitErrorFrameLoadInterruptedByPolicyChange, request.url().string(), WTF::String());
 }
 
 WebCore::ResourceError FrameLoaderClientMona::cannotShowMIMETypeError(const WebCore::ResourceResponse& response)
 {
-    notImplemented();
-    //    return ResourceError(String(), WebKitErrorCannotShowMIMEType, response.url().string(), String());
+    return ResourceError(WTF::String(), WebKitErrorCannotShowMIMEType, response.url().string(), WTF::String());
 }
 
 WebCore::ResourceError FrameLoaderClientMona::fileDoesNotExistError(const WebCore::ResourceResponse& response)
 {
-    notImplemented();
-    //    return ResourceError(String(), WebKitErrorCannotShowURL, response.url().string(), String());
+    return ResourceError(WTF::String(), WebKitErrorCannotShowURL, response.url().string(), WTF::String());
 }
 
 bool FrameLoaderClientMona::shouldFallBack(const WebCore::ResourceError& error)
