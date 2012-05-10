@@ -59,7 +59,12 @@
 namespace WebCore {
 
 const int selectTimeoutMS = 5;
+#if OS(MONA)
+const double pollTimeSeconds = 0.01;
+#else
 const double pollTimeSeconds = 0.05;
+#endif
+
 const int maxRunningJobs = 5;
 
 #if OS(MONA)
