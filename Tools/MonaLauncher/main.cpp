@@ -40,8 +40,35 @@
 
 extern void (*SharedTimerFiredFunction)();
 
+#include <curl/curl.h>
+
+#define SOCKET_LOG() { uint64_t x = syscall_now_in_nanosec() / 1000000; _logprintf("[socket] %s %s:%d %d\n", __func__, __FILE__, __LINE__, (unsigned int)x);}
+#define SOCKET_LOGF(...) { uint64_t x = syscall_now_in_nanosec() / 1000000; _logprintf("[socket] %s %s:%d %d", __func__, __FILE__, __LINE__, (unsigned int)x), _logprintf(__VA_ARGS__); }
+
+static size_t hoge(void* content, size_t size, size_t nmemb, void*hige) {
+  return size * nmemb;
+}
+
 
 int main(int argc, char* argv[]) {
+#if 0
+  CURL* curl;
+  CURLcode res;
+
+  curl = curl_easy_init();
+  if (curl) {
+    SOCKET_LOG();
+    curl_easy_setopt(curl, CURLOPT_URL, "http://myhost/hoge.html");
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, hoge);
+    SOCKET_LOG();
+    res = curl_easy_perform(curl);
+    SOCKET_LOG();
+    curl_easy_cleanup(curl);
+    SOCKET_LOG();
+  }
+
+  exit(-1);
+#endif
   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   intptr_t ret = monapi_enable_stacktrace("/APPS/MLAUNCH.map");
   _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
@@ -67,14 +94,14 @@ int main(int argc, char* argv[]) {
   //   web_view.LoadURL("http://youtube.com/");
   //web_view.LoadURL("http://www.monaos.org/");
   //web_view.LoadURL("http://10.0.2.2/f.html");
-  //web_view.LoadURL("http://myhost/");
+  web_view.LoadURL("http://myhost/hoge.html");
   //  web_view.LoadURL("http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/");
   //  web_view.LoadURL("http://localhost.twitter.com:3000/");
 
   //  web_view.LoadURL("http://10.0.2.2/~taro/f.html");
   //    web_view.LoadURL("http://10.0.2.2/input.html");
   //    web_view.LoadURL("http://10.0.2.2/twitter.html");
-     web_view.LoadURL("http://twitter.com/");
+  //      web_view.LoadURL("https://twitter.com/");
   //web_view.LoadURL("http://acid3.acidtests.org/");
 
   // //  web_view.LoadURL("file://hige.txt/");
