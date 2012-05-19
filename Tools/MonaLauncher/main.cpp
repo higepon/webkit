@@ -69,41 +69,30 @@ int main(int argc, char* argv[]) {
 
   exit(-1);
 #endif
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   intptr_t ret = monapi_enable_stacktrace("/APPS/MLAUNCH.map");
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   if (ret != M_OK) {
     monapi_fatal("syscall_stack_trace_enable failed%d\n", ret);
   }
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
   JSC::initializeThreading();
   WTF::initializeMainThread();
 
-  _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  // MonaLauncher app("http://10.0.2.2/");
-  // app.run();
   WebCore::WebView web_view;
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
-  //web_view.LoadURL("https://twitter.com/#!/login/");
-  //  web_view.LoadURL("https://mail.google.com/");
-  //      web_view.LoadURL("http://www.google.com/");
-  //  web_view.LoadURL("http://www.hatena.ne.jp/");
-  //  web_view.LoadURL("http://www.bing.com/");
-  //web_view.LoadURL("http://www.facebook.com/");
-  //  web_view.LoadURL("http://www.flickr.com/search/?q=animals&f=hp");
-  //   web_view.LoadURL("http://youtube.com/");
-  //web_view.LoadURL("http://www.monaos.org/");
-  //web_view.LoadURL("http://10.0.2.2/f.html");
-  web_view.LoadURL("http://myhost/hoge.html");
-  //  web_view.LoadURL("http://java.sun.com/j2se/1.5.0/ja/docs/ja/api/");
-  //  web_view.LoadURL("http://localhost.twitter.com:3000/");
-
-  //  web_view.LoadURL("http://10.0.2.2/~taro/f.html");
-  //    web_view.LoadURL("http://10.0.2.2/input.html");
-  //    web_view.LoadURL("http://10.0.2.2/twitter.html");
-  //      web_view.LoadURL("https://twitter.com/");
-  //web_view.LoadURL("http://acid3.acidtests.org/");
-
-  // //  web_view.LoadURL("file://hige.txt/");
-  // _logprintf("%s %s:%d\n", __func__, __FILE__, __LINE__);
+#if 1
+  const char* url = "http://myhost/hoge.html";
+#elif 0
+  const char* url = "https://mail.google.com/";
+#elif 0
+  const char* url = "http://www.google.com/";
+#elif 0
+  const char* url = "http://www.facebook.com/";
+#elif 0
+  const char* url = "http://www.flickr.com/search/?q=animals&f=hp";
+#elif 0
+  const char* url = "http://www.monaos.org/";
+#elif 0
+  const char* url = "http://localhost.twitter.com:3000/";
+#elif 0
+  const char* url = "https://twitter.com/";
+#endif
+  web_view.LoadURL(url);
 }
