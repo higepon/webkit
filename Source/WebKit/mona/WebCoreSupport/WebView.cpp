@@ -147,6 +147,14 @@ IntRect WebView::MergeRepaintRequest(int x, int y, int w, int h) {
   return IntRect(x, y, w, h);
 }
 
+void WebView::Repaint(const IntRect& rect) {
+  uint32_t xy =  (rect.y() << 16) | rect.x();
+  uint32_t wh =  (rect.height() << 16) | rect.width();
+  if (MonAPI::Message::send(MonAPI::System::getThreadID(), MSG_UPDATE, xy, wh) != M_OK) {
+    monapi_warn("message send failure");
+  }
+}
+
 void WebView::LoadURL(const char* urlString, bool aquireFocus /* = true */) {
   web_page_->LoadURL(urlString);
   run();

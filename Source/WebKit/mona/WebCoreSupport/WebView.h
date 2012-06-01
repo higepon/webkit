@@ -54,6 +54,8 @@ class WebView : public monagui::Frame {
 
   void LoadURL(const char* urlString, bool aquireFocus = true);
 
+  void Repaint(const IntRect& rect);
+
  private:
   IntRect MergeRepaintRequest(int x, int y, int w, int h);
   WebPage* web_page_;
