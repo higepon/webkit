@@ -335,6 +335,7 @@ void ChromeClientMona::invalidateContentsAndWindow(const IntRect& rect, bool imm
     // To prevent recursive call of doDeferredRepaints,
     // We use MSG_UPDATE for immediate repaint.
     // Borrowed from WinCE port.
+  _logprintf("immediate=%s\n", immediate ? "true" : "false");
     uint32_t xy =  (rect.y() << 16) | rect.x();
     uint32_t wh =  (rect.height() << 16) | rect.width();
     if (MonAPI::Message::send(MonAPI::System::getThreadID(), MSG_UPDATE, xy, wh) != M_OK) {

@@ -65,7 +65,7 @@ void WebView::paint(Graphics *g) {
     int ry = currentRect_.y() +2;
 
     // Draw border for debug
-#if 0
+#if 1
     g->setColor(monagui::Color::red);
     g->drawRect(rx, ry,  currentRect_.width(), currentRect_.height());
 #endif
@@ -83,55 +83,79 @@ void WebView::SetImageBuffer(unsigned char* p) {
 }
 
 void WebView::processEvent(monagui::Event* event) {
-    if (event->getType() == monagui::Event::TIMER) {
-      if (SharedTimerFiredFunction) {
-        //        kill_timer(event->arg1);
-        //        _logprintf("before timer call %s %s:%d function=%x\n", __func__, __FILE__, __LINE__, SharedTimerFiredFunction);
-        SharedTimerFiredFunction();
-        //        _logprintf("after timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
-      }
-    } else if (event->getType() == monagui::Event::KEY_PRESSED ||
-               event->getType() == monagui::Event::KEY_RELEASED) {
-        int keycode = ((KeyEvent *)event)->getKeycode();
-        int modifiers = ((KeyEvent *)event)->getModifiers();
-        PlatformKeyboardEvent keyEvent((monagui::KeyEvent *)event);
-        WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
-        frame->eventHandler()->keyEvent(keyEvent);
-    } else if (event->getType() == monagui::Event::MOUSE_PRESSED) {
-        PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
-        WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
-        frame->eventHandler()->handleMousePressEvent(mouseEvent);
-    } else if (event->getType() == monagui::Event::MOUSE_RELEASED) {
-        PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
-        WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
-        frame->eventHandler()->handleMouseReleaseEvent(mouseEvent);
-    } else if (event->getType() == monagui::Event::MOUSE_MOVED) {
-        PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
-        WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
-        // We call mouseMoved here instead of handleMouseMovedEvent because we need
-        // our ChromeClient to receive changes to the mouse position and
-        // tooltip text, and mouseMoved handles all of that.
-        frame->eventHandler()->mouseMoved(mouseEvent);
-    } else if (event->getType() == monagui::Event::CUSTOM_EVENT && event->header == MSG_UPDATE) {
-        int x = event->arg1 & 0xffff;
-        int y = event->arg1 >> 16;
-        int w = event->arg2 & 0xffff;
-        int h = event->arg2 >> 16;
-        currentRect_ = IntRect(x, y, w, h);
-        web_page_->paint(currentRect_, true);
-    } else {
+  if (event->getType() == monagui::Event::TIMER) {
+    if (SharedTimerFiredFunction) {
+      //        kill_timer(event->arg1);
+      //        _logprintf("before timer call %s %s:%d function=%x\n", __func__, __FILE__, __LINE__, SharedTimerFiredFunction);
+      SharedTimerFiredFunction();
+      //        _logprintf("after timer call %s %s:%d\n", __func__, __FILE__, __LINE__);
     }
+  } else if (event->getType() == monagui::Event::KEY_PRESSED ||
+             event->getType() == monagui::Event::KEY_RELEASED) {
+    int keycode = ((KeyEvent *)event)->getKeycode();
+    int modifiers = ((KeyEvent *)event)->getModifiers();
+    PlatformKeyboardEvent keyEvent((monagui::KeyEvent *)event);
+    WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
+    frame->eventHandler()->keyEvent(keyEvent);
+  } else if (event->getType() == monagui::Event::MOUSE_PRESSED) {
+    PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
+    WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
+    frame->eventHandler()->handleMousePressEvent(mouseEvent);
+  } else if (event->getType() == monagui::Event::MOUSE_RELEASED) {
+    PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
+    WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
+    frame->eventHandler()->handleMouseReleaseEvent(mouseEvent);
+  } else if (event->getType() == monagui::Event::MOUSE_MOVED) {
+    PlatformMouseEvent mouseEvent((monagui::MouseEvent *)event);
+    WebCore::Frame* frame = web_page_->corePage()->focusController()->focusedOrMainFrame();
+    // We call mouseMoved here instead of handleMouseMovedEvent because we need
+    // our ChromeClient to receive changes to the mouse position and
+    // tooltip text, and mouseMoved handles all of that.
+    frame->eventHandler()->mouseMoved(mouseEvent);
+  } else if (event->getType() == monagui::Event::CUSTOM_EVENT && event->header == MSG_UPDATE) {
+    int x = event->arg1 & 0xffff;
+    int y = event->arg1 >> 16;
+    int w = event->arg2 & 0xffff;
+    int h = event->arg2 >> 16;
+    currentRect_ = MergeRepaintRequest(x, y, w, h);
+    web_page_->paint(currentRect_, true);
+  } else {
+  }
+}
+
+IntRect WebView::MergeRepaintRequest(int x, int y, int w, int h) {
+  for (int i = 0;;) {
+    MessageInfo msg;
+    int result = MonAPI::Message::peek(&msg, i);
+    if (result == M_BAD_INDEX) {
+      break;
+    } else if (result == M_OK) {
+      if (msg.header == MSG_UPDATE) {
+        MonAPI::Message::peek(&msg, i, PEEK_REMOVE);
+        int nx = msg.arg1 & 0xffff;
+        int ny = msg.arg1 >> 16;
+        int nw = msg.arg2 & 0xffff;
+        int nh = msg.arg2 >> 16;
+        x = nx < x ? nx : x;
+        y = ny < y ? ny : y;
+        w = nw > w ? nw : w;
+        h = nh > h ? nh : h;
+      }
+      i++;
+    }
+  }
+  return IntRect(x, y, w, h);
 }
 
 void WebView::LoadURL(const char* urlString, bool aquireFocus /* = true */) {
-    web_page_->LoadURL(urlString);
-    run();
+  web_page_->LoadURL(urlString);
+  run();
 }
 
 void WebView::SetStatus(const std::string& text) {
-    if (getGraphics()) {
-        std::string content(" ");
-        content += text;
-        status_->setText(content.c_str());
-    }
+  if (getGraphics()) {
+    std::string content(" ");
+    content += text;
+    status_->setText(content.c_str());
+  }
 }

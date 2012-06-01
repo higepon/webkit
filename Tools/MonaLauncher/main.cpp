@@ -77,7 +77,7 @@ int main(int argc, char* argv[]) {
   WTF::initializeMainThread();
 
   WebCore::WebView web_view;
-#if 1
+#if 0
   const char* url = "http://myhost/hoge.html";
 #elif 0
   const char* url = "https://mail.google.com/";
@@ -91,7 +91,7 @@ int main(int argc, char* argv[]) {
   const char* url = "http://www.monaos.org/";
 #elif 0
   const char* url = "http://localhost.twitter.com:3000/";
-#elif 0
+#elif 1
   const char* url = "https://twitter.com/";
 #endif
   web_view.LoadURL(url);

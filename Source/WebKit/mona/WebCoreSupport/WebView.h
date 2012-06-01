@@ -53,6 +53,9 @@ class WebView : public monagui::Frame {
   }
 
   void LoadURL(const char* urlString, bool aquireFocus = true);
+
+ private:
+  IntRect MergeRepaintRequest(int x, int y, int w, int h);
   WebPage* web_page_;
   unsigned char* image_buffer_;
   MonAPI::scoped_ptr<Label> status_;
