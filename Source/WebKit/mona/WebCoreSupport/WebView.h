@@ -40,13 +40,44 @@ class WebPage;
 #define WEBVIEW_WIDTH 900
 #define WEBVIEW_HEIGHT 480
 
+class WebCanvas : public Canvas {
+ public:
+  WebCanvas(WebPage* web_page) : web_page_(web_page), image_buffer_(NULL) {
+  }
+
+  virtual ~WebCanvas() {
+  }
+
+  void paint(Graphics* g) {
+    if (image_buffer_ == NULL) {
+      return;
+    }
+    const Rectangle rect = g->getClipBound();
+    int xmax = rect.x + rect.width;
+    int ymax = rect.y + rect.height;
+
+    for (int j = rect.y; j < ymax; j++) {
+      for (int i = rect.x; i < xmax; i++) {
+        g->drawPixel(i, j, ((uint32_t*)(image_buffer_))[i + j * getWidth()]);
+      }
+    }
+  }
+
+  void processEvent(monagui::Event* event);
+
+  void SetImageBuffer(unsigned char* p) {
+    image_buffer_ = p;
+  }
+ private:
+  WebPage* web_page_;
+  unsigned char* image_buffer_;
+};
+
 class WebView : public monagui::Frame {
  public:
   WebView();
-  virtual ~WebView() {}
-  void paint(monagui::Graphics *g);
+  virtual ~WebView();
   void processEvent(monagui::Event* event);
-  void SetImageBuffer(unsigned char* p);
   void SetStatus(const std::string& text);
   WebPage* webPage() {
       return web_page_;
@@ -55,13 +86,18 @@ class WebView : public monagui::Frame {
   void LoadURL(const char* urlString, bool aquireFocus = true);
 
   void Repaint(const IntRect& rect);
+  
+  void SetImageBuffer(unsigned char* p) {
+    canvas_->SetImageBuffer(p);
+  }
 
  private:
   IntRect MergeRepaintRequest(int x, int y, int w, int h);
   WebPage* web_page_;
-  unsigned char* image_buffer_;
+
   MonAPI::scoped_ptr<Label> status_;
   IntRect currentRect_;
+  MonAPI::scoped_ptr<WebCanvas> canvas_;
 };
 };
 

@@ -114,7 +114,7 @@ void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
 
   // TODO: apply rect and immediate
   //  _logprintf("(%d %d %d %d) immediate=%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate);
-    web_view_->repaint();
+  //    web_view_->repaint();
   //  web_view_->paint(rect);
 }
 
