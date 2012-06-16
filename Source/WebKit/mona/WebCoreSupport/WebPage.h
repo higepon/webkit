@@ -49,8 +49,8 @@ class WebPage {
   void Init();
   void LoadURL(const char* urlString);
   void SetStatus(const char* text);
-  void paint(const IntRect& rect, bool immediate);
-  void paintWithoutLayout(const IntRect& rect, bool immediate);
+  uint8_t* paint(const IntRect& rect, bool immediate);
+  uint8_t* paintWithoutLayout(const IntRect& rect, bool immediate);
 
   WebCore::Page* corePage() const {
     return m_page.get();

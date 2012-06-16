@@ -81,9 +81,9 @@ WebPage::~WebPage() {
   cairo_surface_destroy(surface_);
 }
 
-void WebPage::paint(const IntRect& rect, bool immediate) {
+uint8_t* WebPage::paint(const IntRect& rect, bool immediate) {
   if (rect.isEmpty()) {
-    return;
+    return NULL;
   }
   ASSERT(web_view_);
   ASSERT(m_mainFrame.get());
@@ -92,7 +92,7 @@ void WebPage::paint(const IntRect& rect, bool immediate) {
   Frame* frame = m_mainFrame->coreFrame();
   if (!frame->contentRenderer()) {
     _logprintf("skip becase of contentRenderer");
-    return;
+    return NULL;
   }
 
   FrameView* view = frame->view();
@@ -101,21 +101,16 @@ void WebPage::paint(const IntRect& rect, bool immediate) {
   // I'm not sure this is correct place whether view isInLayout().
   if (!view->isInLayout()) {
     view->updateLayoutAndStyleIfNeededRecursive();
-    paintWithoutLayout(rect, immediate);
+    return paintWithoutLayout(rect, immediate);
+  } else {
+    return NULL;
   }
 }
 
-void WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
+uint8_t* WebPage::paintWithoutLayout(const IntRect& rect, bool immediate) {
   GraphicsContext context(cairo_);
-  //    _logprintf("MSG_PAINT end0 %d %s %s:%d\n", (int)MonAPI::Date::nowInMsec(), __func__, __FILE__, __LINE__);
   m_mainFrame->coreFrame()->view()->paint(&context, rect);
-  //    _logprintf("MSG_PAINT end1 %d %s %s:%d\n", (int)MonAPI::Date::nowInMsec(), __func__, __FILE__, __LINE__);
-  web_view_->SetImageBuffer(cairo_image_surface_get_data(surface_));
-
-  // TODO: apply rect and immediate
-  //  _logprintf("(%d %d %d %d) immediate=%d\n", rect.x(), rect.y(), rect.width(), rect.height(), immediate);
-  //    web_view_->repaint();
-  //  web_view_->paint(rect);
+  return cairo_image_surface_get_data(surface_);
 }
 
 void WebPage::LoadURL(const char* urlString) {

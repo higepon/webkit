@@ -42,6 +42,24 @@ extern monagui::FontMetrics* g_fontMetrics;
 
 using namespace WebCore;
 
+void WebCanvas::paint(Graphics* g) {
+  const Rectangle rect = g->getClipBound();
+  IntRect r(rect.x, rect.y, rect.height, rect.width);
+  uint8_t* image_buffer = web_page_->paint(r, true);
+  if (image_buffer == NULL) {
+    return;
+  }
+
+  int xmax = rect.x + rect.width;
+  int ymax = rect.y + rect.height;
+
+  for (int j = rect.y; j < ymax; j++) {
+    for (int i = rect.x; i < xmax; i++) {
+      g->drawPixel(i, j, ((uint32_t*)(image_buffer))[i + j * getWidth()]);
+    }
+  }
+}
+
 void WebCanvas::processEvent(monagui::Event* event) {
   if (event->getType() == monagui::Event::KEY_PRESSED ||
              event->getType() == monagui::Event::KEY_RELEASED) {
@@ -98,9 +116,8 @@ void WebView::processEvent(monagui::Event* event) {
     int y = event->arg1 >> 16;
     int w = event->arg2 & 0xffff;
     int h = event->arg2 >> 16;
-    currentRect_ = MergeRepaintRequest(x, y, w, h);
-    web_page_->paint(currentRect_, true);
-    canvas_->repaint(currentRect_.x(), currentRect_.y(), currentRect_.width(), currentRect_.height());
+    IntRect currentRect = MergeRepaintRequest(x, y, w, h);
+    canvas_->repaint(currentRect.x(), currentRect.y(), currentRect.width(), currentRect.height());
   } else {
   }
 }
